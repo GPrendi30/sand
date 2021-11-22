@@ -1,2 +1,2 @@
-# sand
-S.A.N.D project
+# S.A.N.D project
+Decentralized smart NFT analytics.
