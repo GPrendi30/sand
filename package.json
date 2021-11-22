@@ -1,0 +1,37 @@
+{
+  "name": "sand",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
+  },
+  "description": "Decentralized smart NFT analytics.",
+  "main": "www",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GPrendi30/sand.git"
+  },
+  "keywords": [
+    "blockchain",
+    "nft",
+    "defi",
+    "analytics",
+    "nodejs",
+    "express",
+    "mongo"
+  ],
+  "author": " (gprendi30 : [https://github.com/GPrendi30/])",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GPrendi30/sand/issues"
+  },
+  "homepage": "https://github.com/GPrendi30/sand#readme"
+}
