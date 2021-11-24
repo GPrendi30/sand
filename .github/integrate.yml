@@ -2,7 +2,7 @@ name: S.A.N.D CI
 
 
 on:
-  pull_request
+  pull_request:
     branches: [ master ]
 
 
