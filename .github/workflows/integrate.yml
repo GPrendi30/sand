@@ -9,7 +9,7 @@ on:
 
 
 jobs:
-  test_pull_request:
+  run_tests:
     runs-on: ubuntu-latest
     
     steps:
@@ -24,6 +24,4 @@ jobs:
 
       - name: Run tests
         run: npm test
-      
-      - run: npm run build
       
