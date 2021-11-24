@@ -2,8 +2,10 @@ name: S.A.N.D CI
 
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 
 jobs:
