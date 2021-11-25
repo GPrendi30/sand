@@ -7,7 +7,7 @@
 [*Solaro Giacomo*](https://github.com/Solargi)
 
 ### Idea
- A web app built on web-technologies that integrates analytics with web3 assets and lets you track your favourite NFTs and cryptos in real time. Chat with friends in private chat, or in dedicated waiting rooms where you connect with other ?people with same interesets.
+ A web app built on web-technologies that integrates analytics with web3 assets and lets you track your favourite NFTs and cryptos in real time. Chat with friends in private chat, or in dedicated waiting rooms where you connect with other people with same interesets.
 
 ### Features
 * Real-time app
