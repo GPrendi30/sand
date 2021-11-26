@@ -5,6 +5,7 @@
 [*Guma Paola*](https://github.com/paolaguma)  
 [*Di Pietro Enrico*](https://github.com/dipiee)  
 [*Solaro Giacomo*](https://github.com/Solargi)
+[*Vittoria Scocco*](https://github.com/Vitto28)
 
 ### Idea
  A web app built on web-technologies that integrates analytics with web3 assets and lets you track your favourite NFTs and cryptos in real time. Chat with friends in private chat, or in dedicated waiting rooms where you connect with other people with same interesets.
