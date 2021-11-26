@@ -4,7 +4,7 @@
 [*Prendi Gerald*](https://github.com/GPrendi30)  
 [*Guma Paola*](https://github.com/paolaguma)  
 [*Di Pietro Enrico*](https://github.com/dipiee)  
-[*Solaro Giacomo*](https://github.com/Solargi) 
+[*Solaro Giacomo*](https://github.com/Solargi)  
 [*Vittoria Scocco*](https://github.com/Vitto28)
 
 ### Idea
