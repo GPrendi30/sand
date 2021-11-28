@@ -3,7 +3,6 @@
 * nodejs, express, mongodb
 * Views &rarr; HTML5, EJS, CSS
 * TDD (test driven development) &rarr; MOCHA + CHAI
-* Wallet integration &rarr; 
 * Wallet integration &rarr; web3js 
 * Websockets &rarr; socket.io 
 * Hosting & deployment &rarr; heroku + mongodb atlas
