@@ -1,0 +1,8 @@
+/
+    dashboard
+    user
+    watchlist
+    chat
+    rooms
+    graph_creator
+    settings

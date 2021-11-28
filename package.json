@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test":  "echo Test Passed"
+    "test": "npm run lint && echo Test Passed",
+    "lint": "npx eslint ./src",
+    "lint:fix": "npx eslint --fix ./src",
+    "docs": "npx jsdoc -d documentation/docs -r --verbose ./src && echo '\n<-> Documentation created and stored in ./documentation/docs <->\n'"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -14,6 +17,7 @@
     "express-fileupload": "^1.2.1",
     "fs-extra": "^10.0.0",
     "http-errors": "~1.6.3",
+    "jsdoc": "^3.6.7",
     "method-override": "^3.0.0",
     "mongodb": "^4.2.0",
     "morgan": "~1.9.1"
@@ -38,5 +42,12 @@
   "bugs": {
     "url": "https://github.com/GPrendi30/sand/issues"
   },
-  "homepage": "https://github.com/GPrendi30/sand#readme"
+  "homepage": "https://github.com/GPrendi30/sand#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1"
+  }
 }

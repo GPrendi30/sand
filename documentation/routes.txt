@@ -1,0 +1,21 @@
+/
+    graph/
+        types
+        data_type
+        period
+        transaction
+        
+    chat/
+        
+    user/
+        settings/
+        assets/
+        friends/
+        recently_viewed/
+        following/
+        edit/
+
+    exchange/
+        token ?from=id&to=id
+        nft ?from=id&to=id
+        collection ?from=id&to=id
