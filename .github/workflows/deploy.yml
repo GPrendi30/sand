@@ -22,6 +22,10 @@ jobs:
       - name: Run tests
         run: npm test
       
-      - name: Deploy
-        run: git checkout production && git merge main
-        
+      - name: Merge main -> production
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: main
+          target_branch: production
+          github_token: ${{ github.token }}

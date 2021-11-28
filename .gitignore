@@ -109,4 +109,6 @@ dist
 #vscode
 .vscode/
 
+documentation/docs/
+
 .DS_Store

@@ -34,6 +34,14 @@ app.use(function (req, res, next) {
 })
 
 // error handler
+/**
+ * Middleware that handles the errors.
+ * @param {object} err
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ * @returns renders the error page.
+ */
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message
