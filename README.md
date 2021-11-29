@@ -22,3 +22,19 @@ Run the following command in the command line
 <code>npm install && npm start</code>  
 or  
 <code>yarn install && yarn start</code>
+
+### Linting and fixing errors
+
+Run the following command to see the linting errors and warnings:  
+<code>npm run lint</code>
+
+If any errors present, eslint will show you the erros and warning, some are automatically fixable. <br>
+To fix them run the following command  
+<code>npm run lint:fix</code>
+
+
+### Code Documentation
+
+To generate the jsdoc documentation from the code:   
+<code> npm run docs</code>   
+*Note <code>npm docs</code> will open the wiki in the github repo.
