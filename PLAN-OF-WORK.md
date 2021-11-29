@@ -10,10 +10,10 @@
 * [X] Set fixed guidelines
 * [X] Decide for best tools (graphs, ...)
 * [X] Decide on the type of application(multipage / singlepage)
-* [ ] UI/UX mockups
-* [ ] API design and data fetching
-* [ ] login methods
-* [ ] prepare presentation (video, ...)
+* [X] UI/UX mockups
+* [X] API design and data fetching
+* [X] login methods
+* [X] prepare presentation (video, ...)
 * [X] documentation
 ### M1 - 29.11.2021
 ---
