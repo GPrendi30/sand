@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "npm run lint && echo Test Passed",
+    "start": "NODE_ENV=development node ./bin/www",
+    "start:production": "NODE_ENV=production node ./bin/www",
+    "test": "NODE_ENV=test npm run lint && mocha ./src/test",
     "lint": "npx eslint ./src",
     "lint:fix": "npx eslint --fix ./src",
     "docs": "npx jsdoc -d documentation/docs -r --verbose ./src && echo '\n<-> Documentation created and stored in ./documentation/docs <->\n'"

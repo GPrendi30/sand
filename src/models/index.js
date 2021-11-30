@@ -1,5 +1,4 @@
 const mongodb = require('mongodb')
-// const ObjectId = mongodb.ObjectId
 const MongoClient = mongodb.MongoClient
 const config = require('config').get('database')
 const process = require('process')
@@ -24,7 +23,9 @@ MongoClient
     model.db = client.db(dbName)
     model.users = model.db.collection(collectionName)
 
-    console.log('db_ready')
+    console.log('Connected to MongoDB')
+    console.log(`Database: ${dbName}`)
+    console.log(`Collection: ${collectionName}`)
   })
   .catch(err => { console.log(err) })
 
