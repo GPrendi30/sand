@@ -10,6 +10,7 @@
     "docs": "npx jsdoc -d documentation/docs -r --verbose ./src && echo '\n<-> Documentation created and stored in ./documentation/docs <->\n'"
   },
   "dependencies": {
+    "config": "^3.3.6",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
