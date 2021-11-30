@@ -10,6 +10,7 @@
     "docs": "npx jsdoc -d documentation/docs -r --verbose ./src && echo '\n<-> Documentation created and stored in ./documentation/docs <->\n'"
   },
   "dependencies": {
+    "api": "^4.1.0",
     "chai": "^4.3.4",
     "config": "^3.3.6",
     "cookie-parser": "~1.4.4",
