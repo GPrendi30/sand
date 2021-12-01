@@ -3,6 +3,8 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const methodOverride = require('method-override');
+const fileUpload = require('express-fileupload');
 
 const indexRouter = require('./routes/index')
 const graphRouter = require('./routes/graph')
@@ -19,11 +21,17 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 app.use(logger('dev'))
-app.use(express.json())
+app.use(express.json({ limit: '4MB' }));
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 }, safeFileNames: true, preserveExtension: 4, debug: false
+}))
+app.use(methodOverride('_method'));
+
 app.use(express.static(path.join(__dirname, 'public')))
 
+// routers
 app.use('/', indexRouter)
 app.use('/graph', graphRouter)
 app.use('/chat', chatRouter)

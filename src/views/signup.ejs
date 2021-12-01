@@ -4,12 +4,15 @@
     </head>
 
     <body>
-        <form method="POST" action="/login" enctype="multipart/form-data">
+        <!-- temporary action until the users route will be implemented -->
+        <form method="POST" action="/login/signup" enctype="multipart/form-data"> 
             <label for="username">Username:</label>
             <input type="text" name="username">
+            <label for="email">Email:</label>
+            <input type="text" name="email">
             <label for="password">Password:</label>
             <input type="password" name="password">
-            <input type="button" value="Login">
+            <input type="button" value="Signup">
         </form>
     </body>
 
