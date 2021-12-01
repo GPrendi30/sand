@@ -3,9 +3,24 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/header.css' />
+    <link rel='stylesheet' href='/stylesheets/navbar.css' />
+    <link rel='stylesheet' href='/stylesheets/general.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+
+    <header id="header">
+      <%- include('header') %>
+    </header>
+
+    <nav id="navbar">
+      <%- include('navbar') %>
+    </nav>
+
+    <main>
+      <h1><%= title %></h1>
+      <p>Welcome to <%= title %></p>
+    </main>
+
   </body>
 </html>
