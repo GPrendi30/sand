@@ -11,7 +11,7 @@ const request = require('supertest')('http://localhost:3000')
 //const users = [] // array of user
 
 //setting up test data in db
-function createUser (id, username, password, email, name, surname, wallet, collection, friendlist, settings, ppic, bio, tracking) {
+function createUser (username, password, email, name, surname, wallet, collection, friendlist, settings, ppic, bio, tracking) {
   const user = {
     //_id: id,
     username: username,
@@ -51,7 +51,7 @@ function createUser (id, username, password, email, name, surname, wallet, colle
 // }
 // create users for tests
 const dummyUser = createUser( 'username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [])
-const dummyUser2 = createUser( 'username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [])
+const dummyUser2 = createUser( 'username2', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [])
 const _id = dummyUser._id
 
 // add users to db
@@ -62,7 +62,6 @@ describe('Connecting to database', function () {
   async function check () {
     if (models.db && models.users) {
       console.log("connected")
-      console.log(dummyUser)
       models.users.insertOne(dummyUser).then(function(){models.users.insertOne(dummyUser2)})
       .then(function(){done()}).catch(err=>{console.log(err)})
     } else {
@@ -121,8 +120,9 @@ describe('Connecting to database', function () {
   describe('Testing user routes', function () {
     describe('GET /user/_id', function () {
       it('the user metadata should be found', function (done) {
-        models.users.findOne({username:'password'}).then(result=>{request
-          .get('/user/'+result._id)
+        models.users.findOne({username:'username'}).then(result=>{
+          request
+          .get('/user/'+ result._id)
           .set('Accept', 'application/json')
           .send()
           .expect(200)
@@ -131,8 +131,7 @@ describe('Connecting to database', function () {
             if (err) return done(err)
             const user = JSON.parse(res.text)
             console.log('fetched user=')
-            console.log(user)
-            expect(user._id).to.equal('32')
+            expect(user._id).to.equal(''+result._id) //result_id =new ObjectId("61a8013882dda60a14619eeb")
             expect(user.username).to.equal('username')
             expect(user.password).to.equal('password')// probably we don't want this
             expect(user.email).to.equal('email')
@@ -145,20 +144,21 @@ describe('Connecting to database', function () {
             expect(user.ppic).to.equal('ppic')
             expect(user.bio).to.equal('bio')
             expect(user.tracking).to.be.an('array').that.is.empty
-          })}).then(function(){done()})
+            done()
+          })})//.then(function(){done()})
         
       })
 
       it('a random user should be not found ', function (done) {
         request
-          .get('/user/' + Math.random())
+          .get('/user/42a802fd2ac32b114627c148')
           .send()
           .expect(404, done)
       })
 
       it(' the request do not accept json -> bad request', function (done) {
         request
-          .get('/user/' + Math.random())
+          .get('/user/42a802fd2ac32b114627c148')
           .set('Accept', 'html')
           .send()
           .expect(406, done)
@@ -176,13 +176,14 @@ describe('Connecting to database', function () {
           .end(function (err, res) {
             if (err) return done(err)
             const fUsers = JSON.parse(res.text)
-            console.log('fUsers')
-            console.log(fUsers)
+            // console.log('fUsers')
+            // console.log(fUsers)
             expect(JSON.stringify(fUsers)).to.equal(JSON.stringify(users))
             done()
           })
       })
     })
+
 
 
   })

@@ -89,15 +89,16 @@ router.get('/', function (req, res, next) {
 /* Get single user */
 router.get('/:_id', function (req, res, next) {
     if (req.accepts('application/json')) {
-        try {
-        const filter =  { _id: new ObjectId(req.params._id)} 
-        } catch (e) {res.status(404).end}
+        // try {
+        //     const filter =  { _id: new ObjectId(req.params._id) }
+        // } catch (e) {res.status(404).end}
+        const filter =  { _id: new ObjectId(req.params._id) }
         models.users.findOne(filter).then(result=>{
             const user = result
-            if (result === undefined) {
+            if (user === null) {
                 res.status(404).end();
             } else {
-                res.json(result)
+                res.json(user)
             }
         }).catch(err => { console.log(err) })
     } else {
