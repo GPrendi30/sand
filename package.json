@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "npm run lint && echo Test Passed",
+    "start": "NODE_ENV=development node ./bin/www",
+    "start:production": "NODE_ENV=production node ./bin/www",
+    "test": "npm run lint && NODE_ENV=test mocha --exit ./src/test",
     "lint": "npx eslint ./src",
     "lint:fix": "npx eslint --fix ./src",
     "docs": "npx jsdoc -d documentation/docs -r --verbose ./src && echo '\n<-> Documentation created and stored in ./documentation/docs <->\n'"
@@ -14,6 +15,7 @@
     "config": "^3.3.6",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^10.0.0",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-fileupload": "^1.2.1",

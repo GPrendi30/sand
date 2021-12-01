@@ -1,0 +1,7 @@
+{
+    "database": {
+        "uri": "",
+        "db_name": "sand" ,
+        "collection_name": "users"
+    }
+}
