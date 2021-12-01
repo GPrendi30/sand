@@ -1,0 +1,7 @@
+{
+    "database": {
+        "uri": "mongodb://127.0.0.1:27017",
+        "db_name": "sand-test",
+        "collection_name": "users"
+    }
+}

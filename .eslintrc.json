@@ -12,5 +12,11 @@
         "ecmaVersion": 12
     },
     "rules": {
-    }
+        "arrow-spacing": "off",
+        "no-multi-spaces": "off",
+        "no-multiple-empty-lines": "off",
+        "semi": "off",
+        "indent": ["warn", 4]
+    },
+    "ignorePatterns": "src/test/*"
 }
