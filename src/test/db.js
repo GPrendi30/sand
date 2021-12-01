@@ -15,11 +15,10 @@ describe('Connecting to database', function () {
 
     async function check () {
       if (models.db && models.users) {
-        await models.db.collection(testCollection).drop()
         done()
       } else {
         console.log('Trying to connect')
-        attempts++
+        attempts++;
         if (attempts < 10) {
           setTimeout(check, 500)
         } else {
@@ -79,5 +78,12 @@ describe('Connecting to database', function () {
         throw new Error('Database deleted the wrong object')
       }
     })
+  })
+
+  after(function (done) {
+    models.db.collection(testCollection).drop().then(() => {
+      console.log('finished')
+      done();
+    }).catch((err) => { throw err });
   })
 })
