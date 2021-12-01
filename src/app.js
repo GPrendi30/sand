@@ -10,6 +10,8 @@ const chatRouter = require('./routes/chat')
 const userRouter = require('./routes/user')
 const exchangeRouter = require('./routes/exchange')
 
+require('./models'); // run database
+
 const app = express()
 
 // view engine setup
