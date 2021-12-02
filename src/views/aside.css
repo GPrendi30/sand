@@ -39,13 +39,11 @@ background-color: #007bff;
     width: 40px;
     margin-left: 5%;
     margin-top: 12px;
-    float: left;
 }
 
 .active 
 {
   width: 120px;
-  float: left;
   margin-top: 10px;
 }
 .active h4
@@ -86,7 +84,6 @@ background-color: #007bff;
 {
     display: inline-block;
     width: 20px;
-    float: left;
 }
 .received-msg
 {
@@ -135,7 +132,6 @@ background-color: #007bff;
 }
 .outgoing-chats-msg
 {
-    float: left;
     width: 46%;
     margin-left: 45%;
 }
@@ -143,18 +139,14 @@ background-color: #007bff;
 {
     display: inline-block;
     width: 20px;
-    float: right;
 
 }
 .msg-bottom
 {
-    position: relative;
-    height: 100%;
     background-color: #007bff;
 }
 .input-group
 {
-    float: right;
     margin-top: 13px;
     margin-right: 20px;
     outline: none !important;
@@ -166,4 +158,18 @@ background-color: #007bff;
 .form-control
 {
     border: none !important;
+    border-radius: 20px !important;
+
+}
+.input-group-text
+{
+    background: transparent !important;
+    border: none !important;
+}
+.form-control:focus
+{
+    border-color: none !important;
+    box-shadow: none !important;
+    border-radius: 20px;
+
 }
