@@ -118,6 +118,7 @@ describe('Connecting to database', function () {
   // })
 
   describe('Testing user routes', function () {
+    
     describe('GET /user/_id', function () {
       it('the user metadata should be found', function (done) {
         models.users.findOne({username:'username'}).then(result=>{
@@ -177,15 +178,92 @@ describe('Connecting to database', function () {
           .end(function (err, res) {
             if (err) return done(err)
             const fUsers = JSON.parse(res.text)
-            // console.log('fUsers')
-            // console.log(fUsers)
             assert(result);
             expect(JSON.stringify(fUsers)).to.equal(JSON.stringify(result))
             done()
           }) })
       })
+
+      it(' the request do not accept json -> bad request', function (done) {
+        request
+          .get('/user')
+          .set('Accept', 'html')
+          .send()
+          .expect(406, done)
+      })
     })
 
+    describe('GET /user/settings/:_id', function () {
+      it('the user settings metadata should be found', function (done) {
+        models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/settings/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(200)
+          .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+          .end(function (err, res) {
+            if (err) return done(err)
+            const settings = JSON.parse(res.text)
+            console.log('settings'+settings)
+             assert(result);
+             assert(settings);
+             expect(JSON.stringify(settings)).to.equal(JSON.stringify(result.settings))
+            done()
+          }) })
+      })
+
+      it('a random user settings should be not found ', function (done) {
+        request
+          .get('/user/settings/42a802fd2ac32b114627c148')
+          .send()
+          .expect(404, done)
+      })
+
+      it(' the request do not accept json -> bad request', function (done) {
+        request
+          .get('/user/settings/42a802fd2ac32b114627c148')
+          .set('Accept', 'html')
+          .send()
+          .expect(406, done)
+      })
+    })
+
+    describe('GET /user/assets/:_id', function () {
+      it('the user assets metadata should be found', function (done) {
+        models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/assets/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(200)
+          .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+          .end(function (err, res) {
+            if (err) return done(err)
+            const assets = JSON.parse(res.text)
+              assert(result)
+              assert(result.collection);
+              assert(assets);
+              expect(JSON.stringify(assets)).to.equal(JSON.stringify(result.collection))
+            done()
+          }) })
+      })
+
+      it('a random user assets should be not found ', function (done) {
+        request
+          .get('/user/assets/42a802fd2ac32b114627c148')
+          .send()
+          .expect(404, done)
+      })
+
+      it(' the request do not accept json -> bad request', function (done) {
+        request
+          .get('/user/assets/42a802fd2ac32b114627c148')
+          .set('Accept', 'html')
+          .send()
+          .expect(406, done)
+      })
+    })
 
 
   })

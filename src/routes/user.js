@@ -76,8 +76,8 @@ router.get('/', function (req, res, next) {
         const user = result;
         if (result === undefined) {
             res.status(404).end();
-        } else if (req.accepts('html')) {
-            res.render('user', { user })
+        // } else if (req.accepts('html')) {
+        //     res.render('user', { user })
         } else if (req.accepts('application/json')) {
             res.status(200).json(result)
         } else {
@@ -108,32 +108,36 @@ router.get('/:_id', function (req, res, next) {
 
 /* GET user settings page. */
 router.get('/settings/:_id', function (req, res, next) {
-    const filter =  { _id: new ObjectId(req.params._id) };
-    models.users.findOne(filter).then(result=>{
-        const user = result
-        if (user === null) {
-            res.status(404).end();
-        } else if (req.accepts('application/json')) {
-            res.status(200).json(user.settings)
-        } else {
-            res.status(406).end()
-        }
-    })
+    if (req.accepts('application/json')) {
+        const filter =  { _id: new ObjectId(req.params._id) }
+        models.users.findOne(filter).then(result=>{
+            const user = result
+            if (user === null) {
+                res.status(404).end();
+            } else {
+                res.json(user.settings)
+            }
+        }).catch(err => { console.log(err) })
+    } else {
+        res.status(406).end()
+    }
 })
 
 /* GET user assets page. */
 router.get('/assets/:_id', function (req, res, next) {
-    const filter =  { _id: new ObjectId(req.params._id) };
-    models.users.findOne(filter).then(result=>{
-        const user = result
-        if (user === undefined) {
-            res.status(404).end();
-        } else if (req.accepts('application/json')) {
-            res.status(200).json(user.collection)
-        } else {
-            res.status(406).end()
-        }
-    })
+    if (req.accepts('application/json')) {
+        const filter =  { _id: new ObjectId(req.params._id) }
+        models.users.findOne(filter).then(result=>{
+            const user = result
+            if (user === null) {
+                res.status(404).end();
+            } else {
+                res.json(user.collection)
+            }
+        }).catch(err => { console.log(err) })
+    } else {
+        res.status(406).end()
+    }
 })
 
 /* GET user friends page. */
