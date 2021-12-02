@@ -1,5 +1,5 @@
 const rewire = require('rewire')
-const routesFunc = rewire('../public/js/routes.js')
+const routesFunc = rewire('../routes.js')
 const assert = require('chai').assert
 const expect = require('chai').expect
 // const axios = require('axios').default;
@@ -24,14 +24,14 @@ describe('Testing fetching general data of a collection', function () {
     });
 })
 
-// Test for function getSalesFromTimeToTime
+// Test for function getSalesFromStartToEnd
 describe('Testing fetching sales data of a collection', function () {
     it('Get sales data using the collection address and two timestamps', function (done) {
         
         const collectionAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
-        const getSalesFromTimeToTime = routesFunc.__get__('getSalesFromTimeToTime')
+        const getSalesFromStartToEnd = routesFunc.__get__('getSalesFromStartToEnd')
         
-        getSalesFromTimeToTime(collectionAddress, currentTimestamp - 86400 * 1, currentTimestamp - 86400 * 0)
+        getSalesFromStartToEnd(collectionAddress, currentTimestamp - 86400 * 1, currentTimestamp - 86400 * 0)
         .then(data => {
             assert(data.transaction)
             assert(data.total_price)

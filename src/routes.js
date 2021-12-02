@@ -27,14 +27,14 @@ async function getCollectionData (slug) {
 /**
  * Function to get the sell events occurred between the two timestamps.
  * @param string contractAddress, the contract address of the collection.
- * @param int firstTimestamp, show events listed after this timestamp.
- * @param int secondTimestamp, show events listed before this timestamp.
+ * @param int startTimestamp, show events listed after this timestamp.
+ * @param int endTimestamp, show events listed before this timestamp.
  * @returns {object} object with all the data.
  */
-async function getSalesFromTimeToTime (contractAddress, firstTimestamp, secondTimestamp) {
+async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimestamp) {
     const options = {
         method: 'GET',
-        url: 'https://api.opensea.io/api/v1/events?asset_contract_address=' + contractAddress + '&event_type=successful&only_opensea=false&offset=0&occurred_after=' + firstTimestamp + '&occurred_before=' + secondTimestamp + '&limit=300',
+        url: 'https://api.opensea.io/api/v1/events?asset_contract_address=' + contractAddress + '&event_type=successful&only_opensea=false&offset=0&occurred_after=' + startTimestamp + '&occurred_before=' + endTimestamp + '&limit=300',
         headers: { Accept: 'application/json', 'X-API-KEY': process.env.OPENSEA_API }
     }
 
@@ -42,29 +42,30 @@ async function getSalesFromTimeToTime (contractAddress, firstTimestamp, secondTi
     try {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
+
     return response.data;
 }
 
 /**
  * Function to get the sell events occurred between the two timestamps in the form of an object [{ time: 'time', price: 'price'}].
  * @param string contractAddress, the contract address of the collection.
- * @param int firstTimestamp, show events listed after this timestamp.
- * @param int secondTimestamp, show events listed before this timestamp.
+ * @param int startTimestamp, show events listed after this timestamp.
+ * @param int endTimestamp, show events listed before this timestamp.
  * @returns {object} object with data of time and sell price [{ time: 'time', price: 'price'}].
  */
-async function createArrayWithPrices (contractAddress, firstTimestamp, secondTimestamp) {
+async function createArrayWithPrices (contractAddress, startTimestamp, endTimestamp) {
     const data = [];
     let res;
     try {
-        res = await getSalesFromTimeToTime(contractAddress, firstTimestamp, secondTimestamp)
+        res = await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+        res.asset_events.forEach(el => {
+            data.push({
+                timestamp: el.transaction.timestamp,
+                price: (el.total_price / 1000000000000000000)
+            });
+        })
     } catch (error) { console.error(error); }
 
-    res.asset_events.forEach(el => {
-        data.push({
-            timestamp: el.transaction.timestamp,
-            price: (el.total_price / 1000000000000000000)
-        });
-    })
     return data;
 }
 
@@ -103,18 +104,16 @@ async function dailyVolume (contractAddress, timeInDays) {
     for (let i = timeInDays; i > 0; --i) {
         let response;
         let volume = 0;
-        const firstTimestamp = currentTimestamp - 86400 * i;
-        const secondTimestamp = currentTimestamp - 86400 * (i - 1);
+        const startTimestamp = currentTimestamp - 86400 * i;
+        const endTimestamp = currentTimestamp - 86400 * (i - 1);
         try {
-            response =  await getSalesFromTimeToTime(contractAddress, firstTimestamp, secondTimestamp)
+            response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+            response.asset_events.forEach(el => {
+                volume += (el.total_price / 1000000000000000000);
+            })
+            dailyVolumeArray.push(volume);
         } catch (error) { console.error(error); }
-
-        response.asset_events.forEach(el => {
-            volume += (el.total_price / 1000000000000000000);
-        })
-        dailyVolumeArray.push(volume);
     }
 
     return dailyVolumeArray;
 }
-
