@@ -131,7 +131,6 @@ describe('Testing fetching volume of a collection', function () {
     it('Get the volume of a single collection in the last 7 days', function (done) {
 
         const timeInDays = 7
-        // let volumeArray = await dailyVolume(collectionAddress, timeInDays)
         dailyVolume(collectionAddress, timeInDays)
             .then(volumeArray => {
                 assert.equal(volumeArray.length, timeInDays);
