@@ -32,7 +32,8 @@ function createUser (req) {
         settings: req.body.settings,
         ppic: req.body.ppic,
         bio: req.body.bio,
-        tracking: req.body.tracking
+        tracking: req.body.tracking,
+        recentlyviewed: req.body.tracking
     }
     return user
 }
@@ -142,34 +143,47 @@ router.get('/assets/:_id', function (req, res, next) {
 
 /* GET user friends page. */
 router.get('/friends/:_id', function (req, res, next) {
-    const filter =  { _id: new ObjectId(req.params._id) };
-    models.users.findOne(filter).then(result=>{
-        const user = result
-        if (user === undefined) {
-            res.status(404).end();
-        } else if (req.accepts('application/json')) {
-            res.status(200).json(user.friendlist)
-        } else {
-            res.status(406).end()
-        }
-    })
+    if (req.accepts('application/json')) {
+        const filter =  { _id: new ObjectId(req.params._id) }
+        models.users.findOne(filter).then(result=>{
+            const user = result
+            if (user === null) {
+                res.status(404).end();
+            } else {
+                res.json(user.friendlist)
+            }
+        }).catch(err => { console.log(err) })
+    } else {
+        res.status(406).end()
+    }
 })
 
 /* GET user recently viewed assets page. */
-router.get('/recently_viewed/:_id', function (req, res, next) {
-// to complete
-    res.send('route not implemented yet')
+router.get('/recentlyviewed/:_id', function (req, res, next) {
+    if (req.accepts('application/json')) {
+        const filter =  { _id: new ObjectId(req.params._id) }
+        models.users.findOne(filter).then(result=>{
+            const user = result
+            if (user === null) {
+                res.status(404).end();
+            } else {
+                res.json(user.recentlyviewed)
+            }
+        }).catch(err => { console.log(err) })
+    } else {
+        res.status(406).end()
+    }
 })
 
 /* GET user following. */
 router.get('/following/:_id', function (req, res, next) {
-    const filter =  { _id: new ObjectId(req.params._id) };
+    const filter =  { _id: new ObjectId(req.params._id) }
     models.users.findOne(filter).then(result=>{
         const user = result
-        if (user === undefined) {
+        if (user === null) {
             res.status(404).end();
         } else if (req.accepts('application/json')) {
-            res.status(200).json(user.tracking)
+            res.json(user.tracking)
         } else {
             res.status(406).end()
         }
@@ -178,13 +192,14 @@ router.get('/following/:_id', function (req, res, next) {
 
 /* GET user edit page. */
 router.get('/edit/:_id', function (req, res, next) {
-    const filter =  { _id: new ObjectId(req.params._id) };
+    const filter =  { _id: new ObjectId(req.params._id) }
     models.users.findOne(filter).then(result=>{
         const user = result
-        if (user === undefined) {
+        if (user === null) {
             res.status(404).end();
-        } else if (req.accepts('application/json')) {
-            res.status(200).json(user)
+        }
+        if (req.accepts('application/json')) {
+            res.json(user)
         } else {
             res.status(406).end()
         }
@@ -193,9 +208,11 @@ router.get('/edit/:_id', function (req, res, next) {
 
 /* post user , requires form. */
 router.post('/', function (req, res, next) {
+    console.log(req);
     const user = createUser(req)
+    console.log(req.body);
     models.users.insertOne(user).then(result => {
-        res.status('200')
+        res.status('201').json(user)
     })
 })
 

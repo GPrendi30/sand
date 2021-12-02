@@ -25,7 +25,8 @@ function createUser (username, password, email, name, surname, wallet, collectio
     settings: settings,
     ppic: ppic,
     bio: bio,
-    tracking: tracking
+    tracking: tracking,
+    recentlyviewed: [] 	
   }
   return user
 }
@@ -50,9 +51,11 @@ function createUser (username, password, email, name, surname, wallet, collectio
 //   users.push(user)
 // }
 // create users for tests
-const dummyUser = createUser( 'username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [])
-const dummyUser2 = createUser( 'username2', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [])
+const dummyUser = createUser( 'username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [],[])
+const dummyUser2 = createUser( 'username2', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [],[])
 const _id = dummyUser._id
+
+var initialSize=0 //used to check POST/PUT/DELETE 
 
 // add users to db
 
@@ -131,7 +134,6 @@ describe('Connecting to database', function () {
           .end(function (err, res) {
             if (err) return done(err)
             const user = JSON.parse(res.text)
-            console.log('fetched user=')
             expect(user._id).to.equal(''+result._id) //result_id =new ObjectId("61a8013882dda60a14619eeb")
             expect(user.username).to.equal('username')
             expect(user.password).to.equal('password')// probably we don't want this
@@ -205,7 +207,7 @@ describe('Connecting to database', function () {
           .end(function (err, res) {
             if (err) return done(err)
             const settings = JSON.parse(res.text)
-            console.log('settings'+settings)
+            //console.log('settings'+settings)
              assert(result);
              assert(settings);
              expect(JSON.stringify(settings)).to.equal(JSON.stringify(result.settings))
@@ -265,9 +267,251 @@ describe('Connecting to database', function () {
       })
     })
 
+    describe('GET /user/friends/:_id', function () {
+      it('the user friends metadata should be found', function (done) {
+        models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/friends/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(200)
+          .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+          .end(function (err, res) {
+            if (err) return done(err)
+            const friends = JSON.parse(res.text)
+            //console.log('friends' +friends)
+              assert(result)
+              assert(result.friendlist);
+              assert(friends);
+              expect(JSON.stringify(friends)).to.equal(JSON.stringify(result.friendlist))
+            done()
+          }) })
+      })
 
+      it('a random user firends should be not found ', function (done) {
+        request
+          .get('/user/friends/42a802fd2ac32b114627c148')
+          .send()
+          .expect(404, done)
+      })
+
+      it(' the request do not accept json -> bad request', function (done) {
+        request
+          .get('/user/friends/42a802fd2ac32b114627c148')
+          .set('Accept', 'html')
+          .send()
+          .expect(406, done)
+      })
+    })
+
+    describe('GET /user/recentlyviewed/:_id', function () {
+      it('the user recentlyviewed metadata should be found', function (done) {
+        models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/recentlyviewed/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(200)
+          .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+          .end(function (err, res) {
+            if (err) return done(err)
+            const recentlyViewed = JSON.parse(res.text)
+              assert(result)
+              assert(result.recentlyviewed);
+              assert(recentlyViewed);
+              expect(JSON.stringify(recentlyViewed)).to.equal(JSON.stringify(result.recentlyviewed))
+            done()
+          }) })
+      })
+
+      it('a random user recentlyviewed should be not found ', function (done) {
+        request
+          .get('/user/recentlyviewed/42a802fd2ac32b114627c148')
+          .send()
+          .expect(404, done)
+      })
+
+      it(' the request do not accept json -> bad request', function (done) {
+        request
+          .get('/user/recentlyviewed/42a802fd2ac32b114627c148')
+          .set('Accept', 'html')
+          .send()
+          .expect(406, done)
+      })
+    })
+
+    describe('GET /user/following/:_id', function () {
+      it('the user following metadata should be found', function (done) {
+        models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/following/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(200)
+          .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+          .end(function (err, res) {
+            if (err) return done(err)
+            const following = JSON.parse(res.text)
+              assert(result)
+              assert(result.tracking);
+              assert(following);
+              expect(JSON.stringify(following)).to.equal(JSON.stringify(result.tracking))
+            done()
+          }) })
+      })
+
+      it('a random user following should be not found ', function (done) {
+        request
+          .get('/user/following/42a802fd2ac32b114627c148')
+          .send()
+          .expect(404, done)
+      })
+
+    })
+
+    describe('GET /edit/:_id', function () {
+      it('the edit metadata should be found', function (done) {
+        models.users.findOne({username:'username'}).then(result=>{
+          request
+          .get('/user/edit/'+ result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(200)
+          .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+          .end(function (err, res) {
+            if (err) return done(err)
+            const user = JSON.parse(res.text)
+            expect(user._id).to.equal(''+result._id) //result_id =new ObjectId("61a8013882dda60a14619eeb")
+            expect(user.username).to.equal('username')
+            expect(user.password).to.equal('password')// probably we don't want this
+            expect(user.email).to.equal('email')
+            expect(user.name).to.equal('name')
+            expect(user.surname).to.equal('surname')
+            expect(user.wallet).to.equal('wallet')
+            expect(user.collection).to.be.an('array').that.is.empty
+            expect(user.friendlist).to.be.an('array').that.is.empty
+            expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
+            expect(user.ppic).to.equal('ppic')
+            expect(user.bio).to.equal('bio')
+            expect(user.tracking).to.be.an('array').that.is.empty
+            done()
+          })})
+        
+      })
+      it('a random user edit should be not found ', function (done) {
+        request
+          .get('/edit/42a802fd2ac32b114627c148')
+          .send()
+          .expect(404, done)
+      })
+    })
+
+    describe('POST /user/', function() {
+
+      it('check initial user collection size', function(done) {
+          request
+              .get('/user/')
+              .set('Accept', 'application/json')
+              .send()
+              .expect(200)
+              .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+              .end((err, res) => {
+                  if (err) return done(err);
+
+                  const fUsers = JSON.parse(res.text);
+                  //check the initial size of the content present in the server
+                  initialSize = fUsers.length;
+                  done();
+              });
+      });
+
+      it('should create a new user', function(done) {
+
+          request
+              .post('/user/')
+              .send(dummyUser2)
+              .set('Encryption-Type',"multipart/form-data")
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+              .expect(201)
+              .end(function(err, res) {
+                  if (err) return done(err);
+
+                  //console.log(res.text);
+
+                  const user = JSON.parse(res.text);
+
+                  //console.log(user);
+                  expect(user._id).to.not.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
+                  expect(user.username).to.equal(dummyUser2.username)
+                  expect(user.password).to.equal(dummyUser2.password)// probably we don't want this
+                  expect(user.email).to.equal(dummyUser2.email)
+                  expect(user.name).to.equal(dummyUser2.name)
+                  expect(user.surname).to.equal(dummyUser2.surname)
+                  expect(user.wallet).to.equal(dummyUser2.wallet)
+                  expect(user.collection).to.be.an('array').that.is.empty
+                  expect(user.friendlist).to.be.an('array').that.is.empty
+                  expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
+                  expect(user.ppic).to.equal(dummyUser2.ppic)
+                  expect(user.bio).to.equal(dummyUser2.bio)
+                  expect(user.tracking).to.be.an('array').that.is.empty
+                  expect(user.recentlyviewed).to.be.an('array').that.is.empty
+
+                  done()
+              })
+      })
+
+      it('check user collection size after adding the user', function(done) {
+        request
+            .get('/user/')
+            .set('Accept', 'application/json')
+            .send()
+            .expect(200)
+            .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+            .end((err, res) => {
+                if (err) return done(err);
+
+                const fUsers = JSON.parse(res.text);
+                //check the initial size of the content present in the server
+                finalSize = fUsers.length;
+                expect(finalSize).to.equal(initialSize+1)
+                done();
+            });
+    });
+
+    it('should being added to the db and retrivable', function(done) {
+      request
+      models.users.findOne({username:'username2'}).then(result=>{
+        request
+        .get('/user/'+ result._id)
+        .set('Accept', 'application/json')
+        .send()
+        .expect(200)
+        .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+        .end(function (err, res) {
+          if (err) return done(err)
+          const user = JSON.parse(res.text)
+          expect(user._id).to.not.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
+          expect(user.username).to.equal(dummyUser2.username)
+          expect(user.password).to.equal(dummyUser2.password)// probably we don't want this
+          expect(user.email).to.equal(dummyUser2.email)
+          expect(user.name).to.equal(dummyUser2.name)
+          expect(user.surname).to.equal(dummyUser2.surname)
+          expect(user.wallet).to.equal(dummyUser2.wallet)
+          expect(user.collection).to.be.an('array').that.is.empty
+          expect(user.friendlist).to.be.an('array').that.is.empty
+          expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
+          expect(user.ppic).to.equal(dummyUser2.ppic)
+          expect(user.bio).to.equal(dummyUser2.bio)
+          expect(user.tracking).to.be.an('array').that.is.empty
+          expect(user.recentlyviewed).to.be.an('array').that.is.empty
+          done()
+        })
+      })
+    })
   })
-  })
+})
+})
 
 // // addUserDb(dummyUser)
 // // addUserDb(dummyUser2)
