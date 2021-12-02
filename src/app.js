@@ -5,16 +5,36 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
+const session = require('express-session');
+
+
+
 
 const indexRouter = require('./routes/index')
 const graphRouter = require('./routes/graph')
 const chatRouter = require('./routes/chat')
 const userRouter = require('./routes/user')
 const exchangeRouter = require('./routes/exchange')
+const loginRouter = require('./routes/login')
 
 require('./models'); // run database
 
 const app = express()
+const { passport } = require('./login')
+/*  passportjs
+  Local authentication
+ */
+
+
+app.use(session({
+  secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -37,6 +57,8 @@ app.use('/graph', graphRouter)
 app.use('/chat', chatRouter)
 app.use('/user', userRouter)
 app.use('/exchange', exchangeRouter)
+app.use('/login', loginRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
