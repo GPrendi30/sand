@@ -145,7 +145,7 @@ describe('Connecting to database', function () {
             expect(user.bio).to.equal('bio')
             expect(user.tracking).to.be.an('array').that.is.empty
             done()
-          })})//.then(function(){done()})
+          })})
         
       })
 
@@ -167,6 +167,7 @@ describe('Connecting to database', function () {
 
     describe('GET /user/', function () {
       it('the users metadata should be found', function (done) {
+        models.users.find().toArray().then(result=>{
         request
           .get('/user/')
           .set('Accept', 'application/json')
@@ -178,9 +179,10 @@ describe('Connecting to database', function () {
             const fUsers = JSON.parse(res.text)
             // console.log('fUsers')
             // console.log(fUsers)
-            expect(JSON.stringify(fUsers)).to.equal(JSON.stringify(users))
+            assert(result);
+            expect(JSON.stringify(fUsers)).to.equal(JSON.stringify(result))
             done()
-          })
+          }) })
       })
     })
 
