@@ -21,7 +21,7 @@ jobs:
         with:
           mongodb-version: '4.4'
 
-       - name: Create .env file
+      - name: Create .env file
         run: echo "OPENSEA_API=${{ secrets.OPENSEA_API }}" > .env
 
       - name: Install dependencies
