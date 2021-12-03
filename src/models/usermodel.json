@@ -1,0 +1,16 @@
+{
+	_id: xxx
+	username: unique
+	password: hash
+	email:
+	name:
+	surmame:
+	wallet: 
+	collection: []
+	friendlist: []
+	settings: { currency: {}, mode: }
+	ppic: ""
+	bio: ""
+	tracking: []
+	recentlyViewed: [] 	
+}
