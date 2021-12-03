@@ -1,0 +1,144 @@
+#navbar {
+    max-width: 250px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#navbar ul {
+    list-style-type: none;
+    margin-top: 30px;
+}
+
+#navbar ul li {
+    padding: 10px 20px;
+    margin: 15px 0px;
+}
+
+
+/* Underline Current Page (li class="current") */
+
+#navbar li.current h1 {
+    display: inline-block;
+    position: relative;
+}
+
+#navbar li.current h1::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    transform: scaleX(1);
+    transform-origin: bottom center;
+}
+
+#navbar ul li:first-child {
+    margin-top: 5px;
+}
+
+#navbar ul a {
+    /* background-color: red; */
+    display: flex;
+    width: fit-content;
+    gap: 10px;
+    align-items: center;
+    text-decoration: none;
+    padding: 10px;
+}
+
+#navbar a h1 {
+    margin-right: 10px;
+}
+
+.nav-icon {
+    width: 30px;
+    height: 30px;
+    margin: 10px;
+    background-image: url("/images/user.svg");
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: center;
+    background-size: 100%;
+}
+
+#navbar>#options {
+    margin: 35px 10px 20px 10px;
+    /* t r b l */
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#navbar>#options .nav-icon {
+    width: 50px;
+    height: 50px;
+}
+
+
+/* Hover Underline Animation 
+   Will make h1 inside parent w/ class get underlined */
+
+.underline_animation h1 {
+    display: inline-block;
+    position: relative;
+}
+
+.underline_animation h1::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    transform-origin: bottom center;
+    transition: transform 0.25s ease-out;
+}
+
+.underline_animation:hover h1::after {
+    transform: scaleX(1);
+    transform-origin: bottom center;
+}
+
+
+/* Icons */
+
+.nav-icon#home {
+    background-image: url("/images/home.svg");
+}
+
+.nav-icon#exchange {
+    background-image: url("/images/exchange.svg");
+}
+
+.nav-icon#follow {
+    background-image: url("/images/follow.svg");
+}
+
+.nav-icon#friendlist {
+    background-image: url("/images/friendlist.svg");
+}
+
+.nav-icon#rooms {
+    background-image: url("/images/rooms.svg");
+}
+
+.nav-icon#discover {
+    background-image: url("/images/discover.svg");
+}
+
+.nav-icon#minmax {
+    background-image: url("/images/minimize.svg");
+}
+
+.nav-icon#currency {
+    background-image: url("/images/currency.svg");
+}
+
+.nav-icon#settings {
+    background-image: url("/images/settings.svg");
+}

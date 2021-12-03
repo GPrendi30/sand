@@ -1,0 +1,130 @@
+#header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#header>section {
+    display: flex;
+    align-items: center;
+}
+
+#header #title {
+    gap: 15px;
+}
+
+#header #title h1 {
+    font-size: 4em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#header #buttons {
+    min-width: 300px;
+    justify-content: space-between;
+    padding: 0px 10px;
+}
+
+#header #user_buttons {
+    display: flex;
+}
+
+#header #logo {
+    max-height: 70px;
+    margin: 10px;
+}
+
+section#wallet {
+    display: flex;
+}
+
+
+/* Icons */
+
+.header-icon {
+    height: 65px;
+    width: 65px;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
+
+.header-icon#wallet {
+    background-image: url("/images/wallet.svg");
+    background-size: 70% !important;
+}
+
+.header-icon#user {
+    background-image: url("/images/user.svg");
+}
+
+.header-icon#connected_indicator {
+    background-image: url("/images/indicator.svg");
+    width: 25px;
+    filter: invert(25%) sepia(99%) saturate(5981%) hue-rotate(355deg) brightness(101%) contrast(127%);
+}
+
+#connected_indicator.online {
+    filter: invert(84%) sepia(22%) saturate(5982%) hue-rotate(40deg) brightness(109%) contrast(107%);
+}
+
+
+/* Light/Dark switch */
+
+#darkmode .header-icon {
+    height: 30px;
+    width: 30px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 85px;
+    height: 40px;
+}
+
+.switch input {
+    /* Hide default checkbox */
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    border-radius: 34px;
+    -webkit-transition: .2s;
+    transition: .2s;
+    border: 1px solid black;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 30px;
+    width: 30px;
+    left: 5px;
+    bottom: 5px;
+    background-image: url("/images/light.svg");
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+input:checked+.slider {
+    background-color: black;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(45px);
+    background-image: url("/images/dark.svg");
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
