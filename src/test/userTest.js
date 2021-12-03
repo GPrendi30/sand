@@ -32,11 +32,54 @@ function createUser (username, password, email, name, surname, wallet, collectio
 // create users for tests
 const dummyUser = createUser( 'username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [],[])
 const dummyUser2 = createUser( 'username2', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [],[])
+const dummyUserDD = createUser( 'username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [],[])
+
+
+dummyUserDD._id = '42a802fd2ac32b114627c118'
 
 var initialSize=0 //used to check POST/PUT/DELETE 
 const new_id = '42a802fd2ac32b114627c118'//used to check POST/PUT/DELETE 
 
-// add users to db
+// TESTING HELPER FUNCTIONS
+describe('Testing remove sensitive data function', function () {
+  it('successfully deleted the sensitive info', function (done) {
+    // create copy of the object
+    const user = dummyUserDD
+    // check copy has every field before deletion
+    expect(user._id).to.equal(dummyUserDD._id)
+    expect(user.username).to.equal('username')
+    expect(user.password).to.equal('password')
+    expect(user.email).to.equal('email')
+    expect(user.name).to.equal('name')
+    expect(user.surname).to.equal('surname')
+    expect(user.wallet).to.equal('wallet')
+    expect(user.collection).to.be.an('array').that.is.empty
+    expect(user.friendlist).to.be.an('array').that.is.empty
+    expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
+    expect(user.ppic).to.equal('ppic')
+    expect(user.bio).to.equal('bio')
+    expect(user.tracking).to.be.an('array').that.is.empty
+
+    // deletion and check after
+
+    const removeSensitiveData = userJs.__get__('removeSensitiveData') // get the removesdata function form users.js
+    removeSensitiveData(user)
+    expect(user._id).to.be.undefined
+    expect(user.username).to.equal('username')
+    expect(user.password).to.equal(undefined)
+    expect(user.email).to.equal(undefined)
+    expect(user.name).to.equal(undefined)
+    expect(user.surname).to.equal(undefined)
+    expect(user._id).to.be.undefined
+    expect(user.collection).to.be.an('array').that.is.empty
+    expect(user.friendlist).to.be.an('array').that.is.empty
+    expect(user.settings).to.equal(undefined)
+    expect(user.ppic).to.equal('ppic')
+    expect(user.bio).to.equal('bio')
+    expect(user.tracking).to.be.an('array').that.is.empty
+    done()
+  })
+})
 
 describe('Connecting to database', function () {
   before(function (done) {
@@ -65,7 +108,7 @@ describe('Connecting to database', function () {
     describe('GET /user/_id', function () {
       it('the user metadata should be found', function (done) {
         models.users.findOne({username:'username'}).then(result=>{
-          console.log('/user/'+ result._id)
+          //console.log('/user/'+ result._id)
           request
           .get('/user/'+ result._id)
           .set('Accept', 'application/json')
@@ -75,16 +118,17 @@ describe('Connecting to database', function () {
           .end(function (err, res) {
             if (err) return done(err)
             const user = JSON.parse(res.text)
-            expect(user._id).to.equal(''+result._id) //result_id =new ObjectId("61a8013882dda60a14619eeb")
+            expect(user._id).to.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
             expect(user.username).to.equal('username')
-            expect(user.password).to.equal('password')// probably we don't want this
-            expect(user.email).to.equal('email')
-            expect(user.name).to.equal('name')
-            expect(user.surname).to.equal('surname')
-            expect(user.wallet).to.equal('wallet')
+            console.log(user.password)
+            expect(user.password).to.be.undefined
+            expect(user.email).to.be.undefined
+            expect(user.name).to.be.undefined
+            expect(user.surname).to.be.undefined
+            expect(user.wallet).to.be.undefined
             expect(user.collection).to.be.an('array').that.is.empty
             expect(user.friendlist).to.be.an('array').that.is.empty
-            expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
+            expect(user.settings).to.be.undefined
             expect(user.ppic).to.equal('ppic')
             expect(user.bio).to.equal('bio')
             expect(user.tracking).to.be.an('array').that.is.empty
@@ -130,7 +174,7 @@ describe('Connecting to database', function () {
             if (err) return done(err)
             const fUsers = JSON.parse(res.text)
             assert(result);
-            expect(JSON.stringify(fUsers)).to.equal(JSON.stringify(result))
+            expect(JSON.stringify(fUsers)).to.equal(JSON.stringify([dummyUserDD]))
             done()
           }) })
       })
@@ -373,16 +417,16 @@ describe('Connecting to database', function () {
           .end(function (err, res) {
             if (err) return done(err)
             const user = JSON.parse(res.text)
-            expect(user._id).to.equal(''+result._id) //result_id =new ObjectId("61a8013882dda60a14619eeb")
+            expect(user._id).to.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
             expect(user.username).to.equal('username')
-            expect(user.password).to.equal('password')// probably we don't want this
-            expect(user.email).to.equal('email')
-            expect(user.name).to.equal('name')
-            expect(user.surname).to.equal('surname')
-            expect(user.wallet).to.equal('wallet')
+            expect(user.password).to.be.undefined
+            expect(user.email).to.be.undefined
+            expect(user.name).to.be.undefined
+            expect(user.surname).to.be.undefined
+            expect(user.wallet).to.be.undefined
             expect(user.collection).to.be.an('array').that.is.empty
             expect(user.friendlist).to.be.an('array').that.is.empty
-            expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
+            expect(user.settings).to.be.undefined
             expect(user.ppic).to.equal('ppic')
             expect(user.bio).to.equal('bio')
             expect(user.tracking).to.be.an('array').that.is.empty
@@ -442,17 +486,16 @@ describe('Connecting to database', function () {
                   const user = JSON.parse(res.text);
 
                   //console.log(user);
-                  expect(user._id).to.not.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
+                  expect(user._id).to.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
                   expect(user.username).to.equal(dummyUser2.username)
-                  expect(user.password).to.equal(dummyUser2.password)// probably we don't want this
-                  expect(user.email).to.equal(dummyUser2.email)
-                  expect(user.name).to.equal(dummyUser2.name)
-                  expect(user.surname).to.equal(dummyUser2.surname)
-                  expect(user.wallet).to.equal(dummyUser2.wallet)
+                  expect(user.password).to.be.undefined
+                  expect(user.email).to.be.undefined
+                  expect(user.name).to.be.undefined
+                  expect(user.surname).to.be.undefined
+                  expect(user.wallet).to.be.undefined
                   expect(user.collection).to.be.an('array').that.is.empty
                   expect(user.friendlist).to.be.an('array').that.is.empty
-                  expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
-                  expect(user.ppic).to.equal(dummyUser2.ppic)
+                  expect(user.settings).to.be.undefined
                   expect(user.bio).to.equal(dummyUser2.bio)
                   expect(user.tracking).to.be.an('array').that.is.empty
                   expect(user.recentlyviewed).to.be.an('array').that.is.empty
@@ -475,40 +518,20 @@ describe('Connecting to database', function () {
                 //check the initial size of the content present in the server
                 finalSize = fUsers.length;
                 expect(finalSize).to.equal(initialSize+1)
+                initialSize++
                 done();
             });
     });
 
     it('should being added to the db and retrivable', function(done) {
-      request
       models.users.findOne({username:'username2'}).then(result=>{
         request
-        .get('/user/'+ result._id)
-        .set('Accept', 'application/json')
-        .send()
-        .expect(200)
-        .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
-        .end(function (err, res) {
-          if (err) return done(err)
-          const user = JSON.parse(res.text)
-          expect(user._id).to.not.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
-          expect(user.username).to.equal(dummyUser2.username)
-          expect(user.password).to.equal(dummyUser2.password)// probably we don't want this
-          expect(user.email).to.equal(dummyUser2.email)
-          expect(user.name).to.equal(dummyUser2.name)
-          expect(user.surname).to.equal(dummyUser2.surname)
-          expect(user.wallet).to.equal(dummyUser2.wallet)
-          expect(user.collection).to.be.an('array').that.is.empty
-          expect(user.friendlist).to.be.an('array').that.is.empty
-          expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
-          expect(user.ppic).to.equal(dummyUser2.ppic)
-          expect(user.bio).to.equal(dummyUser2.bio)
-          expect(user.tracking).to.be.an('array').that.is.empty
-          expect(user.recentlyviewed).to.be.an('array').that.is.empty
-          done()
+            .get('/user/' + result._id)
+            .send()
+            .expect(200, done);
         })
-      })
     })
+
     it('wrong id should return 404 not found', function (done) {
       request
         .post('/user/wrong_id')
@@ -527,14 +550,14 @@ describe('Connecting to database', function () {
             .send()
             .expect(200, done);
       })
-    });
+    })
 
 
-    it('updating an existing user should change its name and bio', function(done) {
+    it('updating an existing user should change its profilepic and bio', function(done) {
       models.users.findOne({username:'username2'}).then(result=>{
-          let updatedName = "updated Name"
+          let updatedPpic = "updated Pic"
           let updatedBio = "updated bio"
-          dummyUser2.name=updatedName
+          dummyUser2.ppic=updatedPpic
           dummyUser2.bio=updatedBio 
           dummyUser2._id = ''+result._id
           // console.log(dummyUser2._id)
@@ -549,7 +572,7 @@ describe('Connecting to database', function () {
             .end(function(err, res) {
                   if (err) return done(err);
                   const user = JSON.parse(res.text);
-                  expect(user.name).to.equal(updatedName);
+                  expect(user.ppic).to.equal(updatedPpic);
                   expect(user.bio).to.equal(updatedBio);
                   done()
             })
@@ -568,14 +591,14 @@ describe('Connecting to database', function () {
                 if (err) return done(err);
                  const user = JSON.parse(res.text)
                  expect(user.username).to.equal('username')
-                 expect(user.password).to.equal('password')// probably we don't want this
-                 expect(user.email).to.equal('email')
-                 expect(user.name).to.equal('name')
-                 expect(user.surname).to.equal('surname')
-                 expect(user.wallet).to.equal('wallet')
+                 expect(user.password).to.be.undefined
+                 expect(user.email).to.be.undefined
+                 expect(user.name).to.be.undefined
+                 expect(user.surname).to.be.undefined
+                 expect(user.wallet).to.be.undefined
                  expect(user.collection).to.be.an('array').that.is.empty
                  expect(user.friendlist).to.be.an('array').that.is.empty
-                 expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
+                 expect(user.settings).to.be.undefined
                  expect(user.ppic).to.equal('ppic')
                  expect(user.bio).to.equal('bio')
                  expect(user.tracking).to.be.an('array').that.is.empty
@@ -623,7 +646,7 @@ describe('Connecting to database', function () {
     
   });
 })
-//clean up test DB
+// clean up test DB
 after(function (done) {
   models.db.collection('users').drop().then(() => {
     console.log('finished')
