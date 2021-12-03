@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
       - name: Run test server
-        run: npm run start:test
+        run: npm run start:test &
 
       - name: Run tests
         run: npm test
