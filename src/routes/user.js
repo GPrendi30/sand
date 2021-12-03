@@ -6,6 +6,36 @@ const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
 // HELPER FUNCTIONS
 
+/**
+ * Function that emoves the sensitive data from a user object
+ * such as (password,email,name,surname,settings)
+ * @param {object} user the user from which we want to remove the sensitive data
+ * @retun {Undefined}
+ */
+function removeSensitiveData (user) {
+    if (user._id) {
+        delete user._id
+    }
+    if (user.password) {
+        delete user.password
+    }
+    if (user.name) {
+        delete user.name
+    }
+    if (user.surname) {
+        delete user.surname
+    }
+    if (user.settings) {
+        delete user.settings
+    }
+    if (user.wallet) {
+        delete user.wallet
+    }
+    if (user.email) {
+        delete user.email
+    }
+}
+
 // TODO Write Documentation
 
 function createUser (req) {
@@ -30,6 +60,9 @@ function createUser (req) {
 /* GET user page. */
 router.get('/', function (req, res, next) {
     models.users.find().toArray().then(result=>{
+        result.forEach(element => {
+            removeSensitiveData(element)
+        });
         const user = result;
         if (user === null) {
             res.status(404).end();
@@ -53,9 +86,10 @@ router.get('/:_id', function (req, res, next) {
             if (user === null) {
                 res.status(404).end()
             } else {
+                removeSensitiveData(user)
                 res.json(user)
             }
-        }).catch(err => { console.log(err) })
+        })
     } else {
         res.status(406).end()
     }
@@ -171,6 +205,7 @@ router.get('/edit/:_id', function (req, res, next) {
             res.status(404).end();
         }
         if (req.accepts('application/json')) {
+            removeSensitiveData(user)
             res.json(user)
         } else {
             res.status(406).end()
@@ -184,6 +219,7 @@ router.post('/', function (req, res, next) {
     const user = createUser(req)
     console.log(req.body);
     models.users.insertOne(user).then(result => {
+        removeSensitiveData(user)
         res.status('201').json(user)
     })
 })
@@ -196,6 +232,7 @@ router.put('/:_id', function (req, res, next) {
     models.users.replaceOne(filter, user, { upsert: true }) // update + insert = upsert
         .then(result => {
             const found = (result.upsertedCount === 0);
+            removeSensitiveData(user)
             res.status(found ? 200 : 201).json(user);
         });
 })
@@ -209,6 +246,7 @@ router.delete('/:_id', function (req, res) {
             res.status(404).end();
         } else {
             if (req.accepts('application/json')) {
+                removeSensitiveData(result)
                 res.status(204).json(result)
             } else {
                 res.status(406).end();
