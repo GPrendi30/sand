@@ -84,11 +84,12 @@ async function pullTokenDataByID (contractAddress, tokenID) {
     }
 
     let response;
+    let token;
     try {
         response = await axios.request(options);
+        token = response.data.assets[0];
     } catch (error) { console.error(error); }
 
-    const token = response.data.assets[0];
     return token;
 }
 
@@ -96,7 +97,7 @@ async function pullTokenDataByID (contractAddress, tokenID) {
  * Function to get the sell events occurred between the two timestamps in the form of an object [{ time: 'time', price: 'price'}].
  * @param string contractAddress, the contract address of the collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
- * @returns {object} object with data representing the daily volume.
+ * @returns {array} object with data representing the daily volume.
  */
 async function dailyVolume (contractAddress, timeInDays) {
     const dailyVolumeArray = [];
@@ -114,7 +115,6 @@ async function dailyVolume (contractAddress, timeInDays) {
             dailyVolumeArray.push(volume);
         } catch (error) { console.error(error); }
     }
-    console.log(Array.from({ length: 30 }, (_, i) => i + 0))
-    console.log(dailyVolumeArray)
+
     return dailyVolumeArray;
 }
