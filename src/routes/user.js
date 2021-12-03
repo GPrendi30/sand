@@ -5,19 +5,8 @@ const router = express.Router()
 const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
 // HELPER FUNCTIONS
-// /**
-//  * Function that emoves the sensitive data from a user object
-//  * such as (password,email,name,surname,settings)
-//  * @param {object} user the user from which we want to remove the sensitive data
-//  * @retun {Undefined}
-//  */
-// function removeSensitiveData (user) {
-//     delete user.password
-//     delete user.email
-//     delete user.name
-//     delete user.surname
-//     delete user.settings
-// }
+
+// TODO Write Documentation
 
 function createUser (req) {
     const user = {
@@ -55,11 +44,14 @@ router.get('/', function (req, res, next) {
 /* Get single user */
 router.get('/:_id', function (req, res, next) {
     if (req.accepts('application/json')) {
-        const filter =  { _id: new ObjectId(req.params._id) }
+        let filter
+        try {
+            filter =  { _id: new ObjectId(req.params._id) }
+        } catch (e) { res.status(404) }
         models.users.findOne(filter).then(result=>{
             const user = result
             if (user === null) {
-                res.status(404).end();
+                res.status(404).end()
             } else {
                 res.json(user)
             }
@@ -72,7 +64,10 @@ router.get('/:_id', function (req, res, next) {
 /* GET user settings page. */
 router.get('/settings/:_id', function (req, res, next) {
     if (req.accepts('application/json')) {
-        const filter =  { _id: new ObjectId(req.params._id) }
+        let filter
+        try {
+            filter =  { _id: new ObjectId(req.params._id) }
+        } catch (e) { res.status(404) }
         models.users.findOne(filter).then(result=>{
             const user = result
             if (user === null) {
@@ -89,7 +84,10 @@ router.get('/settings/:_id', function (req, res, next) {
 /* GET user assets page. */
 router.get('/assets/:_id', function (req, res, next) {
     if (req.accepts('application/json')) {
-        const filter =  { _id: new ObjectId(req.params._id) }
+        let filter
+        try {
+            filter =  { _id: new ObjectId(req.params._id) }
+        } catch (e) { res.status(404) }
         models.users.findOne(filter).then(result=>{
             const user = result
             if (user === null) {
@@ -106,7 +104,10 @@ router.get('/assets/:_id', function (req, res, next) {
 /* GET user friends page. */
 router.get('/friends/:_id', function (req, res, next) {
     if (req.accepts('application/json')) {
-        const filter =  { _id: new ObjectId(req.params._id) }
+        let filter
+        try {
+            filter =  { _id: new ObjectId(req.params._id) }
+        } catch (e) { res.status(404) }
         models.users.findOne(filter).then(result=>{
             const user = result
             if (user === null) {
@@ -123,7 +124,10 @@ router.get('/friends/:_id', function (req, res, next) {
 /* GET user recently viewed assets page. */
 router.get('/recentlyviewed/:_id', function (req, res, next) {
     if (req.accepts('application/json')) {
-        const filter =  { _id: new ObjectId(req.params._id) }
+        let filter
+        try {
+            filter =  { _id: new ObjectId(req.params._id) }
+        } catch (e) { res.status(404) }
         models.users.findOne(filter).then(result=>{
             const user = result
             if (user === null) {
@@ -139,7 +143,10 @@ router.get('/recentlyviewed/:_id', function (req, res, next) {
 
 /* GET user following. */
 router.get('/following/:_id', function (req, res, next) {
-    const filter =  { _id: new ObjectId(req.params._id) }
+    let filter
+    try {
+        filter =  { _id: new ObjectId(req.params._id) }
+    } catch (e) { res.status(404) }
     models.users.findOne(filter).then(result=>{
         const user = result
         if (user === null) {
@@ -154,7 +161,10 @@ router.get('/following/:_id', function (req, res, next) {
 
 /* GET user edit page. */
 router.get('/edit/:_id', function (req, res, next) {
-    const filter =  { _id: new ObjectId(req.params._id) }
+    let filter
+    try {
+        filter =  { _id: new ObjectId(req.params._id) }
+    } catch (e) { res.status(404) }
     models.users.findOne(filter).then(result=>{
         const user = result
         if (user === null) {

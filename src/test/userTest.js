@@ -59,51 +59,13 @@ describe('Connecting to database', function () {
   
   check()
   })
-  // describe('Testing remove sensitive data function', function () {
-  //   it('successfully deleted the sensitive info', function (done) {
-  //     // create copy of the object
-  //     const user = createUser('id', 'username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [])
-  //     // check copy has every field before deletion
-  //     expect(user._id).to.equal('id')
-  //     expect(user.username).to.equal('username')
-  //     expect(user.password).to.equal('password')
-  //     expect(user.email).to.equal('email')
-  //     expect(user.name).to.equal('name')
-  //     expect(user.surname).to.equal('surname')
-  //     expect(user.wallet).to.equal('wallet')
-  //     expect(user.collection).to.be.an('array').that.is.empty
-  //     expect(user.friendlist).to.be.an('array').that.is.empty
-  //     expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
-  //     expect(user.ppic).to.equal('ppic')
-  //     expect(user.bio).to.equal('bio')
-  //     expect(user.tracking).to.be.an('array').that.is.empty
-
-  //     // deletion and check after
-
-  //     const removeSensitiveData = userJs.__get__('removeSensitiveData') // get the removesdata function form users.js
-  //     removeSensitiveData(user)
-  //     expect(user._id).to.equal(_id)
-  //     expect(user.username).to.equal('username')
-  //     expect(user.password).to.equal(undefined)
-  //     expect(user.email).to.equal(undefined)
-  //     expect(user.name).to.equal(undefined)
-  //     expect(user.surname).to.equal(undefined)
-  //     expect(user.wallet).to.equal('wallet')
-  //     expect(user.collection).to.be.an('array').that.is.empty
-  //     expect(user.friendlist).to.be.an('array').that.is.empty
-  //     expect(user.settings).to.equal(undefined)
-  //     expect(user.ppic).to.equal('ppic')
-  //     expect(user.bio).to.equal('bio')
-  //     expect(user.tracking).to.be.an('array').that.is.empty
-  //     done()
-  //   })
-  // })
-
+  
   describe('Testing user routes', function () {
     
     describe('GET /user/_id', function () {
       it('the user metadata should be found', function (done) {
         models.users.findOne({username:'username'}).then(result=>{
+          console.log('/user/'+ result._id)
           request
           .get('/user/'+ result._id)
           .set('Accept', 'application/json')
