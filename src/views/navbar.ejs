@@ -1,32 +1,13 @@
 <ul>
-    <li class="current"><a class="underline_animation" href="/">
-        <div class="nav-icon" id="home"></div>
-        <h1>Home</h1>
-    </a></li>
 
-    <li><a class="underline_animation" href="/exchange">
-        <div class="nav-icon" id="exchange"></div>
-        <h1 class="underline_animation">Exchange</h1>
-    </a></li>
+    <% pages.forEach( p => { %>
+        <%- include('navbar_item', {p}); %>
+    <% }); %>
 
-    <li><a class="underline_animation" href="/follow">
-        <div class="nav-icon" id="follow"></div>
-        <h1>Follow</h1>
-    </a></li>
-
-    <li><a class="underline_animation" href="/friends">
-        <div class="nav-icon" id="friendlist"></div>
-        <h1>Friendlist</h1>
-    </a></li>
-
-    <li><a class="underline_animation" href="/rooms">
-        <div class="nav-icon" id="rooms"></div>
-        <h1>Rooms</h1>
-    </a></li>
 </ul>
 
 <section id="options">
-    <button class="grow_hover nav-icon" id="minmax"></button>
     <button class="grow_hover nav-icon" id="currency"></button>
     <button class="nav-icon grow_hover" id="settings"></button>
+    <button class="grow_hover nav-icon" id="minmax"></button>
 </section>

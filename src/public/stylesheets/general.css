@@ -1,5 +1,6 @@
 /* Expansion of style.css */
 
+
 /* TODO: Add color variables */
 
 * {
@@ -12,12 +13,14 @@ body {
     padding: 0px !important;
 }
 
-#header, #navbar {
+#header,
+#navbar {
     border: 1px solid black;
 }
 
 #navbar {
-    border-top: 0; /* removes overlapping borders */
+    border-top: 0;
+    /* removes overlapping borders */
 }
 
 
@@ -39,34 +42,8 @@ button {
 }
 
 
-/* Hover Underline Animation 
-   Will make h1 inside parent w/ class get underlined */
-
-.underline_animation h1 {
-    display: inline-block;
-    position: relative;
-}
-
-.underline_animation h1::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    transform: scaleX(0);
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: black;
-    transform-origin: bottom center;
-    transition: transform 0.25s ease-out;
-}
-
-.underline_animation:hover h1::after {
-    transform: scaleX(1);
-    transform-origin: bottom center;
-}
-
-
 /* Float on Hover */
+
 .grow_hover {
     transition: all .15s ease-out;
 }

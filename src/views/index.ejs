@@ -6,6 +6,7 @@
     <link rel='stylesheet' href='/stylesheets/header.css' />
     <link rel='stylesheet' href='/stylesheets/navbar.css' />
     <link rel='stylesheet' href='/stylesheets/general.css' />
+    <link rel='stylesheet' href='/stylesheets/navbar_min.css' />
   </head>
   <body>
 
@@ -13,8 +14,9 @@
       <%- include('header') %>
     </header>
 
-    <nav id="navbar">
-      <%- include('navbar') %>
+    <nav id="navbar" class="minimized">
+      <% let pages = ["home", "exchange", "discover", "follow", "friendlist", "rooms"] %>
+      <%- include('navbar', {pages:pages}); %>
     </nav>
 
     <main>
