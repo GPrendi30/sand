@@ -8,10 +8,13 @@
     "test": "npm run lint && NODE_ENV=test mocha --exit ./src/test",
     "lint": "npx eslint ./src",
     "lint:fix": "npx eslint --fix ./src",
-    "docs": "npx jsdoc -d documentation/docs -r --verbose ./src && echo '\n<-> Documentation created and stored in ./documentation/docs <->\n'"
+    "docs": "npx jsdoc -d documentation/docs -r --verbose ./src && echo '\n<-> Documentation created and stored in ./documentation/docs <->\n'",
+    "test:nolint": "NODE_ENV=test mocha --exit ./src/test",
+    "start:test": "NODE_ENV=test node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "axios": "^0.24.0",
     "chai": "^4.3.4",
     "config": "^3.3.6",
     "cookie-parser": "~1.4.4",
@@ -29,7 +32,9 @@
     "mongodb": "^4.2.0",
     "morgan": "~1.9.1",
     "passport": "^0.5.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "rewire": "^5.0.0",
+    "supertest": "^6.1.6"
   },
   "description": "Decentralized smart NFT analytics.",
   "main": "www",
@@ -58,5 +63,10 @@
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.1"
+  },
+
+  "engines": {
+    "npm": ">=7",
+    "node": ">=14"
   }
 }
