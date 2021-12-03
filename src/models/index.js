@@ -18,15 +18,15 @@ const model = {}
   - collectionName is the name of the collection
 */
 MongoClient
-  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(client => {
-    model.db = client.db(dbName)
-    model.users = model.db.collection(collectionName)
+    .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(client => {
+        model.db = client.db(dbName)
+        model.users = model.db.collection(collectionName)
 
-    console.log('Connected to MongoDB')
-    console.log(`Database: ${dbName}`)
-    console.log(`Collection: ${collectionName}`)
-  })
-  .catch(err => { console.log(err) })
+        console.log('Connected to MongoDB')
+        console.log(`Database: ${dbName}`)
+        console.log(`Collection: ${collectionName}`)
+    })
+    .catch(err => { console.log(err) })
 
 exports.model = model // export model
