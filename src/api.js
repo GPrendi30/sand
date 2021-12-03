@@ -71,7 +71,6 @@ async function createArrayWithPrices (contractAddress, startTimestamp, endTimest
         })
     } catch (error) { console.error(error); }
 
-    console.log(data)
     return data;
 }
 
@@ -121,7 +120,7 @@ async function dailyVolume (contractAddress, timeInDays) {
             dailyVolumeArray.push(volume);
         } catch (error) { console.error(error); }
     }
-    // console.log(dailyVolumeArray)
+
     return dailyVolumeArray;
 }
 
