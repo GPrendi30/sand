@@ -107,6 +107,14 @@ describe('Connecting to database', function () {
           .send()
           .expect(406, done)
       })
+
+      it('wrong id should return 404 not found', function (done) {
+        request
+          .get('/user/wrong_id')
+          .set('Accept', 'application/json')
+          .send()
+          .expect(404, done)
+      })
     })
 
     describe('GET /user/', function () {
@@ -133,6 +141,13 @@ describe('Connecting to database', function () {
           .set('Accept', 'html')
           .send()
           .expect(406, done)
+      })
+      it('wrong id should return 404 not found', function (done) {
+        request
+          .get('/user/wrong_id')
+          .set('Accept', 'application/json')
+          .send()
+          .expect(404, done)
       })
     })
 
@@ -170,6 +185,13 @@ describe('Connecting to database', function () {
           .send()
           .expect(406, done)
       })
+      it('wrong id should return 404 not found', function (done) {
+        request
+          .get('/user/settings/wrong_id')
+          .set('Accept', 'application/json')
+          .send()
+          .expect(404, done)
+      })
     })
 
     describe('GET /user/assets/:_id', function () {
@@ -205,6 +227,13 @@ describe('Connecting to database', function () {
           .set('Accept', 'html')
           .send()
           .expect(406, done)
+      })
+      it('wrong id should return 404 not found', function (done) {
+        request
+          .get('/assets/wrong_id')
+          .set('Accept', 'application/json')
+          .send()
+          .expect(404, done)
       })
     })
 
@@ -243,6 +272,13 @@ describe('Connecting to database', function () {
           .send()
           .expect(406, done)
       })
+      it('wrong id should return 404 not found', function (done) {
+        request
+          .get('/friends/wrong_id')
+          .set('Accept', 'application/json')
+          .send()
+          .expect(404, done)
+      })
     })
 
     describe('GET /user/recentlyviewed/:_id', function () {
@@ -279,6 +315,13 @@ describe('Connecting to database', function () {
           .send()
           .expect(406, done)
       })
+      it('wrong id should return 404 not found', function (done) {
+        request
+          .get('/recentlyviewed/wrong_id')
+          .set('Accept', 'application/json')
+          .send()
+          .expect(404, done)
+      })
     })
 
     describe('GET /user/following/:_id', function () {
@@ -304,6 +347,14 @@ describe('Connecting to database', function () {
       it('a random user following should be not found ', function (done) {
         request
           .get('/user/following/42a802fd2ac32b114627c148')
+          .send()
+          .expect(404, done)
+      })
+
+      it('wrong id should return 404 not found', function (done) {
+        request
+          .get('/user/following/wrong_id')
+          .set('Accept', 'application/json')
           .send()
           .expect(404, done)
       })
@@ -342,6 +393,14 @@ describe('Connecting to database', function () {
       it('a random user edit should be not found ', function (done) {
         request
           .get('/edit/42a802fd2ac32b114627c148')
+          .send()
+          .expect(404, done)
+      })
+
+      it('wrong id should return 404 not found', function (done) {
+        request
+          .get('/user/edit/wrong_id')
+          .set('Accept', 'application/json')
           .send()
           .expect(404, done)
       })
@@ -450,6 +509,13 @@ describe('Connecting to database', function () {
         })
       })
     })
+    it('wrong id should return 404 not found', function (done) {
+      request
+        .post('/user/wrong_id')
+        .set('Accept', 'application/json')
+        .send()
+        .expect(404, done)
+    })
   })
 
   describe('PUT /user/:id', function() {
@@ -527,6 +593,8 @@ describe('Connecting to database', function () {
       })
     });
 
+    
+
   });
   describe('DELETE /user/:id', function() {
 
@@ -552,6 +620,7 @@ describe('Connecting to database', function () {
             .send()
             .expect(404, done);
     });
+    
   });
 })
 //clean up test DB
