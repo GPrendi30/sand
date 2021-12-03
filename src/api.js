@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
+const apiKey = process.env.OPENSEA_API;
 
 /**
  * Function to get the general data of a collection giving a collection slug.
@@ -13,7 +14,7 @@ async function getCollectionData (slug) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/collection/' + slug,
-        headers: { Accept: 'application/json', 'X-API-KEY': process.env.OPENSEA_API }
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
     }
 
     let response;
@@ -35,7 +36,7 @@ async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimes
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/events?asset_contract_address=' + contractAddress + '&event_type=successful&only_opensea=false&offset=0&occurred_after=' + startTimestamp + '&occurred_before=' + endTimestamp + '&limit=300',
-        headers: { Accept: 'application/json', 'X-API-KEY': process.env.OPENSEA_API }
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
     }
 
     let response;
@@ -80,7 +81,7 @@ async function pullTokenDataByID (contractAddress, tokenID) {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/assets?token_ids=' + tokenID +
                 '&asset_contract_address=' + contractAddress + '&order_direction=desc&offset=0&limit=30',
-        headers: { Accept: 'application/json', 'X-API-KEY': process.env.OPENSEA_API }
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
     }
 
     let response;
