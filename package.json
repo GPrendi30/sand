@@ -13,6 +13,7 @@
     "start:test": "NODE_ENV=test node ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "chai": "^4.3.4",
     "config": "^3.3.6",
     "cookie-parser": "~1.4.4",

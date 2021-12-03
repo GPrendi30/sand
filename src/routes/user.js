@@ -186,7 +186,9 @@ router.post('/', function (req, res, next) {
     models.users.insertOne(user).then(result => {
         res.status('201').json(user)
     })
+    res.render('user')
 })
+
 
 /* Put(edit) User , requires form. */
 router.put('/:_id', function (req, res, next) {
