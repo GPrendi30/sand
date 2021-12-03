@@ -114,6 +114,7 @@ async function dailyVolume (contractAddress, timeInDays) {
             dailyVolumeArray.push(volume);
         } catch (error) { console.error(error); }
     }
-
+    console.log(Array.from({ length: 30 }, (_, i) => i + 0))
+    console.log(dailyVolumeArray)
     return dailyVolumeArray;
 }

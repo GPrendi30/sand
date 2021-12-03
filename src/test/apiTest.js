@@ -1,5 +1,5 @@
 const rewire = require('rewire')
-const routesFunc = rewire('../routes.js')
+const routesFunc = rewire('../api.js')
 const assert = require('chai').assert
 const expect = require('chai').expect
 // const axios = require('axios').default;
