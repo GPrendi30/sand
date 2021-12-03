@@ -6,9 +6,7 @@ const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
 const express = require('express');
 const router = express.Router();
-// const describe = require('chai').describe
 const request = require('supertest')('http://localhost:3000')
-//const users = [] // array of user
 
 //setting up test data in db
 function createUser (username, password, email, name, surname, wallet, collection, friendlist, settings, ppic, bio, tracking) {
@@ -31,31 +29,12 @@ function createUser (username, password, email, name, surname, wallet, collectio
   return user
 }
 
-// function addUserDb(user){
-//   const filter = { _id: user._id };
-//   models.users.replaceOne(filter, user, { upsert: true }) // update + insert = upsert
-// // .then(result => {
-// //     const found = (result.upsertedCount === 0);
-// //     res.status(found ? 200 : 201).json(user);
-// // });
-// }
-
-// function getUserDb(user_id){
-//   const filter =  { _id: user._id };
-//     models.users.findOne(filter).then(result=>{
-//         console.log(result)
-//     })
-// }
-
-// function addUser (user) {
-//   users.push(user)
-// }
 // create users for tests
 const dummyUser = createUser( 'username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [],[])
 const dummyUser2 = createUser( 'username2', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [],[])
-const _id = dummyUser._id
 
 var initialSize=0 //used to check POST/PUT/DELETE 
+const new_id = '42a802fd2ac32b114627c118'//used to check POST/PUT/DELETE 
 
 // add users to db
 
@@ -65,7 +44,7 @@ describe('Connecting to database', function () {
   async function check () {
     if (models.db && models.users) {
       console.log("connected")
-      models.users.insertOne(dummyUser).then(function(){models.users.insertOne(dummyUser2)})
+      models.users.insertOne(dummyUser)
       .then(function(){done()}).catch(err=>{console.log(err)})
     } else {
       console.log('Trying to connect')
@@ -79,7 +58,7 @@ describe('Connecting to database', function () {
   }
   
   check()
-})
+  })
   // describe('Testing remove sensitive data function', function () {
   //   it('successfully deleted the sensitive info', function (done) {
   //     // create copy of the object
@@ -510,19 +489,115 @@ describe('Connecting to database', function () {
       })
     })
   })
+
+  describe('PUT /user/:id', function() {
+
+    it(`the new user should be found before updating it`, function(done) {
+      models.users.findOne({username:'username2'}).then(result=>{
+        request
+            .get('/user/' + result._id)
+            .send()
+            .expect(200, done);
+      })
+    });
+
+
+    it('updating an existing user should change its name and bio', function(done) {
+      models.users.findOne({username:'username2'}).then(result=>{
+          let updatedName = "updated Name"
+          let updatedBio = "updated bio"
+          dummyUser2.name=updatedName
+          dummyUser2.bio=updatedBio 
+          dummyUser2._id = ''+result._id
+          // console.log(dummyUser2._id)
+          // console.log(result._id)
+          request
+            .put('/user/'+result._id)
+            .send(dummyUser2)
+            .set('Encryption-Type',"multipart/form-data")
+            .set('Accept', 'application/json')
+            .expect(200 || 201)
+            .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+            .end(function(err, res) {
+                  if (err) return done(err);
+                  const user = JSON.parse(res.text);
+                  expect(user.name).to.equal(updatedName);
+                  expect(user.bio).to.equal(updatedBio);
+                  done()
+            })
+        })
+      });
+      
+    it(`create a new user given the id=`+ new_id, function(done) {
+        request
+            .put('/user/' + new_id )
+            .set('Encryption-Type',"multipart/form-data")
+            .set('Accept', 'application/json')
+            .send(dummyUser)
+            .expect( 200 | 201 )
+            .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
+            .end(function(err, res) {
+                if (err) return done(err);
+                 const user = JSON.parse(res.text)
+                 expect(user.username).to.equal('username')
+                 expect(user.password).to.equal('password')// probably we don't want this
+                 expect(user.email).to.equal('email')
+                 expect(user.name).to.equal('name')
+                 expect(user.surname).to.equal('surname')
+                 expect(user.wallet).to.equal('wallet')
+                 expect(user.collection).to.be.an('array').that.is.empty
+                 expect(user.friendlist).to.be.an('array').that.is.empty
+                 expect(user.settings).to.include({ currency: 'eth', mode: 'dark' })
+                 expect(user.ppic).to.equal('ppic')
+                 expect(user.bio).to.equal('bio')
+                 expect(user.tracking).to.be.an('array').that.is.empty
+                done()
+            });
+
+    });
+
+    it('the create user with id should be fetchable id = '+ new_id, function(done) {
+      models.users.findOne({_id : new_id}).then(result=>{
+        request
+            .get('/user/' + new_id)
+            .send()
+            .expect(200, done)
+      })
+    });
+
+  });
+  describe('DELETE /user/:id', function() {
+
+    it('the user should be found before deleting it (using' +new_id+')', function(done) {
+        request
+            .get('/user/' + new_id)
+            .set('Accept', 'application/json')
+            .send()
+            .expect(200, done);
+    });
+
+    it('deleting the new user removes it from DB', function(done) {
+        request
+            .delete('/user/' + new_id)
+            .send()
+            .expect(204, done);
+    });
+
+    it('the deleted user : ' +new_id + ' should not be found', function(done) {
+        request
+            .get('/user/'+ new_id)
+            .set('Accept', 'application/json')
+            .send()
+            .expect(404, done);
+    });
+  });
 })
+//clean up test DB
+after(function (done) {
+  models.db.collection('users').drop().then(() => {
+    console.log('finished')
+    done();
+  }).catch((err) => { throw err });
 })
 
-// // addUserDb(dummyUser)
-// // addUserDb(dummyUser2)
-// // add users to db
-// console.log('here')
-// // getUserDb(dummyUser._id)
-// // getUserDb(dummyUser2._id)
-
-
-
-// console.log('models.users')
-// console.log(models.users)
-
-
+})
