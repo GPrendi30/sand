@@ -1,0 +1,53 @@
+/* Expansion of style.css */
+
+
+/* TODO: Add color variables */
+
+* {
+    margin: 0px;
+    padding: 0px;
+    color: black !important;
+}
+
+body {
+    padding: 0px !important;
+}
+
+#header,
+#navbar {
+    border: 1px solid black;
+}
+
+#navbar {
+    border-top: 0;
+    /* removes overlapping borders */
+}
+
+
+/* Buttons */
+
+button:hover {
+    cursor: pointer;
+    filter: brightness(150%);
+}
+
+button {
+    background-color: transparent;
+    border-style: none;
+    border-radius: 500px;
+    background-size: 75% !important;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
+
+
+/* Float on Hover */
+
+.grow_hover {
+    transition: all .15s ease-out;
+}
+
+.grow_hover:hover {
+    transform: scale(1.2);
+}
