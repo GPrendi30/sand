@@ -16,7 +16,8 @@
         "no-multi-spaces": "off",
         "no-multiple-empty-lines": "off",
         "semi": "off",
-        "indent": ["warn", 4]
+        "indent": ["warn", 4],
+        "no-unused-vars": "warn"
     },
-    "ignorePatterns": "src/test/*"
+    "ignorePatterns": ["src/test/*", "src/public/js/*.min.js"]
 }
