@@ -3,6 +3,8 @@ require('dotenv').config();
 
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
+const lastMidnight = new Date(currentDate.setHours(0, 0, 0, 0));
+const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
 const apiKey = process.env.OPENSEA_API;
 
 /**
@@ -60,13 +62,16 @@ async function createArrayWithPrices (contractAddress, startTimestamp, endTimest
     try {
         res = await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
         res.asset_events.forEach(el => {
+            let date = new Date(el.transaction.timestamp);
+            date = Math.floor(date / 1000);
             data.push({
-                timestamp: el.transaction.timestamp,
+                timestamp: date,
                 price: (el.total_price / 1000000000000000000)
             });
         })
     } catch (error) { console.error(error); }
 
+    console.log(data)
     return data;
 }
 
@@ -106,8 +111,8 @@ async function dailyVolume (contractAddress, timeInDays) {
     for (let i = timeInDays; i > 0; --i) {
         let response;
         let volume = 0;
-        const startTimestamp = currentTimestamp - 86400 * i;
-        const endTimestamp = currentTimestamp - 86400 * (i - 1);
+        const startTimestamp = lastMidnightTimestamp - 86400 * i;
+        const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
         try {
             response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
             response.asset_events.forEach(el => {
@@ -116,6 +121,9 @@ async function dailyVolume (contractAddress, timeInDays) {
             dailyVolumeArray.push(volume);
         } catch (error) { console.error(error); }
     }
-
+    // console.log(dailyVolumeArray)
     return dailyVolumeArray;
 }
+
+module.exports.dailyVolume = dailyVolume;
+module.exports.createArrayWithPrices = createArrayWithPrices;
