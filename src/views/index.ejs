@@ -8,6 +8,7 @@
     <link rel='stylesheet' href='/stylesheets/general.css' />
     <link rel='stylesheet' href='/stylesheets/navbar_min.css' />
     <link rel='stylesheet' href='/stylesheets/discover.css' />
+    <link rel='stylesheet' href='/stylesheets/follow.css' />
   </head>
   <body>
 
@@ -24,7 +25,11 @@
     </nav>
 
     <main>
-      <%- include('discover') %>
+      <!-- Uncomment (one at a time!) to test different main views-->
+      <% /* - include('discover') */ %>
+      
+      <% let obj = {"title": "You wouldn't right click an NFT", "img": "/images/irony.jpg", "value": 69420} %>
+      <%- include('follow', obj) %>
     </main>
 
     <aside id="aside"></aside>

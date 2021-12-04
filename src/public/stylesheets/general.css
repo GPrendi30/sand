@@ -72,6 +72,9 @@ TODO: Delete/modify once all views have been properly implemented
 main {
     grid-area: content;
     box-shadow: rgba(50, 50, 93, 0.2) 0px 10px 30px -12px inset, rgba(0, 0, 0, 0.2) 0px 10px 25px -18px inset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* For testing purposes
@@ -83,7 +86,6 @@ TODO: Delete/modify once all views have been properly implemented
 
 button:hover {
     cursor: pointer;
-    filter: brightness(150%);
 }
 
 button {
@@ -100,7 +102,7 @@ button {
 /* Float on Hover */
 
 .grow_hover {
-    transition: all .15s ease-out;
+    transition: all .125s ease-out;
 }
 
 .grow_hover:hover {
