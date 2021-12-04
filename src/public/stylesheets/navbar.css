@@ -1,14 +1,21 @@
 #navbar {
+    grid-area: nav;
     max-width: 250px;
     height: 100%;
+    background-color: white;
+}
+
+#nav_buttons {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* Make navlinks sticky when scrolling down */
+    position: sticky;
+    top: 75px; /* this should be the same value as margin-top */
 }
 
 #navbar ul {
     list-style-type: none;
-    margin-top: 30px;
 }
 
 #navbar ul li {
@@ -65,14 +72,14 @@
     background-size: 100%;
 }
 
-#navbar>#options {
-    margin: 35px 10px 20px 10px;
+#nav_buttons>#options {
+    margin: 35px 10px;
     /* t r b l */
     display: flex;
     justify-content: space-evenly;
 }
 
-#navbar>#options .nav-icon {
+#nav_buttons>#options .nav-icon {
     width: 50px;
     height: 50px;
 }
