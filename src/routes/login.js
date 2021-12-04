@@ -11,27 +11,7 @@ router.get('/', isLoggedOut, (req, res) => {
     res.render('login', response);
 });
 
-router.get('/signup', (req, res) => {
-    const response = {
-        title: 'Signup',
-        error: req.query ? req.query.error : ''
-    }
-    res.render('signup', response);
-});
-
-router.post('/signup', async (req, res) => {
-    let user = { username: req.body.username, password: req.body.password, email: req.body.email };
-    user = await hashUserPassword(user);
-    console.log(user);
-    models.users.insertOne(user).then(result => {
-        if (result.error) {
-            res.redirect(`/login/signup?error=${result.error}`);
-        } else { res.redirect('/login'); }
-    });
-});
-
-
-router.post('/', passport.authenticate('local', {
+router.post('/', isLoggedOut, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login?error=true'
 }));
