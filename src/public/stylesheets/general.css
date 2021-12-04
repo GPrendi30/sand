@@ -14,14 +14,69 @@ body {
 }
 
 #header,
-#navbar {
+#navbar,
+#aside,
+#footer {
     border: 1px solid black;
 }
 
-#navbar {
+/* Remove overlapping borders */
+
+#navbar, #aside, #header {
     border-top: 0;
-    /* removes overlapping borders */
 }
+
+#navbar, #footer, #header {
+    border-left: 0;
+}
+
+#aside, #header, #footer {
+    border-right: 0;
+}
+
+#footer, #navbar, #aside {
+    border-bottom: 0;
+}
+
+
+/* Page Layout */
+
+body {
+    display: grid;
+    grid-template-columns: auto 1fr 185px;
+    grid-template-rows: 75px 1fr 70px;
+    grid-template-areas: 
+    "header header  header" 
+    "nav    content aside" 
+    "footer footer  footer";
+}
+
+
+/* For testing purposes
+TODO: Delete/modify once all views have been properly implemented
+*/
+
+#aside {
+    grid-area: aside;
+    background-color: blue;
+    width: 100%;
+}
+
+#footer {
+    grid-area: footer;
+    background-color: magenta;
+    height: auto;
+    width: 100%;
+}
+
+main {
+    grid-area: content;
+    box-shadow: rgba(50, 50, 93, 0.2) 0px 10px 30px -12px inset, rgba(0, 0, 0, 0.2) 0px 10px 25px -18px inset;
+}
+
+/* For testing purposes
+TODO: Delete/modify once all views have been properly implemented
+*/
 
 
 /* Buttons */
@@ -50,4 +105,11 @@ button {
 
 .grow_hover:hover {
     transform: scale(1.2);
+}
+
+
+/* Box Shadow */
+
+.shadow {
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }

@@ -1,0 +1,55 @@
+article.discover_section {
+    padding: 35px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+article.discover_section > h1 {
+    font-size: 2.2em;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    width: fit-content;
+}
+
+ul.discover_lineup {
+    list-style-type: none;
+    background-color:rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 30px;
+    padding: 20px;
+}
+
+li.discover_item {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    width: 200px;
+    flex-grow: 0.5;
+    overflow: hidden;
+}
+
+li.discover_item a {
+    text-decoration: none;
+}
+
+li.discover_item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+li.discover_item h1 {
+    font-size: 1.4em;
+    text-align: center;
+    margin: 5px 0px;
+}
+
+/* On Hover */
+
+li.discover_item:hover {
+    transform: scale(1.09) !important;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 15px 45px;
+}

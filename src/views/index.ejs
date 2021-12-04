@@ -7,22 +7,29 @@
     <link rel='stylesheet' href='/stylesheets/navbar.css' />
     <link rel='stylesheet' href='/stylesheets/general.css' />
     <link rel='stylesheet' href='/stylesheets/navbar_min.css' />
+    <link rel='stylesheet' href='/stylesheets/discover.css' />
   </head>
   <body>
+
+    <!-- TODO: Transfer this page structure to index.html-->
 
     <header id="header">
       <%- include('header') %>
     </header>
 
-    <nav id="navbar" class="minimized">
+    <!-- Minimize navbar by adding: class="minimized" -->
+    <nav id="navbar">
       <% let pages = ["home", "exchange", "discover", "follow", "friendlist", "rooms"] %>
       <%- include('navbar', {pages:pages}); %>
     </nav>
 
     <main>
-      <h1><%= title %></h1>
-      <p>Welcome to <%= title %></p>
+      <%- include('discover') %>
     </main>
+
+    <aside id="aside"></aside>
+
+    <footer id="footer"></footer>
 
   </body>
 </html>
