@@ -1,4 +1,4 @@
-#navbar.minimized {
+#navbar.minimized #nav_buttons {
     align-items: center;
     max-width: fit-content;
 }
@@ -68,6 +68,7 @@
 
 /* Options Bar */
 
-#navbar.minimized>#options {
+#navbar.minimized #nav_buttons>#options {
     flex-direction: column;
+    margin-top: 40px;
 }
