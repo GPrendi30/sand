@@ -9,7 +9,17 @@ router.get('/', function (req, res, next) {
 })
 
 /* GET the graph types. */
-router.get('/types', async function (req, res, next) {
+router.get('/types', function (req, res, next) {
+    // TODO: enum with the current graph types (json)
+    if (req.accepts('json')) {
+        res.status(200).send({ types: ['bar', 'scatter']})
+    } else {
+        res.status(406).end();
+    }
+})
+
+/* GET the graph data types. */
+router.get('/data', async function (req, res, next) {
     const chartType = req.query.chart
     const contractAddress = req.query.address
     const time = req.query.time
@@ -27,24 +37,6 @@ router.get('/types', async function (req, res, next) {
     } else {
         res.status(406).end()
     };
-})
-
-/* GET the graph data types. */
-router.get('/data_type', function (req, res, next) {
-    // to complete
-    res.send('route not implemented yet')
-})
-
-/* GET the graph period. */
-router.get('/period', function (req, res, next) {
-    // to complete
-    res.send('route not implemented yet')
-})
-
-/* GET the transactions graph. */
-router.get('/transaction', function (req, res, next) {
-    // to complete
-    res.send('route not implemented yet')
 })
 
 // export the required modules
