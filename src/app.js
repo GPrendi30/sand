@@ -50,7 +50,7 @@ app.use('/', routers.dashboard)
 app.use('/home', routers.dashboard)
 app.use('/graph', routers.graph)
 app.use('/chat', routers.chat)
-app.use('/user', routers.chat)
+app.use('/user', routers.user)
 app.use('/exchange', routers.exchange)
 app.use('/login', routers.login);
 app.use('/signup', routers.signup);
