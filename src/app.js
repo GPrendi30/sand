@@ -16,6 +16,8 @@ const chatRouter = require('./routes/chat')
 const userRouter = require('./routes/user')
 const exchangeRouter = require('./routes/exchange')
 const loginRouter = require('./routes/login')
+const signupRouter = require('./routes/signup')
+const logoutRouter = require('./routes/logout')
 
 require('./models'); // run database
 
@@ -58,6 +60,8 @@ app.use('/chat', chatRouter)
 app.use('/user', userRouter)
 app.use('/exchange', exchangeRouter)
 app.use('/login', loginRouter);
+app.use('/signup', signupRouter);
+app.use('/logout', logoutRouter);
 
 
 // catch 404 and forward to error handler
