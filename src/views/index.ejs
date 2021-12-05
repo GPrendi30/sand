@@ -1,32 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='/stylesheets/header.css' />
-    <link rel='stylesheet' href='/stylesheets/navbar.css' />
-    <link rel='stylesheet' href='/stylesheets/general.css' />
-    <link rel='stylesheet' href='/stylesheets/navbar_min.css' />
-    <link rel='stylesheet' href='/stylesheets/discover.css' />
-    <link rel='stylesheet' href='/stylesheets/follow.css' />
-  </head>
+
+  <%- include('./includes/head') %>
+
   <body>
 
     <!-- TODO: Transfer this page structure to index.html-->
-
-    <header id="header">
-      <%- include('header') %>
-    </header>
+    <%- include('header') %>
 
     <!-- Minimize navbar by adding: class="minimized" -->
-    <nav id="navbar">
-      <% let pages = ["home", "exchange", "discover", "followed", "friendlist", "rooms"] %>
-      <%- include('navbar', {pages:pages}); %>
-    </nav>
+    <%- include('./includes/navbar'); %>
 
     <main>
       <!-- Uncomment (one at a time!) to test different main views-->
-      <% /* - include('discover') */ %>
+      <%- include('discover') %>
       
       <% let obj = {"title": "You wouldn't right click an NFT", "img": "/images/irony.jpg", "value": 69420} %>
       <%- include('follow', obj) %>
