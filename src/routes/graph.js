@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 router.get('/types', function (req, res, next) {
     // TODO: enum with the current graph types (json)
     if (req.accepts('json')) {
-        res.status(200).send({ types: ['bar', 'scatter']})
+        res.status(200).send({ types: ['bar', 'scatter'] })
     } else {
         res.status(406).end();
     }
