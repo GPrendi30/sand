@@ -47,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // routers
 app.use('/', routers.dashboard)
+app.use('/home', routers.dashboard)
 app.use('/graph', routers.graph)
 app.use('/chat', routers.chat)
 app.use('/user', routers.chat)
