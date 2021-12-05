@@ -122,8 +122,8 @@
     background-image: url("/images/exchange.svg");
 }
 
-.nav-icon#follow {
-    background-image: url("/images/follow.svg");
+.nav-icon#followed {
+    background-image: url("/images/followed.svg");
 }
 
 .nav-icon#friendlist {
