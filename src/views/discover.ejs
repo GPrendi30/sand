@@ -1,33 +1,56 @@
-<section id="discover">
-    <!-- This setup can be expanded with more discover areas
-         Eg: hot, new, popular, for you, etc -->
-    <article class="discover_section" id="general">
-        <h1>Discover collections</h1>
-        <ul class="discover_lineup">
-            <!-- TODO: Make card generation dynamic
-                 Eg: collections.forEach( include('discover_item')) -->
-            <% let item1 = {"title": "Animal Pattern", "img": "/images/animal_pattern.jpg"} %>
-            <%- include('includes/discover_item', item1) %>
+<!DOCTYPE html>
+<html>
 
-            <% let item2 = {"title": "Abstract Art", "img": "/images/abstract_art.jpg"} %>
-            <%- include('includes/discover_item', item2) %>
+  <%- include('./includes/head', { title: 'Discover'}) %>
 
-            <% let item3 = {"title": "Dark", "img": "/images/dark_art.jpg"} %>
-            <%- include('includes/discover_item', item3) %>
+  <body>
 
-            <% let item4 = {"title": "the irony", "img": "/images/irony.jpg"} %>
-            <%- include('includes/discover_item', item4) %>
+    <!-- TODO: Transfer this page structure to index.html-->
+    <%- include('header') %>
 
-            <% let item5 = {"title": "monke", "img": "/images/monke.jpg"} %>
-            <%- include('includes/discover_item', item5) %>
+    <!-- Minimize navbar by adding: class="minimized" -->
+    <%- include('./includes/navbar'); %>
 
-            <%- include('includes/discover_item', item1) %>
-            <%- include('includes/discover_item', item2) %>
-            <%- include('includes/discover_item', item3) %>
-            <%- include('includes/discover_item', item4) %>
-            <%- include('includes/discover_item', item5) %>
+    <main>
+      <section id="discover">
+        <!-- This setup can be expanded with more discover areas
+             Eg: hot, new, popular, for you, etc -->
+        <article class="discover_section" id="general">
+            <h1>Discover collections</h1>
+            <ul class="discover_lineup">
+                <!-- TODO: Make card generation dynamic
+                     Eg: collections.forEach( include('discover_item')) -->
+                <% let item1 = {"title": "Animal Pattern", "img": "/images/animal_pattern.jpg"} %>
+                <%- include('includes/discover_item', item1) %>
+    
+                <% let item2 = {"title": "Abstract Art", "img": "/images/abstract_art.jpg"} %>
+                <%- include('includes/discover_item', item2) %>
+    
+                <% let item3 = {"title": "Dark", "img": "/images/dark_art.jpg"} %>
+                <%- include('includes/discover_item', item3) %>
+    
+                <% let item4 = {"title": "the irony", "img": "/images/irony.jpg"} %>
+                <%- include('includes/discover_item', item4) %>
+    
+                <% let item5 = {"title": "monke", "img": "/images/monke.jpg"} %>
+                <%- include('includes/discover_item', item5) %>
+    
+                <%- include('includes/discover_item', item1) %>
+                <%- include('includes/discover_item', item2) %>
+                <%- include('includes/discover_item', item3) %>
+                <%- include('includes/discover_item', item4) %>
+                <%- include('includes/discover_item', item5) %>
+    
+            </ul>
+        </article>
+    
+    </section>
+    
+    </main>
 
-        </ul>
-    </article>
+    <aside id="aside"></aside>
 
-</section>
+    <footer id="footer"></footer>
+
+  </body>
+</html>

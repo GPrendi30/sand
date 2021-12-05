@@ -1,0 +1,17 @@
+<nav id="navbar">
+    <% let pages=["home", "exchange" , "discover" , "follow" , "friendlist" , "rooms" ]; %>
+
+        <div id="nav_buttons">
+            <ul>
+                <% pages.forEach( p=> { %>
+                    <%- include('navbar_item', {p}); %>
+                        <% }); %>
+            </ul>
+
+            <section id="options">
+                <button class="grow_hover nav-icon" id="currency"></button>
+                <button class="nav-icon grow_hover" id="settings"></button>
+                <button class="grow_hover nav-icon" id="minmax"></button>
+            </section>
+        </div>
+</nav>

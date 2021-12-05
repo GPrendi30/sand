@@ -1,30 +1,55 @@
-<section class="follow">
+<!DOCTYPE html>
+<html>
 
-    <section id="top">
-        <section id="info">
-            <div>
-                <h1>
-                    <%= title %>
-                </h1>
-                <section id="desc">
-                    <h2>Info:</h2>
-                    <p>This NFT is classified as '<%= title %>' NFT Art.
-                            It's current value in the market is <%= value %> CHF.
-                                Market value expected to increase.</p>
+  <%- include('./includes/head.ejs', { 'title': 'Follow' }) %>
+
+  <body>
+
+    <!-- TODO: Transfer this page structure to index.html-->
+    <%- include('header') %>
+
+    <!-- Minimize navbar by adding: class="minimized" -->
+    <%- include('./includes/navbar'); %>
+
+    <main>
+      <!-- Uncomment (one at a time!) to test different main views-->
+      <!-- TODO add dashboard here -->
+      
+        <% let obj = {"title": "You wouldn't right click an NFT", "img": "/images/irony.jpg", "value": 69420} %>
+        <section class="follow">
+
+            <section id="top">
+                <section id="info">
+                    <div>
+                        <h1>
+                            <%= obj.title %>
+                        </h1>
+                        <section id="desc">
+                            <h2>Info:</h2>
+                            <p>This NFT is classified as '<%= obj.title %>' NFT Art.
+                                    It's current value in the market is <%= obj.value %> CHF.
+                                        Market value expected to increase.</p>
+                        </section>
+                    </div>
                 </section>
-            </div>
-        </section>
-        <section id="img">
-            <div>
-                <img src="<%= img %>" alt="<%= title %>">
-            </div>
-        </section>
-    </section>
+                <section id="img">
+                    <div>
+                        <img src="<%= obj.img %>" alt="<%= obj.title %>">
+                    </div>
+                </section>
+            </section>
+        
+            <section id="buttons">
+                <button class="grow_hover">Add +</button>
+                <button class="grow_hover">Track</button>
+                <button class="grow_hover">Notify Me</button>
+            </section>
+            </section>
+    </main>
 
-    <section id="buttons">
-        <button class="grow_hover">Add +</button>
-        <button class="grow_hover">Track</button>
-        <button class="grow_hover">Notify Me</button>
-    </section>
+    <aside id="aside"></aside>
 
-</section>
+    <footer id="footer"></footer>
+
+  </body>
+</html>
