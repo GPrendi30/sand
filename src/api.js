@@ -62,10 +62,10 @@ async function createArrayWithPrices (contractAddress, startTimestamp, endTimest
     try {
         res = await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
         res.asset_events.forEach(el => {
-            let date = new Date(el.transaction.timestamp);
-            date = Math.floor(date / 1000);
+            // let date = new Date(el.transaction.timestamp);
+            // date = Math.floor(date / 1000);
             data.push({
-                timestamp: date,
+                timestamp: el.transaction.timestamp,
                 price: (el.total_price / 1000000000000000000)
             });
         })
