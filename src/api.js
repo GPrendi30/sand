@@ -107,6 +107,7 @@ async function pullTokenDataByID (contractAddress, tokenID) {
 async function dailyVolume (contractAddress, timeInDays) {
     const dailyVolumeArray = [];
 
+    // adding every needed day's volume getting volume day by day and pushing it into dailyVolumeArray
     for (let i = timeInDays; i > 0; --i) {
         let response;
         let volume = 0;
@@ -120,6 +121,18 @@ async function dailyVolume (contractAddress, timeInDays) {
             dailyVolumeArray.push(volume);
         } catch (error) { console.error(error); }
     }
+
+    // adding today's volume separately because it's a shorter amount of time (from last midnight to now)
+    const startTimestamp = lastMidnightTimestamp;
+    const endTimestamp = currentTimestamp;
+    try {
+        let todayVolume = 0;
+        const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+        response.asset_events.forEach(el => {
+            todayVolume += (el.total_price / 1000000000000000000);
+        })
+        dailyVolumeArray.push(todayVolume);
+    } catch (error) { console.error(error); }
 
     return dailyVolumeArray;
 }

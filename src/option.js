@@ -19,6 +19,10 @@ function getOptionForBarChart (contractAddress, timeInDays) {
         const day = date.getDate()
         dateArray.push(month + '/' + day)
     }
+    const date = new Date((lastMidnightTimestamp * 1000))
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    dateArray.push(month + '/' + day)
 
     dailyVolume(contractAddress, timeInDays)
         .then(dailyVolumeArray => {
@@ -41,7 +45,8 @@ function getOptionForBarChart (contractAddress, timeInDays) {
                     }
                 ]
             };
-
+            console.log(option.xAxis.data)
+            console.log(option.series[0].data)
             return option
         });
 }
@@ -84,4 +89,3 @@ function getOptionForScatterChart (contractAddress, timeInDays) {
 }
 
 module.exports.getOptionForBarChart = getOptionForBarChart;
-
