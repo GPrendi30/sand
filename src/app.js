@@ -10,24 +10,16 @@ const session = require('express-session');
 
 
 
-const indexRouter = require('./routes/index')
-const graphRouter = require('./routes/graph')
-const chatRouter = require('./routes/chat')
-const userRouter = require('./routes/user')
-const exchangeRouter = require('./routes/exchange')
-const loginRouter = require('./routes/login')
-const signupRouter = require('./routes/signup')
-const logoutRouter = require('./routes/logout')
-
+const routers = require('./routes');
 require('./models'); // run database
 
 const app = express()
 const { passport } = require('./login')
+
+
 /*  passportjs
   Local authentication
- */
-
-
+*/
 app.use(session({
   secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
   resave: false,
@@ -54,14 +46,15 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 
 // routers
-app.use('/', indexRouter)
-app.use('/graph', graphRouter)
-app.use('/chat', chatRouter)
-app.use('/user', userRouter)
-app.use('/exchange', exchangeRouter)
-app.use('/login', loginRouter);
-app.use('/signup', signupRouter);
-app.use('/logout', logoutRouter);
+app.use('/', routers.dashboard)
+app.use('/graph', routers.graph)
+app.use('/chat', routers.chat)
+app.use('/user', routers.chat)
+app.use('/exchange', routers.exchange)
+app.use('/login', routers.login);
+app.use('/signup', routers.signup);
+app.use('/logout', routers.logout);
+app.use('/follow', routers.follow);
 
 
 // catch 404 and forward to error handler
