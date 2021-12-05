@@ -2,15 +2,23 @@
 
     <section id="top">
         <section id="info">
-            <h1><%= title %></h1>
-            <section id="desc">
-                <h2>Info:</h2>
-                <p>This NFT is classified as '<%= title %>' NFT Art. 
-                It's current value in the market is <%= value %> CHF.
-                Market value expected to increase.</p>
-            </section>
+            <div>
+                <h1>
+                    <%= title %>
+                </h1>
+                <section id="desc">
+                    <h2>Info:</h2>
+                    <p>This NFT is classified as '<%= title %>' NFT Art.
+                            It's current value in the market is <%= value %> CHF.
+                                Market value expected to increase.</p>
+                </section>
+            </div>
         </section>
-        <img src="<%= img %>" alt="<%= title %>">
+        <section id="img">
+            <div>
+                <img src="<%= img %>" alt="<%= title %>">
+            </div>
+        </section>
     </section>
 
     <section id="buttons">

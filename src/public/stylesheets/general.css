@@ -18,6 +18,7 @@ body {
 #aside,
 #footer {
     border: 1px solid black;
+    z-index: 10;
 }
 
 /* Remove overlapping borders */
@@ -59,13 +60,11 @@ TODO: Delete/modify once all views have been properly implemented
 #aside {
     grid-area: aside;
     background-color: blue;
-    width: 100%;
 }
 
 #footer {
     grid-area: footer;
     background-color: magenta;
-    height: auto;
     width: 100%;
 }
 
