@@ -96,7 +96,7 @@ section#top > #info #desc {
     justify-self: center;
     display: flex;
     align-items: center;
-    justify-content: space-evenly
+    justify-content: space-evenly;
 }
 
 .follow>section#buttons button {
