@@ -2,27 +2,12 @@
 
     <section class="page" id="your_friends">
         <h1>Your friends</h1>
-        <% for(let i=1; i < 11; i++) { %>
-            <% let friend={name: "Friend Number " + i} %>
-            <%- include('includes/friendlist_item', friend) %>
-        <% }; %>
-    </section>
-
-    <section class="page" id="requests_received">
-        
-        <h1>Your friends</h1>
-        <% for(let i=1; i < 11; i++) { %>
-            <% let friend={name: "Friend Number " + i} %>
-            <%- include('includes/friendlist_item', friend) %>
-        <% }; %>
-    </section>
-
-    <section class="page" id="requests_sent">
-        <h1>Your friends</h1>
-        <% for(let i=1; i < 11; i++) { %>
-            <% let friend={name: "Friend Number " + i} %>
-            <%- include('includes/friendlist_item', friend) %>
-        <% }; %>
+        <ul>
+            <% for(let i=1; i < 6; i++) { %>
+                <% let friend={name: "Friend Number " + i} %>
+                <%- include('includes/friendlist_item', friend) %>
+            <% }; %>
+        </ul>
     </section>
 
     <section id="bookmarks">

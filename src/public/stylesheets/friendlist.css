@@ -1,25 +1,31 @@
 section#friendlist {
-    background-color: rosybrown;
     width: 85%;
     min-width: 400px;
-    height: 85%;
-    margin: 0px 20px;
+    min-height: 600px;
+    margin: 50px 20px;
     display: grid;
     grid-template-columns: 5fr minmax(120px, 1fr);
     grid-template-rows: 1fr;
-    grid-template-areas: 
-    "pg bm"
+    grid-template-areas: "pg bm"
 }
 
 section.page {
     border-radius: 10px 0px 0px 10px;
     grid-area: pg;
+    z-index: 12;
+    width: 100%;
+}
+
+section.page>h1 {
+    padding-left: 20px;
+    margin-top: 35px;
+    margin-left: 20px;
+    font-size: 3.1em;
+    letter-spacing: .2em;
 }
 
 section#your_friends {
     background-color: #CDD0B9;
-    z-index: 12;
-    width: 100%;
 }
 
 section#bookmarks {
@@ -29,7 +35,7 @@ section#bookmarks {
     grid-template-rows: repeat(19, 1fr);
 }
 
-section#bookmarks > div.bookmark {
+section#bookmarks>div.bookmark {
     border-radius: 0px 10px 10px 0px;
     width: 90%;
     transition: all 0.1s ease-in-out;
@@ -41,7 +47,7 @@ section#bookmarks > div.bookmark {
     font-size: 1.3em;
 }
 
-section#bookmarks > div.bookmark:hover {
+section#bookmarks>div.bookmark:hover {
     cursor: pointer;
     width: 100%;
     z-index: 11 !important;
@@ -59,11 +65,12 @@ section#bookmarks :last-child {
     box-shadow: rgba(0, 0, 0, 0.3) -10px -5px 15px;
 }
 
-section#bookmarks > *::before{
+section#bookmarks>*::before {
     width: 90%;
     padding-left: 15px;
     color: #181818;
 }
+
 
 /* Bookmark Colors */
 
@@ -81,7 +88,7 @@ section#bookmarks :nth-child(3) {
 
 section#bookmarks :nth-child(3)::before {
     content: "Friend Requests";
-}  
+}
 
 section#bookmarks :nth-child(4) {
     background-color: #B6AD90;
@@ -95,7 +102,7 @@ section#bookmarks :nth-child(5) {
 
 section#bookmarks :nth-child(5)::before {
     content: "Your Friends";
-}   
+}
 
 section#bookmarks :nth-child(6) {
     background-color: #B3B998;
@@ -107,7 +114,7 @@ section#bookmarks :nth-child(7) {
 
 section#bookmarks :nth-child(7)::before {
     content: "Sent Requests";
-}  
+}
 
 section#bookmarks :nth-child(8) {
     background-color: #60684B;
@@ -115,4 +122,57 @@ section#bookmarks :nth-child(8) {
 
 section#bookmarks :nth-child(9) {
     background-color: #47533D;
+}
+
+
+/* Friend items */
+
+section.page ul {
+    display: flex;
+    flex-direction: column;
+}
+
+li.friend {
+    margin: 20px 10px;
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+}
+
+li.friend #info {
+    display: flex;
+    background-color: #B3B998;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 20px;
+    border-radius: 25px;
+    margin-left: 15px;
+}
+
+li.friend #info h1 {
+    font-size: 1.5em;
+}
+
+li.friend #info div {
+    background-image: url("/images/user.svg");
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    height: 65px;
+    width: 65px;
+}
+
+li.friend #buttons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+li.friend #buttons button {
+    background-color: #f0f0f0;
+    font-weight: bolder;
+    min-width: 80px;
+    padding: 0px 20px;
+    height: 35px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
