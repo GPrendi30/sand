@@ -1,0 +1,118 @@
+section#friendlist {
+    background-color: rosybrown;
+    width: 85%;
+    min-width: 400px;
+    height: 85%;
+    margin: 0px 20px;
+    display: grid;
+    grid-template-columns: 5fr minmax(120px, 1fr);
+    grid-template-rows: 1fr;
+    grid-template-areas: 
+    "pg bm"
+}
+
+section.page {
+    border-radius: 10px 0px 0px 10px;
+    grid-area: pg;
+}
+
+section#your_friends {
+    background-color: #CDD0B9;
+    z-index: 12;
+    width: 100%;
+}
+
+section#bookmarks {
+    grid-area: bm;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(19, 1fr);
+}
+
+section#bookmarks > div.bookmark {
+    border-radius: 0px 10px 10px 0px;
+    width: 90%;
+    transition: all 0.1s ease-in-out;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 1.3em;
+}
+
+section#bookmarks > div.bookmark:hover {
+    cursor: pointer;
+    width: 100%;
+    z-index: 11 !important;
+}
+
+section#bookmarks :not(:first-child):not(:last-child) {
+    box-shadow: rgba(0, 0, 0, 0.3) -10px 5px 15px, rgba(0, 0, 0, 0.3) -10px -5px 15px;
+}
+
+section#bookmarks :first-child {
+    box-shadow: rgba(0, 0, 0, 0.3) -10px 5px 15px;
+}
+
+section#bookmarks :last-child {
+    box-shadow: rgba(0, 0, 0, 0.3) -10px -5px 15px;
+}
+
+section#bookmarks > *::before{
+    width: 90%;
+    padding-left: 15px;
+    color: #181818;
+}
+
+/* Bookmark Colors */
+
+section#bookmarks :nth-child(1) {
+    background-color: #7F4F24;
+}
+
+section#bookmarks :nth-child(2) {
+    background-color: #936639;
+}
+
+section#bookmarks :nth-child(3) {
+    background-color: #A68A64;
+}
+
+section#bookmarks :nth-child(3)::before {
+    content: "Friend Requests";
+}  
+
+section#bookmarks :nth-child(4) {
+    background-color: #B6AD90;
+}
+
+section#bookmarks :nth-child(5) {
+    background-color: #CDD0B9;
+    z-index: 5 !important;
+    width: 100% !important;
+}
+
+section#bookmarks :nth-child(5)::before {
+    content: "Your Friends";
+}   
+
+section#bookmarks :nth-child(6) {
+    background-color: #B3B998;
+}
+
+section#bookmarks :nth-child(7) {
+    background-color: #828A69;
+}
+
+section#bookmarks :nth-child(7)::before {
+    content: "Sent Requests";
+}  
+
+section#bookmarks :nth-child(8) {
+    background-color: #60684B;
+}
+
+section#bookmarks :nth-child(9) {
+    background-color: #47533D;
+}

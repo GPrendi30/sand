@@ -9,6 +9,7 @@
     <link rel='stylesheet' href='/stylesheets/navbar_min.css' />
     <link rel='stylesheet' href='/stylesheets/discover.css' />
     <link rel='stylesheet' href='/stylesheets/follow.css' />
+    <link rel='stylesheet' href='/stylesheets/friendlist.css' />
   </head>
   <body>
 
@@ -29,7 +30,10 @@
       <% /* - include('discover') */ %>
       
       <% let obj = {"title": "You wouldn't right click an NFT", "img": "/images/irony.jpg", "value": 69420} %>
-      <%- include('follow', obj) %>
+      <% /* - include('follow', obj) */ %>
+    
+      <%- include('friendlist') %>
+    
     </main>
 
     <aside id="aside"></aside>
