@@ -3,6 +3,8 @@ require('dotenv').config();
 
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
+const lastMidnight = new Date(currentDate.setHours(0, 0, 0, 0));
+const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
 const apiKey = process.env.OPENSEA_API;
 
 /**
@@ -60,6 +62,8 @@ async function createArrayWithPrices (contractAddress, startTimestamp, endTimest
     try {
         res = await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
         res.asset_events.forEach(el => {
+            // let date = new Date(el.transaction.timestamp);
+            // date = Math.floor(date / 1000);
             data.push({
                 timestamp: el.transaction.timestamp,
                 price: (el.total_price / 1000000000000000000)
@@ -103,11 +107,12 @@ async function pullTokenDataByID (contractAddress, tokenID) {
 async function dailyVolume (contractAddress, timeInDays) {
     const dailyVolumeArray = [];
 
+    // adding every needed day's volume getting volume day by day and pushing it into dailyVolumeArray
     for (let i = timeInDays; i > 0; --i) {
         let response;
         let volume = 0;
-        const startTimestamp = currentTimestamp - 86400 * i;
-        const endTimestamp = currentTimestamp - 86400 * (i - 1);
+        const startTimestamp = lastMidnightTimestamp - 86400 * i;
+        const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
         try {
             response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
             response.asset_events.forEach(el => {
@@ -117,5 +122,20 @@ async function dailyVolume (contractAddress, timeInDays) {
         } catch (error) { console.error(error); }
     }
 
+    // adding today's volume separately because it's a shorter amount of time (from last midnight to now)
+    const startTimestamp = lastMidnightTimestamp;
+    const endTimestamp = currentTimestamp;
+    try {
+        let todayVolume = 0;
+        const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+        response.asset_events.forEach(el => {
+            todayVolume += (el.total_price / 1000000000000000000);
+        })
+        dailyVolumeArray.push(todayVolume);
+    } catch (error) { console.error(error); }
+
     return dailyVolumeArray;
 }
+
+module.exports.dailyVolume = dailyVolume;
+module.exports.createArrayWithPrices = createArrayWithPrices;

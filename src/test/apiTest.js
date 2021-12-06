@@ -88,7 +88,7 @@ describe('Testing fetching volume of a collection', function () {
         const timeInDays = 1
         dailyVolume(collectionAddress, timeInDays)
             .then(volumeArray => {
-                assert.equal(volumeArray.length, timeInDays);
+                assert.equal(volumeArray.length, timeInDays + 1);
                 volumeArray.forEach(vol => {
                     expect(vol).to.be.at.least(0);
                 });
@@ -107,7 +107,7 @@ describe('Testing fetching volume of a collection', function () {
         const timeInDays = 3
         dailyVolume(collectionAddress, timeInDays)
             .then(volumeArray => {
-                assert.equal(volumeArray.length, timeInDays);
+                assert.equal(volumeArray.length, timeInDays + 1);
                 volumeArray.forEach(vol => {
                     expect(vol).to.be.at.least(0);
                 });
@@ -120,7 +120,7 @@ describe('Testing fetching volume of a collection', function () {
         const timeInDays = 5
         dailyVolume(collectionAddress, timeInDays)
             .then(volumeArray => {
-                assert.equal(volumeArray.length, timeInDays);
+                assert.equal(volumeArray.length, timeInDays + 1);
                 volumeArray.forEach(vol => {
                     expect(vol).to.be.at.least(0);
                 });
@@ -133,7 +133,7 @@ describe('Testing fetching volume of a collection', function () {
         const timeInDays = 7
         dailyVolume(collectionAddress, timeInDays)
             .then(volumeArray => {
-                assert.equal(volumeArray.length, timeInDays);
+                assert.equal(volumeArray.length, timeInDays + 1);
                 volumeArray.forEach(vol => {
                     expect(vol).to.be.at.least(0);
                 });
