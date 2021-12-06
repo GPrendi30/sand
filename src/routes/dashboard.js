@@ -12,7 +12,6 @@ router.get('/home', function (req, res, next) {
     } else {
         res.status(406).end();
     }
-     
 })
 
 

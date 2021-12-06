@@ -10,18 +10,16 @@ let routers = {};
 try {
     dirEntries.forEach(function (dirEntry) {
         const stats = fs.statSync(base + dirEntry);
-        //try to load router of dir
+        // try to load router of dir
         try {
             if (stats.isDirectory()) {
-
                 const router = require(base + dirEntry + '/router');
-                //add router to our list of routers;
+                // add router to our list of routers;
                 routers[dirEntry] = router;
-
             } else {
                 const router = require(base + dirEntry);
-                //add router to our list of routers;
-                routers[dirEntry.replace(/.js$/, "")] = router;
+                // add router to our list of routers;
+                routers[dirEntry.replace(/.js$/, '')] = router;
             }
         } catch (err) {
             console.log('Could not get router for ' + dirEntry);
@@ -31,7 +29,7 @@ try {
 } catch (err) {
     console.log('Error while loading routers');
     console.log(err.stack);
-    //We don't know what happened, export empty object
+    // We don't know what happened, export empty object
     routers = {}
 } finally {
     module.exports = routers;

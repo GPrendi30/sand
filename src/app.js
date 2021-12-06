@@ -21,9 +21,9 @@ const { passport } = require('./login')
   Local authentication
 */
 app.use(session({
-  secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
-  resave: false,
-  saveUninitialized: true
+    secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
+    resave: false,
+    saveUninitialized: true
 }));
 
 app.use(passport.initialize());
@@ -39,7 +39,7 @@ app.use(express.json({ limit: '4MB' }));
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(fileUpload({
-  limits: { fileSize: 50 * 1024 * 1024 }, safeFileNames: true, preserveExtension: 4, debug: false
+    limits: { fileSize: 50 * 1024 * 1024 }, safeFileNames: true, preserveExtension: 4, debug: false
 }))
 app.use(methodOverride('_method'));
 

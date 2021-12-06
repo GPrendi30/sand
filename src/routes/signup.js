@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { passport, isLoggedOut, hashUserPassword } = require('../login');
+const { isLoggedOut, hashUserPassword } = require('../login');
 const models = require('../models').model;
 
 router.get('/', isLoggedOut, (req, res) => {
@@ -31,9 +31,9 @@ router.post('/', isLoggedOut, async (req, res) => {
     }
 
     let user = createUser(
-        req.body.username, 
-        req.body.password, 
-        req.body.email, 
+        req.body.username,
+        req.body.password,
+        req.body.email,
         req.body.name,
         req.body.surname);
 
