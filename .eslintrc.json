@@ -12,5 +12,18 @@
         "ecmaVersion": 12
     },
     "rules": {
-    }
+        "arrow-spacing": "off",
+        "no-multi-spaces": "off",
+        "no-multiple-empty-lines": "off",
+        "semi": "off",
+        "indent": ["warn", 4],
+        "no-unused-vars": "warn",
+        "no-trailing-spaces": "warn",
+        "padded-blocks": "warn",
+        "quotes": "warn",
+        "spaced-comment": "warn",
+        "node/no-path-concat": "off",
+        "eol-last": "warn"
+    },
+    "ignorePatterns": ["src/test/*", "src/public/js/*.min.js"]
 }
