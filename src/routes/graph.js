@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const { isLoggedIn } = require('../login');
 const getOptionForBarChart = require('../option.js').getOptionForBarChart
 const getOptionForScatterChart = require('../option.js').getOptionForScatterChart
 
 /* GET graph page. */
-router.get('/', function (req, res, next) {
+router.get('/', isLoggedIn, function (req, res, next) {
     res.render('graph')
 })
 
