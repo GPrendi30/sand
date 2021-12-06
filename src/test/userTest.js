@@ -120,7 +120,7 @@ describe('Connecting to database', function () {
             const user = JSON.parse(res.text)
             expect(user._id).to.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
             expect(user.username).to.equal('username')
-            console.log(user.password)
+            //console.log(user.password)
             expect(user.password).to.be.undefined
             expect(user.email).to.be.undefined
             expect(user.name).to.be.undefined
