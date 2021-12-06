@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+  <%- include('./includes/head', { title: 'Friendlist'}) %>
+  <body>
+
+    <!-- TODO: Transfer this page structure to index.html-->
+    <%- include('header') %>
+
+    <!-- Minimize navbar by adding: class="minimized" -->
+    <%- include('./includes/navbar'); %>
+
+    <main>
+        <section id="friendlist">
+
+            <section class="page" id="your_friends">
+                <h1>Your friends</h1>
+                <ul>
+                    <% for(let i=1; i < 6; i++) { %>
+                        <% let friend={name: "Friend Number " + i} %>
+                        <%- include('includes/friendlist_item', friend) %>
+                    <% }; %>
+                </ul>
+            </section>
+        
+            <section id="bookmarks">
+                <% for(let i=0; i < 9; i++) { %>
+                    <% let style = 'grid-area: ' + (1 + 2*i) + ' / 1 / ' + (4 + 2*i) + ' / 2' %>
+                    <div style="<%= style %>" id="bm<%=i%>" class="bookmark"></div>
+                <% }; %>
+            </section>
+        
+        </section>
+    </main>
+
+    <aside id="aside"></aside>
+
+    <footer id="footer"></footer>
+
+  </body>
+</html>
