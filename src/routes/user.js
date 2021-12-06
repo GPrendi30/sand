@@ -6,6 +6,8 @@ const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
 // HELPER FUNCTIONS
 
+/* TODO update with authentication, and also refactor the test */
+
 /**
  * Function that emoves the sensitive data from a user object
  * such as (password,email,name,surname,settings)
