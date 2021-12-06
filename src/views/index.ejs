@@ -2,7 +2,7 @@
 <html>
 
   <%- include('./includes/head', { title: 'S.A.N.D'}) %>
-  <body>
+  <body onload="init()">
 
     <!-- TODO: Transfer this page structure to index.html-->
     <%- include('header') %>
@@ -14,32 +14,97 @@
       <!-- Uncomment (one at a time!) to test different main views-->
       <!-- TODO add dashboard here -->
 
-      <section id="friendlist">
+    <section id="graph" style="width: 100%; height: 100%" >
 
-        <section class="page" id="your_friends">
-            <h1>Your friends</h1>
-            <ul>
-                <% for(let i=1; i < 6; i++) { %>
-                    <% let friend={name: "Friend Number " + i} %>
-                    <%- include('includes/friendlist_item', friend) %>
-                <% }; %>
-            </ul>
-        </section>
-    
-        <section id="bookmarks">
-            <% for(let i=0; i < 9; i++) { %>
-                <% let style = 'grid-area: ' + (1 + 2*i) + ' / 1 / ' + (4 + 2*i) + ' / 2' %>
-                <div style="<%= style %>" id="bm<%=i%>" class="bookmark"></div>
-            <% }; %>
-        </section>
-    
     </section>
-    
+        
     </main>
 
     <%- include('./includes/aside_closed'); %>
 
     <%- include('./includes/footer'); %>
+
+    <script src="/js/echarts.min.js"></script>
+    <script src="/js/echarts.simple.min.js"></script>
+    <script>
+      function init() {
+        let graphContainer = document.getElementById('graph')
+
+        var myChart = echarts.init(graphContainer, 'dark');
+        var option;
+        option = {
+            xAxis: {
+                type: 'category',
+                data: [
+                    0, 1, 2, 3, 4, 5, 6, 7, 8,
+                    9, 10, 11, 12, 13, 14, 15, 16, 17,
+                    18, 19, 20, 21, 22, 23, 24, 25, 26,
+                    27, 28, 29
+                ]
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: [
+                        172.71, 218.44909999999996,
+                        136.37775285714287, 71.3022,
+                        80.30675000000001, 87.64,
+                        239.87030000000001, 214.02100000000002,
+                        173.3443, 188.51900000000003,
+                        264.94106942069004, 499.59668999999997,
+                        306.88460000000003, 1124.4106000000006,
+                        439.71420000000006, 140.72549999999998,
+                        89.48, 133.2808,
+                        94.986, 114.3365,
+                        135.799, 206.94459999999998,
+                        156.48479999999998, 69.58,
+                        54.21000000000001, 107.80550000000001,
+                        98.0568, 180.95900000000006,
+                        139.58990000000003, 127.4852572380754
+                    ],
+                    type: 'bar',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                },
+
+               
+                
+                {
+                    data: [
+                    172.71, 218.44909999999996,
+                    136.37775285714287, 71.3022,
+                    80.30675000000001, 87.64,
+                    239.87030000000001, 214.02100000000002,
+                    173.3443, 188.51900000000003,
+                    264.94106942069004, 499.59668999999997,
+                    306.88460000000003, 1124.4106000000006,
+                    439.71420000000006, 140.72549999999998,
+                    89.48, 133.2808,
+                    94.986, 114.3365,
+                    135.799, 206.94459999999998,
+                    156.48479999999998, 69.58,
+                    54.21000000000001, 107.80550000000001,
+                    98.0568, 180.95900000000006,
+                    139.58990000000003, 127.4852572380754
+                ],
+                    type: 'line'
+                } 
+                
+            ]
+        };
+
+
+        if (option && typeof option === 'object') {
+            myChart.setOption(option);
+        }
+
+      }
+      
+    </script>
 
   </body>
 </html>
