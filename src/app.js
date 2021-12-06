@@ -57,6 +57,7 @@ app.use('/signup', routers.signup);
 app.use('/logout', routers.logout);
 app.use('/follow', routers.follow);
 app.use('/discover', routers.discover);
+app.use('/friendlist', routers.friendlist);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
