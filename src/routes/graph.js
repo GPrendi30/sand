@@ -24,7 +24,7 @@ router.get('/data', async function (req, res, next) {
     const chartType = req.query.chart
     const contractAddress = req.query.address
     const time = req.query.time
-
+    console.log(`${chartType} ${contractAddress} ${time}`)
     if (req.accepts('json')) {
         if (chartType === 'bar') {
             const option = await getOptionForBarChart(contractAddress, time);
