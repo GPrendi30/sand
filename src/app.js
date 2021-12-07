@@ -7,15 +7,13 @@ const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
 
-
-
-
 const routers = require('./routes');
 require('./models'); // run database
 
+require('./ejs-compile')
+
 const app = express()
 const { passport } = require('./login')
-
 
 /*  passportjs
   Local authentication
