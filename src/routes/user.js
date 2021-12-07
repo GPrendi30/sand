@@ -49,6 +49,7 @@ function createUser (req) {
         wallet: req.body.wallet,
         collection: req.body.collection,
         friendlist: req.body.friendlist,
+        friendrequests: req.body.friendrequests,
         settings: req.body.settings,
         ppic: req.body.ppic,
         bio: req.body.bio,
