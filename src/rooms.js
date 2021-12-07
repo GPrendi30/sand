@@ -15,6 +15,7 @@ class Room {
         this.author = authorId;
         this.admins = [authorId];
         this.users = users.push(authorId);
+        // TODO: Store sent and received room join requests
     }
 
     // Storage Functions
@@ -88,6 +89,14 @@ class Room {
     isAuthor (userId) {
         // TODO
         return false;
+    }
+
+    /**
+     * Get size of room (ie, the number of users it has, including author)
+     * @returns {integer} - room size
+     */
+    getRoomSize () {
+        // TODO
     }
 
     // Room Settings
