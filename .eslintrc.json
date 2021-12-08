@@ -23,7 +23,8 @@
         "quotes": "warn",
         "spaced-comment": "warn",
         "node/no-path-concat": "off",
-        "eol-last": "warn"
+        "eol-last": "warn",
+        "no-new-wrappers": "off"
     },
     "ignorePatterns": ["src/test/*", "src/public/js/*.min.js"]
 }
