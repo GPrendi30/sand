@@ -1,9 +1,7 @@
-const io = require('socket.io')();
+const io = require('socket.io')()
 // const EventEmitter = require('events');
 // const eventBus = new EventEmitter();
-
-const models = require('./models').model;
-
+const models = require('./models').model
 
 
 function init (server) {
@@ -40,8 +38,7 @@ function init (server) {
                     .then(result => {
                         // changing button text once the request has been sent
                         if (result !== undefined) {
-                            addFriendButton = { 'addFriendButton': addFriendButton }
-                            socket.emit('request.sent', addFriendButton)
+                            socket.emit('request.sent')
                             console.log('friend request from ' + sender + 'added to ' + receiver + 'pending requests')
                         } else {
                             console.log('receiver: ' + receiver + 'not found')
