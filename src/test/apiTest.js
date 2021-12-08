@@ -8,17 +8,34 @@ require('dotenv').config();
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
 
-// Test for function getCollectionData
+// Test for function getCollectionDataWithSlug
 describe('Testing fetching general data of a collection', function () {
-    it('Using getCollectionData with collection slug', function (done) {
+    it('Using getCollectionDataWithSlug with collection slug', function (done) {
 
         const collectionSlug = 'doodles-official';
-        const getCollectionData = routesFunc.__get__('getCollectionData')
+        const getCollectionDataWithSlug = routesFunc.__get__('getCollectionDataWithSlug')
         
-        getCollectionData(collectionSlug)
+        getCollectionDataWithSlug(collectionSlug)
         .then(data => {
             assert(data.collection)
             assert(data.collection.stats)
+            done()
+        })
+    });
+})
+
+// Test for function getCollectionDataWithAddress
+describe('Testing fetching general data of a collection', function () {
+    it('Using getCollectionDataWithAddress with collection address', function (done) {
+
+        const collectionAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
+        const getCollectionDataWithAddress = routesFunc.__get__('getCollectionDataWithAddress')
+        
+        getCollectionDataWithAddress(collectionAddress)
+        .then(data => {
+            // TODO: add more tests
+            // check that a result exists
+            assert(data)
             done()
         })
     });
@@ -81,7 +98,7 @@ describe('Testing fetching volume of a collection', function () {
     const collectionSlug = 'cool-cats-nft';
 
     const dailyVolume = routesFunc.__get__('dailyVolume')
-    const getCollectionData = routesFunc.__get__('getCollectionData')
+    const getCollectionDataWithSlug = routesFunc.__get__('getCollectionDataWithSlug')
 
     it('Get the volume of a single collection in the last 1 days', function (done) {
 
@@ -93,7 +110,7 @@ describe('Testing fetching volume of a collection', function () {
                     expect(vol).to.be.at.least(0);
                 });
                 let sum = volumeArray.reduce((a, b) => a + b, 0)
-                getCollectionData('cool-cats-nft')
+                getCollectionDataWithSlug('cool-cats-nft')
                     .then(data => {
                         let oneDayVolumeFromOS = data.collection.stats.one_day_volume
                         expect(sum).to.be.within(oneDayVolumeFromOS - 50, oneDayVolumeFromOS + 50);
@@ -139,7 +156,7 @@ describe('Testing fetching volume of a collection', function () {
                 });
 
                 let sum = volumeArray.reduce((a, b) => a + b, 0)
-                getCollectionData('cool-cats-nft')
+                getCollectionDataWithSlug('cool-cats-nft')
                     .then(data => {
                         let sevenDayVolumeFromOS = data.collection.stats.one_day_volume
                         expect(sum).to.be.within(sevenDayVolumeFromOS - 50, sevenDayVolumeFromOS + 50);

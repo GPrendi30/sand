@@ -8,7 +8,7 @@ const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
 const apiKey = process.env.OPENSEA_API;
 
 /**
- * Function to get the general data of a collection giving a collection slug.
+ * Function to get the general data of a collection passing as parameter a collection slug.
  * @param string slug, the collection slug
  * @returns {object} object with all the data.
  */
@@ -28,7 +28,7 @@ async function getCollectionDataWithSlug (slug) {
 }
 
 /**
- * Function to get the general data of a collection giving a collection slug.
+ * Function to get the general data of a collection passing as parameter a collection address.
  * @param string the collection address
  * @returns {object} object with all the data.
  */
@@ -44,7 +44,6 @@ async function getCollectionDataWithAddress (address) {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
 
-    console.log(response);
     return response;
 }
 
