@@ -22,16 +22,20 @@ function init_client() {
         // create friend Request object to send with sender username, receiver username,
         // event.target.tagName where tag name user is the field with the friend request target username
         // passing the button so that it can change from add to request sent.
-        const friendRequest = { sender: session.passport.user, receiver: event.target.user, addFriendButton: addFriendButton }
+        const friendRequest = { sender: session.passport.user, receiver: event.target.user }
         socket.emit('friend.request.sent', friendRequest)
     })
 
     acceptFriendRequest.addEventListener('click', (event)=>{
-        const acceptance = { accepter: session.passport.user, sender: event.targer.user, acceptFriendRequestButton: acceptFriendRequest }
+        const acceptance = { receiver: session.passport.user, sender: event.targer.user }
+        socket.emit('friend.request.accepted', acceptance)
     })
     // change add button text when request successfully sent
-    socket.on('request.sent', addFriendButton=>{
-        addFriendButton.innerHTML = 'request pending'
+    socket.on('request.sent', function () {
+        console.log('request sent')
     })
 
+    socket.on('friend.added.to.sender.friendlist', newFriend => {
+        console.log('you are now ' + newFriend.newfriend + '\'s friend')
+    })
 }
