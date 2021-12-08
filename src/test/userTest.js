@@ -25,7 +25,8 @@ function createUser (username, password, email, name, surname, wallet, collectio
     bio: bio,
     tracking: tracking,
     recentlyviewed: [],
-    friendrequests: []
+    friendrequests: [],
+    blocked: [],
   }
   return user
 }
@@ -61,6 +62,7 @@ describe('Testing remove sensitive data function', function () {
     expect(user.bio).to.equal('bio')
     expect(user.tracking).to.be.an('array').that.is.empty
     expect(user.friendrequests).to.be.an('array').that.is.empty
+    expect(user.blocked).to.be.an('array').that.is.empty
 
     // deletion and check after
 
@@ -134,6 +136,7 @@ describe('Connecting to database', function () {
             expect(user.ppic).to.equal('ppic')
             expect(user.bio).to.equal('bio')
             expect(user.tracking).to.be.an('array').that.is.empty
+            expect(user.blocked).to.be.an('array').that.is.empty
             done()
           })})
         

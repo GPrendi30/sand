@@ -13,6 +13,8 @@ const ObjectId = require('mongodb').ObjectId
  * @param {object} user the user from which we want to remove the sensitive data
  * @retun {Undefined}
  */
+
+// TO DO Update removesensitive data to remove friendslist and blocked + UPDATE TESTING
 function removeSensitiveData (user) {
     if (user._id) {
         delete user._id
@@ -50,6 +52,7 @@ function createUser (req) {
         collection: req.body.collection,
         friendlist: req.body.friendlist,
         friendrequests: req.body.friendrequests,
+        blocked: req.body.blocked,
         settings: req.body.settings,
         ppic: req.body.ppic,
         bio: req.body.bio,

@@ -88,7 +88,7 @@ function init (server) {
                             // changing button text once the request has been sent
                             if (result !== undefined) {
                                 console.log('added' + receiver + ' to ' + sender + 'friendslist')
-                                const newFriend = {newfriend: sender}
+                                const newFriend = { newfriend: sender }
                                 socket.emt('friend.added.to.sender.friendlist', newFriend)
                             } else {
                                 console.log('sender: ' + sender + 'not found')
@@ -105,7 +105,7 @@ function init (server) {
             models.users.findOne(filter).then(result=>{
                 user = result
                 if (user === null) {
-                    console.log('receiver user :' + unfriend.user + 'not found')
+                    console.log('user :' + unfriend.user + 'not found')
                 }
             }).then(function () {
                 // remove friend from friendlist
@@ -125,6 +125,37 @@ function init (server) {
                     }).catch(err=>{ console.log(err) });
             }).catch(err=>{ console.log(err) });
         });
+        socket.on('block.friend', blocked =>{
+            const blockerUser = blocked.user // the user who unfriends friend
+            let user
+            const friend = blocked.friend // the unfriended friend
+            const filter = { username: blockerUser }
+            // retreive receiver user
+            models.users.findOne(filter).then(result=>{
+                user = result
+                if (user === null) {
+                    console.log('user :' + blockerUser + 'not found')
+                }
+            }).then(function () {
+                // remove friend from friendlist if he is in there
+                user.friendslist = user.friendslist.filter(function (value) {
+                    return value !== friend;
+                });
+                // add user to blocked users
+                user.blocked.push(friend)
+                // store user changes back in db
+                models.users.replaceOne(filter, user, { upsert: true })
+                    .then(result => {
+                        // changing button text once the request has been sent
+                        if (result !== undefined) {
+                            console.log('removed' + friend + ' from ' + blockerUser + 'friendslist and added to blocked')
+                            socket.emit('friend.successfully.blocked', blocked)
+                        } else {
+                            console.log('receiver: ' + blockerUser + 'not found')
+                        }
+                    }).catch(err=>{ console.log(err) });
+            }).catch(err=>{ console.log(err) });
+        })
     })
 }
 // module.exports.eventBus = eventBus;
