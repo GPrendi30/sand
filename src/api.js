@@ -24,6 +24,8 @@ async function getCollectionDataWithSlug (slug) {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
 
+    console.log(response.data.collection.slug)
+
     return response.data;
 }
 
@@ -44,7 +46,8 @@ async function getCollectionDataWithAddress (address) {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
 
-    return response;
+    // getCollectionDataWithSlug(response.data.collection.slug).then(result => { console.log(result) });
+    return response.data;
 }
 
 /**
@@ -157,7 +160,51 @@ async function dailyVolume (contractAddress, timeInDays) {
     return dailyVolumeArray;
 }
 
+/**
+ * Function to get the collection of a user by passing a wallet address.
+ * @param string walletAddress, the collection wallet address.
+ * @returns {object} object with all the data.
+ */
+async function getCollectionsOfWallet (walletAddress) {
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/collections',
+        params: {
+            asset_owner: walletAddress,
+            offset: '0',
+            limit: '300'
+        }
+    }
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    return response;
+}
+
+/**
+ * Function to get the collection of a user by passing a wallet address.
+ * @param string walletAddress, the collection wallet address.
+ * @returns {object} object with all the data.
+ */
+async function getWalletTokenValues (walletAddress) {
+    let response;
+    const record = {};
+    try {
+        response = await getCollectionsOfWallet(walletAddress);
+        response.data.forEach(token => {
+            const key = token.slug;
+            const count = token.owned_asset_count;
+            record[key] = count;
+        })
+        console.log(record);
+    } catch (error) { console.error(error); }
+
+    return record;
+}
+
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
 
-getCollectionDataWithAddress('0x06012c8cf97bead5deae237070f9587f8e7a266d');
