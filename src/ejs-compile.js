@@ -32,14 +32,14 @@ function compile (view) {
     return fStr;
 }
 
-const compiled = glob.readdirSync('/src/views/**/*.ejs').map(compile).join('\n\n');
+const compiled = glob.readdirSync('./src/views/**/*.ejs').map(compile).join('\n\n');
 
 const output = `//EJS Compiled Views - This file was automatically generated on ${new Date()}
 ejs.views_include = function(locals) {
     console.log("views_include_setup",locals);
     return function(path, d) {
         console.log("ejs.views_include",path,d);
-        return ejs["views_"+path.replace(/\\/g,"_")]({...d,...locals}, null, ejs.views_include(locals));
+        return ejs["views_"+path.replace(/\\\//g,"_")]({...d,...locals}, null, ejs.views_include(locals));
     }
 };
 ${compiled}`
