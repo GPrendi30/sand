@@ -12,7 +12,7 @@ const apiKey = process.env.OPENSEA_API;
  * @param string slug, the collection slug
  * @returns {object} object with all the data.
  */
-async function getCollectionData (slug) {
+async function getCollectionDataWithSlug (slug) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/collection/' + slug,
@@ -25,6 +25,27 @@ async function getCollectionData (slug) {
     } catch (error) { console.error(error); }
 
     return response.data;
+}
+
+/**
+ * Function to get the general data of a collection giving a collection slug.
+ * @param string the collection address
+ * @returns {object} object with all the data.
+ */
+async function getCollectionDataWithAddress (address) {
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/asset_contract/' + address,
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
+    }
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    console.log(response);
+    return response;
 }
 
 /**
@@ -139,3 +160,5 @@ async function dailyVolume (contractAddress, timeInDays) {
 
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
+
+getCollectionDataWithAddress('0x06012c8cf97bead5deae237070f9587f8e7a266d');
