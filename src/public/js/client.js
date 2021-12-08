@@ -24,6 +24,7 @@ function initClient () {
     const unfriend = document.getElementById('unfriend')
     // button to add user to blacklist
     const blockuser = document.getElementById('blockUser')
+    const unlockuser = document.getElementById('unlockuser')
     // ************************************** END BUTTONS **********************************
 
     // ************************************** Friend Request **************************************
@@ -77,5 +78,13 @@ function initClient () {
     })
     socket.on('friend.successfully.blocked', blocked => {
         console.log('friend successfully blocked for ever and ever')
+    })
+
+    unlockuser.addEventListener('click', (event)=>{
+        const unlocked = { user: session.passport.user, friend: event.target.user }
+        socket.emit('unlock.friend', unlocked)
+    })
+    socket.on('friend.successfully.ulocked', unlocked=>{
+        console.log(unlocked.friend + 'unlocked')
     })
 }

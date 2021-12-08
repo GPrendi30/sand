@@ -156,6 +156,36 @@ function init (server) {
                     }).catch(err=>{ console.log(err) });
             }).catch(err=>{ console.log(err) });
         })
+
+        socket.on('unlock.friend', unlocked=>{
+            const unlockerUser = unlocked.user // the user who unlocks friend
+            let user
+            const friend = unlocked.friend // the unfriended friend
+            const filter = { username: unlockerUser }
+            // retreive unlocker user
+            models.users.findOne(filter).then(result=>{
+                user = result
+                if (user === null) {
+                    console.log('user :' + unlockerUser + 'not found')
+                }
+            }).then(function () {
+                // remove friend from blocked if he is in there
+                user.blocked = user.blocked.filter(function (value) {
+                    return value !== friend;
+                });
+                // store user changes back in db
+                models.users.replaceOne(filter, user, { upsert: true })
+                    .then(result => {
+                        if (result !== undefined) {
+                            // 
+                            console.log('removed' + friend + ' from ' + unlockerUser + 'blocked')
+                            socket.emit('friend.successfully.ulocked', unlocked)
+                        } else {
+                            console.log('unlocker: ' + unlockerUser + 'not found')
+                        }
+                    }).catch(err=>{ console.log(err) });
+            }).catch(err=>{ console.log(err) });
+        })
     })
 }
 // module.exports.eventBus = eventBus;
