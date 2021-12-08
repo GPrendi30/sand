@@ -82,6 +82,16 @@ class Room {
     }
 
     /**
+     * Check if user with given id is a member of group
+     * @param {string} userId - user id
+     * @returns {boolean} - whether a given user is a member of this room
+     */
+    isMember (userId) {
+        // TODO
+        return false;
+    }
+
+    /**
      * Check if given user is the room creator (ie, has max privileges)
      * @param {string} userId - user id
      * @returns {boolean} whether user is the creator or not
@@ -92,10 +102,28 @@ class Room {
     }
 
     /**
+     * Get id assigned to this room
+     * @returns {integer} - id of the given room
+     */
+    getRoomId () {
+        // TODO: Set working room id format
+        return 0;
+    }
+
+
+    /**
      * Get size of room (ie, the number of users it has, including author)
      * @returns {integer} - room size
      */
     getRoomSize () {
+        // TODO
+    }
+
+    /**
+     * Set room size
+     * @param {int} roomSize - size of the room
+     */
+    setRoomSize (roomSize) {
         // TODO
     }
 
@@ -126,6 +154,4 @@ class Room {
     }
 }
 
-module.exports = {
-    Room
-};
+module.exports = Room;
