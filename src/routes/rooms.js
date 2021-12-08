@@ -5,3 +5,5 @@ const router = express.Router()
 router.get('/', function (req, res, next) {
     res.render('wip')
 })
+
+module.exports = router;

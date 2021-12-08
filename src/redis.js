@@ -22,7 +22,7 @@ let opts = {
 // if production there is a different configuration
 if (process.env.NODE_ENV === 'production') {
     opts = {
-        url: process.env.REDIS_URL,
+        url: process.env.REDIS_URI,
         password: process.env.REDIS_PASSWORD,
         ...opts
     }
