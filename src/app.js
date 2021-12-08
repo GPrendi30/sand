@@ -6,7 +6,7 @@ const logger = require('morgan')
 const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
-
+const { store } = require('./redis');
 
 
 
@@ -23,7 +23,8 @@ const { passport } = require('./login')
 app.use(session({
     secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: store // using the redis store
 }));
 
 app.use(passport.initialize());
@@ -73,14 +74,13 @@ app.use(function (req, res, next) {
  * @param {object} next
  * @returns renders the error page.
  */
-app.use(function (err, req, res, next) {
+app.use(function (req, res, next) {
     // set locals, only providing error in development
-    res.locals.message = err.message
-    res.locals.error = req.app.get('env') === 'development' ? err : {}
+    //res.locals.message = err.message
+    //res.locals.error = req.app.get('env') === 'development' ? err : {}
 
     // render the error page
-    res.status(err.status || 500)
-    res.render('error')
+    res.status(500).end();
 })
 
 module.exports = app

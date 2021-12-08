@@ -2,26 +2,44 @@ const session = require('express-session');
 const Redis = require('ioredis');
 const RedisStore = require('connect-redis')(session);
 
-const redisPort = process.env.REDIS_PORT || 6379;
-const redisHost = process.env.REDIS_HOST || 'localhost';
+const config = require('config').get('cache')
+const redisPort = config.redisPort
+const redisHost = config.redisHost
+require('dotenv').config()
 
-const opts = {
-    host: redisHost,
-    port: redisPort,
-    // password: process.env.REDIS_PASSWORD || '',
-    legacyMode: true,
+let opts = {
     connectTimeout: 3000,
-    // maxRetriesPerRequest: 0,
+    maxRetriesPerRequest: 0,
     retryStrategy: function (times) {
         if (times > 3) {
             console.log('redisRetryError', 'Redis reconnect exhausted after 3 retries.');
             return null;
         }
-
         return 200;
     }
-};
+}
 
+// if production there is a different configuration
+if (process.env.NODE_ENV === 'production') {
+    opts = {
+        url: process.env.REDIS_URL,
+        password: process.env.REDIS_PASSWORD,
+        ...opts
+    }
+} else {
+    opts = {
+        host: redisHost,
+        port: redisPort,
+        ...opts
+    };
+}
+
+
+
+/**
+ * Redis client for session storage
+ * Currently supports local REDIS
+ */
 let client;
 let store;
 
@@ -32,9 +50,7 @@ try {
 } catch (err) {
     console.log('Redis connection failed');
     console.log('redisError:', err);
-} finally {
-    client.disconnect();
-}
+} 
 
 client.on('connect', function () {
     console.log('Redis client connected');
