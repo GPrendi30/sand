@@ -9,7 +9,7 @@ const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
 
 // Test for function getCollectionDataWithSlug
-describe('Testing fetching general data of a collection', function () {
+describe('Fetching general data of a collection', function () {
     it('Using getCollectionDataWithSlug with collection slug', function (done) {
 
         const collectionSlug = 'doodles-official';
@@ -25,7 +25,7 @@ describe('Testing fetching general data of a collection', function () {
 })
 
 // Test for function getCollectionDataWithAddress
-describe('Testing fetching general data of a collection', function () {
+describe('Fetching general data of a collection', function () {
     it('Using getCollectionDataWithAddress with collection address', function (done) {
 
         const collectionAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
@@ -42,7 +42,7 @@ describe('Testing fetching general data of a collection', function () {
 })
 
 // Test for function getSalesFromStartToEnd
-describe('Testing fetching sales data of a collection', function () {
+describe('Fetching sales data of a collection', function () {
     it('Get sales data using the collection address and two timestamps', function (done) {
         
         const collectionAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
@@ -58,7 +58,7 @@ describe('Testing fetching sales data of a collection', function () {
 })
 
 // Test for function createArrayWithPrices
-describe('Testing creation of data to plot the graphs', function () {
+describe('Creation of data to plot the graphs', function () {
     it('Create the array of objects with data for the graphs', function (done) {
 
         const collectionAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
@@ -76,7 +76,7 @@ describe('Testing creation of data to plot the graphs', function () {
 })
 
 // Test for function pullTokenDataByID
-describe('Testing fetching a single asset', function () {
+describe('Fetching a single asset', function () {
     it('Get the data of a single asset from the collection address and the token ID', function (done) {
 
         const collectionAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
@@ -92,7 +92,7 @@ describe('Testing fetching a single asset', function () {
         })
 })
 // Test for function dailyVolume
-describe('Testing fetching volume of a collection', function () {
+describe('Fetching volume of a collection', function () {
     this.timeout(15000);
     const collectionAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
     const collectionSlug = 'cool-cats-nft';
@@ -164,4 +164,38 @@ describe('Testing fetching volume of a collection', function () {
                 done()
             })
         })
+})
+
+// Test for function getCollectionsOfWallet
+describe('Fetching general data of an address', function () {
+    it('Using getCollectionsOfWallet with collection address', function (done) {
+
+        const walletAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
+        const getCollectionsOfWallet = routesFunc.__get__('getCollectionsOfWallet')
+        
+        getCollectionsOfWallet(walletAddress)
+        .then(data => {
+            // TODO: add more tests
+            // check that a result exists
+            assert(data)
+            done()
+        })
+    });
+})
+
+// Test for function getWalletTokenValues
+describe('Fetching the collection owned by a user through a wallet address', function () {
+    it('Using getWalletTokenValues with collection address', function (done) {
+
+        const walletAddress = '0x1a92f7381b9f03921564a437210bb9396471050c' // Cool Cats collection address
+        const getWalletTokenValues = routesFunc.__get__('getWalletTokenValues')
+        
+        getWalletTokenValues(walletAddress)
+        .then(data => {
+            // TODO: add more tests
+            // check that a result exists
+            assert(data)
+            done()
+        })
+    });
 })

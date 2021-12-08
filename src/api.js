@@ -24,8 +24,6 @@ async function getCollectionDataWithSlug (slug) {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
 
-    console.log(response.data.collection.slug)
-
     return response.data;
 }
 
@@ -199,7 +197,6 @@ async function getWalletTokenValues (walletAddress) {
             const count = token.owned_asset_count;
             record[key] = count;
         })
-        console.log(record);
     } catch (error) { console.error(error); }
 
     return record;
