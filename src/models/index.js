@@ -1,4 +1,5 @@
 const mongodb = require('mongodb')
+const mongoose = require('mongoose')
 const MongoClient = mongodb.MongoClient
 const config = require('config').get('database')
 const process = require('process')
@@ -6,27 +7,21 @@ const process = require('process')
 require('dotenv').config() // read .env file
 
 // mongodb uri, config.uri if its local db or MONGODB_URI if its heroku
-const uri = config.uri || process.env.MONGODB_URI
+const uri = (config.uri || process.env.MONGODB_URI) + '/' + config.db_name
 const dbName = config.db_name
-const collectionName = config.collection_name
-
-const model = {}
 
 /* connect to mongodb
   - uri is the mongodb uri
   - dbName is the name of the database
-  - collectionName is the name of the collection
 */
-MongoClient
+mongoose
     .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(client => {
-        model.db = client.db(dbName)
-        model.users = model.db.collection(collectionName)
-
-        console.log('Connected to MongoDB')
+    .then(connection => {
+        console.log('Connected to MongoDB through Mongoose')
         console.log(`Database: ${dbName}`)
-        console.log(`Collection: ${collectionName}`)
     })
     .catch(err => { console.log(err) })
 
-exports.model = model // export model
+mongoose.connection.on('error', err => {
+    console.log('Mongodb error:', err);
+});
