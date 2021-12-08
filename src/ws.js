@@ -19,9 +19,8 @@ function init (server) {
             // look for the friend request target and add request to his request list
             const receiver = friendRequest.receiver // the user who receives the friend request
             const sender = friendRequest.sender // the user who sent the request
-            let filter
+            const filter =  { username: receiver }
             let user
-            filter =  { username: receiver }
             models.users.findOne(filter).then(result=>{
                 user = result
                 if (user === null) {
@@ -39,18 +38,17 @@ function init (server) {
                         } else {
                             console.log('receiver: ' + receiver + 'not found')
                         }
-                    }).catch(err=>{console.log(err)})
-            })
+                    }).catch(err=>{ console.log(err) })
+            }).catch(err=>{ console.log(err) });
         })
 
         // RECEIVE AND HANDLE ACCEPTED FRIEND REQUESTS
         socket.on('friend.request.accepted', acceptance=>{
             const sender = acceptance.sender // the user who sent the request
             const receiver = acceptance.receiver // the user who accepted it
-            let filter
+            let filter  =  { username: receiver }
             let user
             // remove pending request from receiver
-            filter =  { username: receiver }
             // retreive receiver user
             models.users.findOne(filter).then(result=>{
                 user = result
@@ -74,7 +72,7 @@ function init (server) {
                     })
             }).ten(function () {
                 // add receiver to sender friendslist
-                filter =  { username: sender}
+                filter =  { username: sender }
                 // retreive sender user
                 models.users.findOne(filter).then(result=>{
                     user = result
@@ -95,11 +93,39 @@ function init (server) {
                             } else {
                                 console.log('sender: ' + sender + 'not found')
                             }
-                        }).catch(err=>{console.log(err)});
+                        }).catch(err=>{ console.log(err) });
+                }).catch(err=>{ console.log(err) });
             })
         })
+        socket.io('unfriend', unfriend =>{
+            let user = unfriend.user // the user who unfriends friend
+            const friend = unfriend.friend // the unfriended friend
+            const filter = { username: user }
+            // retreive receiver user
+            models.users.findOne(filter).then(result=>{
+                user = result
+                if (user === null) {
+                    console.log('receiver user :' + unfriend.user + 'not found')
+                }
+            }).then(function () {
+                // remove friend from friendlist
+                user.friendslist = user.friendslist.filter(function (value) {
+                    return value !== friend;
+                });
+                // store user friendlist back in db
+                models.users.replaceOne(filter, user, { upsert: true })
+                    .then(result => {
+                        // changing button text once the request has been sent
+                        if (result !== undefined) {
+                            console.log('removed' + friend + ' from ' + unfriend.user + 'friendslist')
+                            socket.emit('friend.removed', unfriend)
+                        } else {
+                            console.log('receiver: ' + unfriend.user + 'not found')
+                        }
+                    }).catch(err=>{ console.log(err) });
+            }).catch(err=>{ console.log(err) });
+        });
     })
 }
-
 // module.exports.eventBus = eventBus;
-module.exports.init = init;
+module.exports.init = init
