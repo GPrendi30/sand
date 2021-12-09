@@ -68,19 +68,18 @@ describe('Testing remove sensitive data function', function () {
 
     const removeSensitiveData = userJs.__get__('removeSensitiveData') // get the removesdata function form users.js
     removeSensitiveData(user)
-    expect(user._id).to.be.undefined
     expect(user.username).to.equal('username')
-    expect(user.password).to.equal(undefined)
-    expect(user.email).to.equal(undefined)
-    expect(user.name).to.equal(undefined)
-    expect(user.surname).to.equal(undefined)
+    expect(user.password).to.be.undefined
+    expect(user.email).to.be.undefined
+    expect(user.name).to.be.undefined
+    expect(user.surname).to.be.undefined
     expect(user._id).to.be.undefined
-    expect(user.collection).to.be.an('array').that.is.empty
-    expect(user.friendlist).to.be.an('array').that.is.empty
-    expect(user.settings).to.equal(undefined)
+    expect(user.collection).to.be.undefined
+    expect(user.friendlist).to.be.undefined
+    expect(user.settings).to.be.undefined
     expect(user.ppic).to.equal('ppic')
     expect(user.bio).to.equal('bio')
-    expect(user.tracking).to.be.an('array').that.is.empty
+    expect(user.tracking).to.be.undefined
     done()
   })
 })
@@ -107,16 +106,119 @@ describe('Connecting to database', function () {
   check()
   })
 
-  // TODO do the tests 
-  // test the routes with no authentication ()
-  // redirect to /login
+  // ******TESTING ROUTES WITHOUT AUTENTICATION
+  describe('Testing user routes without authentication', function () {
+    it('can\'t get user settings without authentication ->redirect to login', function (done) {
+      models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/settings/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(302, done)
+          }) 
+    })
+    it('can\'t get user assets without authentication ->redirect to login', function (done) {
+      models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/assets/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(302, done)
+          }) 
+    })
+    it('can\'t get user friends without authentication ->redirect to login', function (done) {
+      models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/friends/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(302, done)
+          })
+    })
+    it('can\'t get user recentlyviewed without authentication ->redirect to login', function (done) {
+      models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/recentlyviewed/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(302, done)
+          })
+    })
+    it('can\'t get user following without authentication ->redirect to login', function (done) {
+      models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/following/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(302, done)
+          })
+    })
+    it('can\'t get user edit without authentication ->redirect to login', function (done) {
+      models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/edit/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(302, done)
+          })
+    })
+    it('can\'t get user friendrequests without authentication ->redirect to login', function (done) {
+      models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/friendrequests/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(302, done)
+          })
+    })
+    it('can\'t get user blocked friends without authentication ->redirect to login', function (done) {
+      models.users.findOne({username:'username'}).then(result=>{
+        request
+          .get('/user/blocked/' + result._id)
+          .set('Accept', 'application/json')
+          .send()
+          .expect(302, done)
+          })
+    })
+    it('can\'t edit a user without authentication ->redirect to login', function(done) {
+      models.users.findOne({username:'username'}).then(result=>{
+          let updatedPpic = "updated Pic"
+          let updatedBio = "updated bio"
+          dummyUser.ppic=updatedPpic
+          dummyUser.bio=updatedBio 
+          dummyUser._id = ''+result._id
+          // console.log(dummyUser2._id)
+          // console.log(result._id)
+          request
+            .put('/user/'+result._id)
+            .send(dummyUser)
+            .set('Encryption-Type',"multipart/form-data")
+            .set('Accept', 'application/json')
+            .expect(302, done)
+        })
+    })
 
-  // login
+    it('can\'t delete a user without authentication ->redirect to login', function(done) {
+      models.users.findOne({username:'username'}).then(result=>{
+          let updatedPpic = "updated Pic"
+          let updatedBio = "updated bio"
+          dummyUser.ppic=updatedPpic
+          dummyUser.bio=updatedBio 
+          dummyUser._id = ''+result._id
+          request
+            .delete('/user/'+result._id)
+            .send(dummyUser)
+            .set('Encryption-Type',"multipart/form-data")
+            .set('Accept', 'application/json')
+            .expect(302, done)
+        })
+    })
+  })
+  // ******** END TEST WHITOUT AUTHENTICATION ********** 
+  
 
-  // test the routes after authentication
-  // test login/signup -> home
 
-  describe('Testing user routes', function () {
+  describe('Testing user routes with authentication', function () {
     
     describe('GET /user/_id', function () {
       it('the user metadata should be found', function (done) {
@@ -591,7 +693,7 @@ describe('Connecting to database', function () {
                   done()
             })
         })
-      });
+      })
       
     it(`create a new user given the id=`+ new_id, function(done) {
         request
