@@ -199,7 +199,6 @@ async function getWalletTokenValues (walletAddress) {
         })
     } catch (error) { console.error(error); }
 
-    console.log(record)
     return record;
 }
 
