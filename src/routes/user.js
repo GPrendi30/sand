@@ -3,6 +3,7 @@ const router = express.Router()
 // Imports for database
 const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
+const { isLoggedIn, isLoggedInSpecialized } = require('../login');
 // HELPER FUNCTIONS
 
 /* TODO update with authentication, and also refactor the test */
@@ -117,7 +118,7 @@ router.get('/:_id', function (req, res, next) {
 })
 
 /* GET user settings page. */
-router.get('/settings/:_id', function (req, res, next) {
+router.get('/settings/:_id', isLoggedInSpecialized,  function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
@@ -137,7 +138,7 @@ router.get('/settings/:_id', function (req, res, next) {
 })
 
 /* GET user assets page. */
-router.get('/assets/:_id', function (req, res, next) {
+router.get('/assets/:_id', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
@@ -157,7 +158,7 @@ router.get('/assets/:_id', function (req, res, next) {
 })
 
 /* GET user friends page. */
-router.get('/friends/:_id', function (req, res, next) {
+router.get('/friends/:_id', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
@@ -177,7 +178,7 @@ router.get('/friends/:_id', function (req, res, next) {
 })
 
 /* GET user recently viewed assets page. */
-router.get('/recentlyviewed/:_id', function (req, res, next) {
+router.get('/recentlyviewed/:_id', isLoggedInSpecialized, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
@@ -197,7 +198,7 @@ router.get('/recentlyviewed/:_id', function (req, res, next) {
 })
 
 /* GET user following. */
-router.get('/following/:_id', function (req, res, next) {
+router.get('/following/:_id', isLoggedIn, function (req, res, next) {
     let filter
     try {
         filter =  { _id: new ObjectId(req.params._id) }
@@ -215,7 +216,7 @@ router.get('/following/:_id', function (req, res, next) {
 })
 
 /* GET user edit page. */
-router.get('/edit/:_id', function (req, res, next) {
+router.get('/edit/:_id', isLoggedInSpecialized, function (req, res, next) {
     let filter
     try {
         filter =  { _id: new ObjectId(req.params._id) }
@@ -235,7 +236,7 @@ router.get('/edit/:_id', function (req, res, next) {
 })
 // to do add tests
 /* GET user pending friend request. */
-router.get('/friendrequests/:_id', function (req, res, next) {
+router.get('/friendrequests/:_id', isLoggedInSpecialized, function (req, res, next) {
     let filter
     try {
         filter =  { _id: new ObjectId(req.params._id) }
@@ -253,7 +254,7 @@ router.get('/friendrequests/:_id', function (req, res, next) {
 })
 // to do add tests
 /* GET user blocked friend. */
-router.get('/blocked/:_id', function (req, res, next) {
+router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {
     let filter
     try {
         filter =  { _id: new ObjectId(req.params._id) }
@@ -270,7 +271,11 @@ router.get('/blocked/:_id', function (req, res, next) {
     })
 })
 
-/* post user , requires form. */
+/**
+ * @DEPRECATED
+ * Is replaced with authentication middleware
+ */
+/*
 router.post('/', function (req, res, next) {
     console.log(req);
     const user = createUser(req)
@@ -280,10 +285,10 @@ router.post('/', function (req, res, next) {
         res.status('201').json(user)
     })
 })
-
+*/
 
 /* Put(edit) User , requires form. */
-router.put('/:_id', function (req, res, next) {
+router.put('/:_id', isLoggedInSpecialized, function (req, res, next) {
     const user = createUser(req)
     const filter = { _id: new ObjectId(req.params._id) };
     models.users.replaceOne(filter, user, { upsert: true }) // update + insert = upsert
@@ -296,7 +301,7 @@ router.put('/:_id', function (req, res, next) {
 
 
 /* Delete Uses */
-router.delete('/:_id', function (req, res) {
+router.delete('/:_id', isLoggedInSpecialized, function (req, res) {
     const filter = { _id: new ObjectId(req.params._id) };
     models.users.findOneAndDelete(filter).then(result => {
         if (result.value == null) {
