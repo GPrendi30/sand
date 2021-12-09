@@ -24,6 +24,7 @@ function initClient () {
     const unfriend = document.getElementById('unfriend')
     // button to add user to blacklist
     const blockuser = document.getElementById('blockUser')
+    // button to unlock a blcoked user
     const unlockuser = document.getElementById('unlockuser')
     // ************************************** END BUTTONS **********************************
 

@@ -37,6 +37,22 @@ function removeSensitiveData (user) {
     if (user.email) {
         delete user.email
     }
+    // TO DO add testssssssssssssss
+    if (user.blocked) {
+        delete user.blocked
+    }
+    if (user.tracking) {
+        delete user.tracking
+    }
+    if (user.friendrequests) {
+        delete user.friendrequests
+    }
+    if (user.recentlyviewed) {
+        delete user.recentlyviewed
+    }
+    if (user.collection) {
+        delete user.collection
+    }
 }
 
 // TODO Write Documentation
@@ -212,6 +228,42 @@ router.get('/edit/:_id', function (req, res, next) {
         if (req.accepts('application/json')) {
             removeSensitiveData(user)
             res.json(user)
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+// to do add tests
+/* GET user pending friend request. */
+router.get('/friendrequests/:_id', function (req, res, next) {
+    let filter
+    try {
+        filter =  { _id: new ObjectId(req.params._id) }
+    } catch (e) { res.status(404) }
+    models.users.findOne(filter).then(result=>{
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            res.json(user.friendrequests)
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+// to do add tests
+/* GET user blocked friend. */
+router.get('/blocked/:_id', function (req, res, next) {
+    let filter
+    try {
+        filter =  { _id: new ObjectId(req.params._id) }
+    } catch (e) { res.status(404) }
+    models.users.findOne(filter).then(result=>{
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            res.json(user.blocked)
         } else {
             res.status(406).end()
         }
