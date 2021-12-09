@@ -106,7 +106,16 @@ describe('Connecting to database', function () {
   
   check()
   })
-  
+
+  // TODO do the tests 
+  // test the routes with no authentication ()
+  // redirect to /login
+
+  // login
+
+  // test the routes after authentication
+  // test login/signup -> home
+
   describe('Testing user routes', function () {
     
     describe('GET /user/_id', function () {

@@ -70,7 +70,7 @@ function init (server) {
                             console.log('receiver: ' + receiver + 'not found')
                         }
                     })
-            }).ten(function () {
+            }).then(function () {
                 // add receiver to sender friendslist
                 filter =  { username: sender }
                 // retreive sender user
