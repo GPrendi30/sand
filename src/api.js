@@ -75,7 +75,7 @@ async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimes
  * @param string contractAddress, the contract address of the collection.
  * @param int startTimestamp, show events listed after this timestamp.
  * @param int endTimestamp, show events listed before this timestamp.
- * @returns {object} object with data of time and sell price [{ time: 'time', price: 'price'}].
+ * @returns {object} object with data of time and sell price [{ time: 'time', price: 'price'}, ...].
  */
 async function createArrayWithPrices (contractAddress, startTimestamp, endTimestamp) {
     const data = [];
@@ -199,9 +199,37 @@ async function getWalletTokenValues (walletAddress) {
         })
     } catch (error) { console.error(error); }
 
+    console.log(record)
     return record;
+}
+
+/**
+ * Function to check the difference between two objects and return what was added.
+ * @param {object} oldSet, object containing the old data.
+ * @param {object} newSet, object containing the new data .
+ * @returns {object} object with the difference between the two objects.
+ */
+function returnDifference (oldSet, newSet) {
+    const newTokens = {};
+    // check the token that have been added to the new set
+    for (const [key, value] of Object.entries(newSet)) {
+        if (key in oldSet) {
+            if (oldSet[key] !== newSet[key]) {
+                newTokens[key] = newSet[key] - oldSet[key];
+            }
+        } else {
+            newTokens[key] = newSet[key];
+        }
+    }
+    // check the token that have been removed from the old set
+    for (const [key, value] of Object.entries(oldSet)) {
+        if (!(key in newSet)) {
+            newTokens[key] = -1 * (oldSet[key]);
+        }
+    }
+
+    return newTokens;
 }
 
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
-

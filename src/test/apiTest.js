@@ -199,3 +199,40 @@ describe('Fetching the collection owned by a user through a wallet address', fun
         })
     });
 })
+
+// Test for function returnDifference
+describe('Getting the difference between two objects of tokens', function () {
+    it('Using returnDifference with two test objects', function (done) {
+
+        const returnDifference = routesFunc.__get__('returnDifference')
+
+        const a = {
+            nftboxes: 1,
+            rarible: 4,
+            sandbox: 4,
+            ens: 1,
+            axie: 7
+        }
+        
+        const b = {
+            rarible: 4,
+            sandbox: 12,
+            ens: 1,
+            axie: 7,
+            new_token: 666
+        }
+        
+        // const difference = { 
+        //     sandbox: 8, 
+        //     new_token: 666, 
+        //     nftboxes: -1 
+        // }
+        
+        const difference = returnDifference(a, b);
+
+        assert(difference['sandbox'] === 8);
+        assert(difference['new_token'] === 666);
+        assert(difference['nftboxes'] === -1);
+        done()
+    });
+})
