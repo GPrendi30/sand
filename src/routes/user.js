@@ -3,6 +3,7 @@ const router = express.Router()
 // Imports for database
 const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
+const { isLoggedIn, isLoggedInSpecialized } = require('../login');
 // HELPER FUNCTIONS
 
 /* TODO update with authentication, and also refactor the test */
@@ -13,6 +14,8 @@ const ObjectId = require('mongodb').ObjectId
  * @param {object} user the user from which we want to remove the sensitive data
  * @retun {Undefined}
  */
+
+// TO DO Update removesensitive data to remove friendslist and blocked + UPDATE TESTING
 function removeSensitiveData (user) {
     if (user._id) {
         delete user._id
@@ -35,6 +38,27 @@ function removeSensitiveData (user) {
     if (user.email) {
         delete user.email
     }
+    // TO DO add testssssssssssssss
+    if (user.blocked) {
+        delete user.blocked
+    }
+    if (user.tracking) {
+        delete user.tracking
+    }
+    if (user.friendrequests) {
+        delete user.friendrequests
+    }
+    if (user.recentlyviewed) {
+        delete user.recentlyviewed
+    }
+    if (user.collection) {
+        delete user.collection
+    }
+
+    if (user.friendlist) {
+        delete user.friendlist
+    }
+
 }
 
 // TODO Write Documentation
@@ -49,6 +73,8 @@ function createUser (req) {
         wallet: req.body.wallet,
         collection: req.body.collection,
         friendlist: req.body.friendlist,
+        friendrequests: req.body.friendrequests,
+        blocked: req.body.blocked,
         settings: req.body.settings,
         ppic: req.body.ppic,
         bio: req.body.bio,
@@ -60,7 +86,7 @@ function createUser (req) {
 
 /* GET user page. */
 router.get('/', function (req, res, next) {
-    models.users.find().toArray().then(result=>{
+    models.users.find().toArray().then(result => {
         result.forEach(element => {
             removeSensitiveData(element)
         });
@@ -80,9 +106,9 @@ router.get('/:_id', function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
-            filter =  { _id: new ObjectId(req.params._id) }
+            filter = { _id: new ObjectId(req.params._id) }
         } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result=>{
+        models.users.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end()
@@ -97,13 +123,13 @@ router.get('/:_id', function (req, res, next) {
 })
 
 /* GET user settings page. */
-router.get('/settings/:_id', function (req, res, next) {
+router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
-            filter =  { _id: new ObjectId(req.params._id) }
+            filter = { _id: new ObjectId(req.params._id) }
         } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result=>{
+        models.users.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end();
@@ -117,13 +143,13 @@ router.get('/settings/:_id', function (req, res, next) {
 })
 
 /* GET user assets page. */
-router.get('/assets/:_id', function (req, res, next) {
+router.get('/assets/:_id', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
-            filter =  { _id: new ObjectId(req.params._id) }
+            filter = { _id: new ObjectId(req.params._id) }
         } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result=>{
+        models.users.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end();
@@ -137,13 +163,13 @@ router.get('/assets/:_id', function (req, res, next) {
 })
 
 /* GET user friends page. */
-router.get('/friends/:_id', function (req, res, next) {
+router.get('/friends/:_id', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
-            filter =  { _id: new ObjectId(req.params._id) }
+            filter = { _id: new ObjectId(req.params._id) }
         } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result=>{
+        models.users.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end();
@@ -157,13 +183,16 @@ router.get('/friends/:_id', function (req, res, next) {
 })
 
 /* GET user recently viewed assets page. */
-router.get('/recentlyviewed/:_id', function (req, res, next) {
+router.get('/recentlyviewed/:_id', isLoggedInSpecialized, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
-            filter =  { _id: new ObjectId(req.params._id) }
-        } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result=>{
+            filter = { _id: new ObjectId(req.params._id) }
+        } catch (e) {
+            return res.status(404);
+        }
+
+        models.users.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end();
@@ -177,30 +206,30 @@ router.get('/recentlyviewed/:_id', function (req, res, next) {
 })
 
 /* GET user following. */
-router.get('/following/:_id', function (req, res, next) {
+router.get('/following/:_id', isLoggedIn, function (req, res, next) {
     let filter
     try {
-        filter =  { _id: new ObjectId(req.params._id) }
+        filter = { _id: new ObjectId(req.params._id) }
     } catch (e) { res.status(404) }
-    models.users.findOne(filter).then(result=>{
+    models.users.findOne(filter).then(result => {
         const user = result
         if (user === null) {
             res.status(404).end();
         } else if (req.accepts('application/json')) {
             res.json(user.tracking)
         } else {
-            res.status(406).end()
+            res.status(403).end()
         }
     })
 })
 
 /* GET user edit page. */
-router.get('/edit/:_id', function (req, res, next) {
+router.get('/edit/:_id', isLoggedInSpecialized, function (req, res, next) {
     let filter
     try {
-        filter =  { _id: new ObjectId(req.params._id) }
+        filter = { _id: new ObjectId(req.params._id) }
     } catch (e) { res.status(404) }
-    models.users.findOne(filter).then(result=>{
+    models.users.findOne(filter).then(result => {
         const user = result
         if (user === null) {
             res.status(404).end();
@@ -213,8 +242,48 @@ router.get('/edit/:_id', function (req, res, next) {
         }
     })
 })
+// to do add tests
+/* GET user pending friend request. */
+router.get('/friendrequests/:_id', isLoggedInSpecialized, function (req, res, next) {
+    let filter
+    try {
+        filter = { _id: new ObjectId(req.params._id) }
+    } catch (e) { res.status(404) }
+    models.users.findOne(filter).then(result => {
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            res.json(user.friendrequests)
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+// to do add tests
+/* GET user blocked friend. */
+router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {
+    let filter
+    try {
+        filter = { _id: new ObjectId(req.params._id) }
+    } catch (e) { res.status(404) }
+    models.users.findOne(filter).then(result => {
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            res.json(user.blocked)
+        } else {
+            res.status(406).end()
+        }
+    })
+})
 
-/* post user , requires form. */
+/**
+ * @DEPRECATED
+ * Is replaced with authentication middleware
+ */
+/*
 router.post('/', function (req, res, next) {
     console.log(req);
     const user = createUser(req)
@@ -224,10 +293,10 @@ router.post('/', function (req, res, next) {
         res.status('201').json(user)
     })
 })
-
+*/
 
 /* Put(edit) User , requires form. */
-router.put('/:_id', function (req, res, next) {
+router.put('/:_id', isLoggedInSpecialized, function (req, res, next) {
     const user = createUser(req)
     const filter = { _id: new ObjectId(req.params._id) };
     models.users.replaceOne(filter, user, { upsert: true }) // update + insert = upsert
@@ -240,7 +309,7 @@ router.put('/:_id', function (req, res, next) {
 
 
 /* Delete Uses */
-router.delete('/:_id', function (req, res) {
+router.delete('/:_id', isLoggedInSpecialized, function (req, res) {
     const filter = { _id: new ObjectId(req.params._id) };
     models.users.findOneAndDelete(filter).then(result => {
         if (result.value == null) {
@@ -249,6 +318,7 @@ router.delete('/:_id', function (req, res) {
             if (req.accepts('application/json')) {
                 removeSensitiveData(result)
                 res.status(204).json(result)
+                req.logOut();
             } else {
                 res.status(406).end();
             }
