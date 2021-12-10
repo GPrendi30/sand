@@ -24,7 +24,12 @@ app.use(session({
     secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
     resave: false,
     saveUninitialized: true,
-    store: store  // using the redis store
+    store: store,  // using the redis store
+    cookie: {
+        maxAge: 1000 * 60 * 30, // 30 minutes
+        expires: new Date(Date.now() + 1000 * 60 * 30), // 30 minutes
+        httpOnly: true
+    }
 }));
 
 /*  passportjs
