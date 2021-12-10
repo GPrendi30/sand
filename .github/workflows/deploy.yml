@@ -27,7 +27,7 @@ jobs:
           redis-version: '6'
 
       - name: Create .env file
-        run: echo "OPENSEA_API=${{ secrets.OPENSEA_API }}" > .env
+        run: echo "OPENSEA_API=${{ secrets.OPENSEA_API }}" >> .env
 
       - name: Install dependencies
         run: npm ci
