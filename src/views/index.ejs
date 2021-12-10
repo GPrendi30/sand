@@ -1,131 +1,121 @@
 <!DOCTYPE html>
 <html>
 
-<%- include('./includes/head', { title: 'S.A.N.D' }) %>
+  <%- include('./includes/head', { title: 'S.A.N.D'}) %>
+  <body onload="init()">
 
-    <body onload="init()">
+    <!-- TODO: Transfer this page structure to index.html-->
+    <%- include('header') %>
 
-        <!-- TODO: Transfer this page structure to index.html-->
-        <%- include('header') %>
+    <!-- Minimize navbar by adding: class="minimized" -->
+    <%- include('./includes/navbar'); %>
 
-            <!-- Minimize navbar by adding: class="minimized" -->
-            <%- include('./includes/navbar'); %>
+    <main>
+      <!-- Uncomment (one at a time!) to test different main views-->
+      <!-- TODO add dashboard here -->
+    <button id ="connect">Connect Wallet</button>
+    <section id="graph" style="width: 100%; height: 100%" >
 
-                <main>
-                    <!-- Uncomment (one at a time!) to test different main views-->
-                    <!-- TODO add dashboard here -->
+    </section>
+        
+    </main>
 
-                    <section id="graph" style="width: 100%; height: 100%">
+    <%- include('./includes/aside_closed'); %>
 
-                    </section>
+    <%- include('./includes/footer'); %>
 
-                </main>
+    <script src="/js/echarts.min.js"></script>
+    <script src="/js/echarts.simple.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 
-                <%- include('./includes/aside_closed'); %>
+    <script src="/js/wallet.js"></script>
+    <script>
+      let web3;
+      function init() {
+        
+        let graphContainer = document.getElementById('graph')
 
-                    <%- include('./includes/footer'); %>
+        var myChart = echarts.init(graphContainer, 'dark');
+        var option;
+        option = {
+            xAxis: {
+                type: 'category',
+                data: [
+                    0, 1, 2, 3, 4, 5, 6, 7, 8,
+                    9, 10, 11, 12, 13, 14, 15, 16, 17,
+                    18, 19, 20, 21, 22, 23, 24, 25, 26,
+                    27, 28, 29
+                ]
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: [
+                        172.71, 218.44909999999996,
+                        136.37775285714287, 71.3022,
+                        80.30675000000001, 87.64,
+                        239.87030000000001, 214.02100000000002,
+                        173.3443, 188.51900000000003,
+                        264.94106942069004, 499.59668999999997,
+                        306.88460000000003, 1124.4106000000006,
+                        439.71420000000006, 140.72549999999998,
+                        89.48, 133.2808,
+                        94.986, 114.3365,
+                        135.799, 206.94459999999998,
+                        156.48479999999998, 69.58,
+                        54.21000000000001, 107.80550000000001,
+                        98.0568, 180.95900000000006,
+                        139.58990000000003, 127.4852572380754
+                    ],
+                    type: 'bar',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                },
 
-                        <script src="/js/echarts.min.js"></script>
-                        <script src="/js/echarts.simple.min.js"></script>
-                        <script>
-                            function init() {
-                                let graphContainer = document.getElementById('graph')
+               
+                
+                {
+                    data: [
+                    172.71, 218.44909999999996,
+                    136.37775285714287, 71.3022,
+                    80.30675000000001, 87.64,
+                    239.87030000000001, 214.02100000000002,
+                    173.3443, 188.51900000000003,
+                    264.94106942069004, 499.59668999999997,
+                    306.88460000000003, 1124.4106000000006,
+                    439.71420000000006, 140.72549999999998,
+                    89.48, 133.2808,
+                    94.986, 114.3365,
+                    135.799, 206.94459999999998,
+                    156.48479999999998, 69.58,
+                    54.21000000000001, 107.80550000000001,
+                    98.0568, 180.95900000000006,
+                    139.58990000000003, 127.4852572380754
+                ],
+                    type: 'line'
+                } 
+                
+            ]
+        };
 
-                                var myChart = echarts.init(graphContainer);
-                                var option;
-                                option = {
-                                    "xAxis": {
-                                        "type": "category",
-                                        "data": [
-                                            "11/6",
-                                            "11/7",
-                                            "11/8",
-                                            "11/9",
-                                            "11/10",
-                                            "11/11",
-                                            "11/12",
-                                            "11/13",
-                                            "11/14",
-                                            "11/15",
-                                            "11/16",
-                                            "11/17",
-                                            "11/18",
-                                            "11/19",
-                                            "11/20",
-                                            "11/21",
-                                            "11/22",
-                                            "11/23",
-                                            "11/24",
-                                            "11/25",
-                                            "11/26",
-                                            "11/27",
-                                            "11/28",
-                                            "11/29",
-                                            "11/30",
-                                            "12/1",
-                                            "12/2",
-                                            "12/3",
-                                            "12/4",
-                                            "12/5",
-                                            "12/6"
-                                        ]
-                                    },
-                                    "yAxis": {
-                                        "type": "value"
-                                    },
-                                    "series": [
-                                        {
-                                            "data": [
-                                                78.0922,
-                                                74.20675,
-                                                82.44,
-                                                236.4761,
-                                                176.5232,
-                                                225.53629999999998,
-                                                188.51900000000003,
-                                                257.999,
-                                                506.53875942069,
-                                                299.38460000000003,
-                                                1070.3106000000007,
-                                                487.3142,
-                                                154.72549999999998,
-                                                81.38,
-                                                141.3808,
-                                                94.986,
-                                                104.36749999999999,
-                                                145.768,
-                                                164.4546,
-                                                198.9748,
-                                                69.58,
-                                                54.21000000000001,
-                                                107.80550000000001,
-                                                98.0568,
-                                                167.05900000000005,
-                                                146.1399,
-                                                134.8352572380754,
-                                                103.55,
-                                                88.92,
-                                                67.201,
-                                                31.6074
-                                            ],
-                                            "type": "bar",
-                                            "showBackground": true,
-                                            "backgroundStyle": {
-                                                "color": "rgba(180, 180, 180, 0.2)"
-                                            }
-                                        }
-                                    ]
-                                };
+        
+        if (option && typeof option === 'object') {
+            myChart.setOption(option);
+        }
 
+        document.getElementById('connect').onclick = async () => { 
+            web3 = await connectWeb3() 
+            if (web3)
+               document.getElementById('connected_indicator').classList.add('online')
+        };
+      }
+      
 
-                                if (option && typeof option === 'object') {
-                                    myChart.setOption(option);
-                                }
+    </script>
 
-                            }
-
-                        </script>
-
-    </body>
-
+  </body>
 </html>
