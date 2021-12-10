@@ -227,7 +227,24 @@ function returnDifference (oldSet, newSet) {
         }
     }
 
+    console.log(newTokens)
     return newTokens;
+}
+
+/**
+ * Function to check the difference between two objects and return what was added.
+ * @param string walletAddress, the address that we want to track.
+ * @param string time, .
+ * @returns {object} object with the difference between the two objects.
+ */
+function getChanges (walletAddress, time) {
+    getWalletTokenValues(walletAddress).then(firstSet => {
+        setTimeout(() => {
+            getWalletTokenValues(walletAddress).then(secondSet => {
+                returnDifference(firstSet, secondSet);
+            })
+        }, time);
+    })
 }
 
 module.exports.dailyVolume = dailyVolume;
