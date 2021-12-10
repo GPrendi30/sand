@@ -6,7 +6,8 @@ const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
 const express = require('express');
 const router = express.Router();
-const request = require('supertest')('http://localhost:3000')
+const request = require('supertest').agent('http://localhost:3000')
+const removeSensitiveData = userJs.__get__('removeSensitiveData') // get the removesdata function form users.js
 
 //setting up test data in db
 function createUser(username, password, email, name, surname, wallet, collection, friendlist, settings, ppic, bio, tracking) {
@@ -33,8 +34,11 @@ function createUser(username, password, email, name, surname, wallet, collection
 
 // create users for tests
 const dummyUser = createUser('username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [], [])
-const dummyUser2 = createUser('username2', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [], [])
-const dummyUserDD = createUser('username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [], [])
+const dummyUser2 = createUser('username2', 'password', '2email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [], [])
+const dummyUserDD = createUser('username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, 'ppic', 'bio', [], [])// not in db
+let dummyUser4 = createUser('username', 'password', 'email', 'name', 'surname', 'wallet', [], [], { currency: 'eth', mode: 'dark' }, '', '', [], []) //for get user id not in db
+removeSensitiveData(dummyUser4)
+
 
 
 dummyUserDD._id = '42a802fd2ac32b114627c118'
@@ -44,6 +48,7 @@ const new_id = '42a802fd2ac32b114627c118'//used to check POST/PUT/DELETE
 
 // TESTING HELPER FUNCTIONS
 describe('Testing remove sensitive data function', function () {
+  
   it('successfully deleted the sensitive info', function (done) {
     // create copy of the object
     const user = dummyUserDD
@@ -65,9 +70,8 @@ describe('Testing remove sensitive data function', function () {
     expect(user.blocked).to.be.an('array').that.is.empty
 
     // deletion and check after
-
-    const removeSensitiveData = userJs.__get__('removeSensitiveData') // get the removesdata function form users.js
     removeSensitiveData(user)
+
     expect(user.username).to.equal('username')
     expect(user.password).to.be.undefined
     expect(user.email).to.be.undefined
@@ -260,20 +264,20 @@ describe('Connecting to database', function () {
               if (err) return done(err)
               const user = JSON.parse(res.text)
               expect(user._id).to.be.undefined //result_id =new ObjectId("61a8013882dda60a14619eeb")
-              expect(user.username).to.equal('username')
+              expect(user.username).to.equal(dummyUser.username)
               //console.log(user.password)
               expect(user.password).to.be.undefined
               expect(user.email).to.be.undefined
               expect(user.name).to.be.undefined
               expect(user.surname).to.be.undefined
               expect(user.wallet).to.be.undefined
-              expect(user.collection).to.be.an('array').that.is.empty
-              expect(user.friendlist).to.be.an('array').that.is.empty
+              expect(user.collection).to.be.undefined
+              expect(user.friendlist).to.be.undefined
               expect(user.settings).to.be.undefined
-              expect(user.ppic).to.equal('ppic')
-              expect(user.bio).to.equal('bio')
-              expect(user.tracking).to.be.an('array').that.is.empty
-              expect(user.blocked).to.be.an('array').that.is.empty
+              expect(user.ppic).to.equal('')
+              expect(user.bio).to.equal('')
+              expect(user.tracking).to.be.undefined
+              expect(user.blocked).to.be.undefined
               done()
             })
         })
@@ -317,7 +321,7 @@ describe('Connecting to database', function () {
               if (err) return done(err)
               const fUsers = JSON.parse(res.text)
               assert(result);
-              expect(JSON.stringify(fUsers)).to.equal(JSON.stringify([dummyUserDD]))
+              expect(JSON.stringify(fUsers)).to.equal(JSON.stringify([dummyUser4]))
               done()
             })
         })
