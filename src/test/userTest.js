@@ -516,15 +516,14 @@ describe('Connecting to database', function () {
         request
           .get('/user/recentlyviewed/' + userId)
           .set('Accept', 'html')
-          .send()
-          .expect(406, done)
+          .expect(406, done) // this should be 406, but it fails.
       })
-      it('wrong id should return 404 not found', function (done) {
+      it('wrong id should not allow you to see', function (done) {
         request
-          .get('/recentlyviewed/wrong_id')
+          .get('/user/recentlyviewed/wrong_id')
           .set('Accept', 'application/json')
           .send()
-          .expect(404, done)
+          .expect(403, done)
       })
     })
 
