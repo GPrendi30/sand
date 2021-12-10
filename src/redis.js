@@ -3,8 +3,8 @@ const Redis = require('ioredis');
 const RedisStore = require('connect-redis')(session);
 
 const config = require('config').get('cache')
-const redisPort = 6379
-const redisHost = config.redisHost
+const redisPort = parseInt(config.port)
+const redisHost = config.host
 require('dotenv').config()
 
 let opts = {
@@ -22,7 +22,9 @@ let opts = {
 // if production there is a different configuration
 if (process.env.NODE_ENV === 'production') {
     opts = {
-        url: process.env.REDIS_URI,
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
+        username: process.env.REDIS_USERNAME,
         password: process.env.REDIS_PASSWORD,
         ...opts
     }

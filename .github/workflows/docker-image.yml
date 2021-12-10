@@ -35,7 +35,9 @@ jobs:
       run: |
           echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
           echo "OPENSEA_API=${{ secrets.OPENSEA_API }}" >> .env
-          echo "REDIS_URI=${{ secrets.REDIS_URI }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "REDIS_USERNAME=${{ secrets.REDIS_USERNAME }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
       
     - name: Build and push
