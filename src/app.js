@@ -6,30 +6,33 @@ const logger = require('morgan')
 const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
-const { store } = require('./redis');
-
-
+const store = require('./redis').store;
 
 const routers = require('./routes');
 require('./models'); // run database
 
+
+
 const app = express()
-const { passport } = require('./login')
 
 
-/*  passportjs
-  Local authentication
-*/
+const { passport } = require('./login');
+
+
+
 app.use(session({
     secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
     resave: false,
     saveUninitialized: true,
-    store: store // using the redis store
+    store: store  // using the redis store
 }));
 
+/*  passportjs
+  Local authentication
+  Redis cache
+*/
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
