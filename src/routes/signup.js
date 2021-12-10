@@ -58,6 +58,8 @@ function createUser (username, password, email, name, surname) {
         bio: '',
         tracking: [],
         recentlyviewed: [],
+        blocked: [],
+        collection: [],
         settings: { currency: 'eth', mode: 'dark' }
     }; // will be updated by the user schema of mongoose in M3
 }

@@ -46,6 +46,10 @@ function isLoggedIn (req, res, next) {
  */
  function isLoggedInSpecialized (req, res, next) {
     if (req.isAuthenticated() && req.session.passport.user === req.params._id) return next();
+
+    if (req.isAuthenticated()) {
+        return res.status(403).send('Forbidden');
+    }
     // redirect to login page.
     // if logged in with another account, login will bubble up(redirect) to home
     res.redirect('/login');
