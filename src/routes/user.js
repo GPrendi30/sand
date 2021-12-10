@@ -51,7 +51,10 @@ function removeSensitiveData (user) {
     if (user.recentlyviewed) {
         delete user.recentlyviewed
     }
-    
+    if (user.collection) {
+        delete user.collection
+    }
+
     if (user.friendlist) {
         delete user.friendlist
     }
@@ -195,7 +198,7 @@ router.get('/recentlyviewed/:_id', isLoggedInSpecialized, function (req, res, ne
             }
         }).catch(err => { console.log(err) })
     } else {
-        res.status(406).end()
+        res.status(403).end()
     }
 })
 
@@ -212,7 +215,7 @@ router.get('/following/:_id', isLoggedIn, function (req, res, next) {
         } else if (req.accepts('application/json')) {
             res.json(user.tracking)
         } else {
-            res.status(406).end()
+            res.status(403).end()
         }
     })
 })
