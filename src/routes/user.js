@@ -51,9 +51,7 @@ function removeSensitiveData (user) {
     if (user.recentlyviewed) {
         delete user.recentlyviewed
     }
-    if (user.collection) {
-        delete user.collection
-    }
+    
     if (user.friendlist) {
         delete user.friendlist
     }
@@ -314,6 +312,7 @@ router.delete('/:_id', isLoggedInSpecialized, function (req, res) {
             if (req.accepts('application/json')) {
                 removeSensitiveData(result)
                 res.status(204).json(result)
+                req.logOut();
             } else {
                 res.status(406).end();
             }
