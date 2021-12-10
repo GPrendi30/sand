@@ -12,5 +12,6 @@
 	ppic: ""
 	bio: ""
 	tracking: []
-	recentlyViewed: [] 	
+	recentlyViewed: []
+	blocked:[] 	
 }
