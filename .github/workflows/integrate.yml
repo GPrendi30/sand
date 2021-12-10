@@ -24,11 +24,13 @@ jobs:
         with:
           mongodb-version: '4.4'
           
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.2.0
+        with:
+          redis-version: '6'
+          
       - name: Create .env file
-        run: |
-          echo "OPENSEA_API=${{ secrets.OPENSEA_API }}" > .env
-          echo "REDIS_URI = ${{ secrets.REDIS_URI }}" >> .env
-          echo "REDIS_PASSWORD = ${{ secrets.REDIS_PASSWORD }}" >> .env
+        run: echo "OPENSEA_API=${{ secrets.OPENSEA_API }}" > .env
 
       - name: Install dependencies
         run: npm ci
