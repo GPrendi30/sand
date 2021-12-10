@@ -3,7 +3,7 @@ const Redis = require('ioredis');
 const RedisStore = require('connect-redis')(session);
 
 const config = require('config').get('cache')
-const redisPort = config.redisPort
+const redisPort = 6379
 const redisHost = config.redisHost
 require('dotenv').config()
 
@@ -34,37 +34,33 @@ if (process.env.NODE_ENV === 'production') {
     };
 }
 
-
+let store;
 
 /**
  * Redis client for session storage
  * Currently supports local REDIS
  */
-let client;
-let store;
+const client = new Redis(opts);
+store = new RedisStore({ client: client });
 
-try {
-    client = new Redis(opts);
 
-    store = new RedisStore({ client: client });
-} catch (err) {
-    console.log('Redis connection failed');
-    console.log('redisError:', err);
-} 
+// pinging the client
+client.info()
+    .catch(() => {
+        console.log('Redis connection failed');
+        client.disconnect();
+        store = null;
+    });
 
 client.on('connect', function () {
     console.log('Redis client connected');
+
 });
 
 client.on('error', function () {
     console.log('Redis client error');
-    client.shutdown();
+    client.disconnect();
 });
 
 
-
-
-
-
-module.exports.store = store;
-module.exports.client = client;
+module.exports = { client, store };
