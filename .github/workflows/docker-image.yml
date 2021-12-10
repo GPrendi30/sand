@@ -32,7 +32,11 @@ jobs:
             type=raw,value=latest
 
     - name: Create .env file
-      run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > .env
+      run: |
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > .env
+          echo "OPENSEA_API=${{ secrets.OPENSEA_API }}" > .env
+          echo "REDIS_URI = ${{ secrets.REDIS_URI }}" >> .env
+          echo "REDIS_PASSWORD = ${{ secrets.REDIS_PASSWORD }}" >> .env
       
     - name: Build and push
       uses: docker/build-push-action@v2

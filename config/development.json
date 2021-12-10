@@ -3,5 +3,10 @@
         "uri": "mongodb://127.0.0.1:27017",
         "db_name": "sand-dev" ,
         "collection_name": "users"
+    }, 
+
+    "cache": {
+        "host": "127.0.0.1",
+        "port": "6379"
     }
 }
