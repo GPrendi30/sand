@@ -232,7 +232,7 @@ describe('Connecting to database', function () {
       })
     })
   })
-  // ******** END TEST WHITOUT AUTHENTICATION ********** 
+  // ******** END TEST WITHOUT AUTHENTICATION ********** 
 
 
 
@@ -344,8 +344,10 @@ describe('Connecting to database', function () {
     })
 
     describe('GET /user/settings/:_id', function () {
+      let userId;
       it('the user settings metadata should be found', function (done) {
         models.users.findOne({ username: 'username' }).then(result => {
+          userId = result._id;
           request
             .get('/user/settings/' + result._id)
             .set('Accept', 'application/json')
@@ -368,22 +370,22 @@ describe('Connecting to database', function () {
         request
           .get('/user/settings/42a802fd2ac32b114627c148')
           .send()
-          .expect(404, done)
+          .expect(403, done)
       })
 
       it(' the request do not accept json -> bad request', function (done) {
         request
-          .get('/user/settings/42a802fd2ac32b114627c148')
+          .get('/user/settings/' + userId)
           .set('Accept', 'html')
           .send()
           .expect(406, done)
       })
-      it('wrong id should return 404 not found', function (done) {
+      it('wrong id should let you access it', function (done) {
         request
           .get('/user/settings/wrong_id')
           .set('Accept', 'application/json')
           .send()
-          .expect(404, done)
+          .expect(403, done)
       })
     })
 
@@ -393,12 +395,14 @@ describe('Connecting to database', function () {
           request
             .get('/user/assets/' + result._id)
             .set('Accept', 'application/json')
-            .send()
             .expect(200)
             .expect('Content-Type', /json/, 'it should respond with Content-Type: application/json')
             .end(function (err, res) {
               if (err) return done(err)
+
+              
               const assets = JSON.parse(res.text)
+              
               assert(result)
               assert(result.collection);
               assert(assets);
@@ -477,8 +481,12 @@ describe('Connecting to database', function () {
     })
 
     describe('GET /user/recentlyviewed/:_id', function () {
+      let userId;
+
       it('the user recentlyviewed metadata should be found', function (done) {
         models.users.findOne({ username: 'username' }).then(result => {
+
+          userId = result._id;
           request
             .get('/user/recentlyviewed/' + result._id)
             .set('Accept', 'application/json')
@@ -501,12 +509,12 @@ describe('Connecting to database', function () {
         request
           .get('/user/recentlyviewed/42a802fd2ac32b114627c148')
           .send()
-          .expect(404, done)
+          .expect(403, done)
       })
 
       it(' the request do not accept json -> bad request', function (done) {
         request
-          .get('/user/recentlyviewed/42a802fd2ac32b114627c148')
+          .get('/user/recentlyviewed/' + userId)
           .set('Accept', 'html')
           .send()
           .expect(406, done)
@@ -600,7 +608,7 @@ describe('Connecting to database', function () {
           .get('/user/edit/wrong_id')
           .set('Accept', 'application/json')
           .send()
-          .expect(302, done)
+          .expect(403, done)
       })
     })
 
