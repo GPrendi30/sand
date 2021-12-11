@@ -9,6 +9,7 @@ router.get('/', function (req, res, next) {
 router.get('/home', function (req, res, next) {
     if (req.accepts('html')) {
         res.render('index', { title: 'S.A.N.D' })
+    } else {
         res.status(406).end();
     }
 })
