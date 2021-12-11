@@ -39,12 +39,12 @@ function isLoggedIn (req, res, next) {
  * @param {object} req request object
  * @param {object} res response object
  * @param {function} next next function
- * @result Delegated request to next function if user is logged in, 
+ * @result Delegated request to next function if user is logged in,
  * and the logged in user has the same id as the params of the request
  * else redirects to login page.
  * // TODO test when extending routes
  */
- function isLoggedInSpecialized (req, res, next) {
+function isLoggedInSpecialized (req, res, next) {
     if (req.isAuthenticated() && req.session.passport.user === req.params._id) return next();
 
     if (req.isAuthenticated()) {

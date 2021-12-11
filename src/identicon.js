@@ -1,13 +1,8 @@
-const jdenticon = require("jdenticon");
-const fs = require("fs");
-
-// automatically generated from the hash
-const pngBuffer = jdenticon.toPng(value, size);
-
-// write it.
+const jdenticon = require('jdenticon');
+const fs = require('fs');
 
 
-function generateIdenticon(username, created) {
+function generateIdenticon (username, created) {
     // set value
     const value = username + created;
     const size = 200;
@@ -16,7 +11,7 @@ function generateIdenticon(username, created) {
     return jdenticon.toPng(value, size);
 }
 
-function generateIdenticonSaveFile(username, created, outpath) {
+function generateIdenticonSaveFile (username, created, outpath) {
     if (!outpath.includes('.png')) return;
     const pngBuffer = generateIdenticon(username, created);
     fs.writeFileSync(outpath, pngBuffer);

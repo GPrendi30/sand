@@ -56,7 +56,6 @@ client.info()
 
 client.on('connect', function () {
     console.log('Redis client connected');
-
 });
 
 client.on('error', function () {

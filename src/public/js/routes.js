@@ -1,55 +1,52 @@
 
-function linkClick(href) {
+function linkClick (href) {
+    const url = new URL(href); // parse link address
 
-    let url = new URL(href); //parse link address 
-    
-    if (url.pathname == "/home") { 
-        getHome(); 
-    } else if (url.pathname == "/discover") {
+    if (url.pathname === '/home') {
+        getHome();
+    } else if (url.pathname === '/discover') {
         getDiscover()
-    } else if (url.pathname == "/follow") {
+    } else if (url.pathname === '/follow') {
         getFollow();
-    } else if (url.pathname == "/friendlist") {
+    } else if (url.pathname === '/friendlist') {
         getFriendList();
-    } else if (url.pathname == "/rooms") {
+    } else if (url.pathname === '/rooms') {
         getRooms();
-    } else if (url.pathname == "/exchange") {
+    } else if (url.pathname === '/exchange') {
         getExchange();
-    } else if (url.pathname == "/settings") {
+    } else if (url.pathname === '/settings') {
         getSettings();
-    } else { console.log("Unknown route"); }
-  
-  }
-  
-  
-  function parse_path() {
-    let hash = window.location.hash
+    } else { console.log('Unknown route'); }
+}
+
+
+function parsePath () {
+    const hash = window.location.hash
     if (hash) {
-      if (hash == "#dashboard") {
-        getHome();
-      } else if (hash == "#discover") {
-        getDiscover()
-      } else if (hash == "#friendlist") {
-        getFriendList();
-      } else if (hash == "#follow") {
-        getFollow();
-      } else {
-        getHome();
-      }
+        if (hash === '#dashboard') {
+            getHome();
+        } else if (hash === '#discover') {
+            getDiscover()
+        } else if (hash === '#friendlist') {
+            getFriendList();
+        } else if (hash === '#follow') {
+            getFollow();
+        } else {
+            getHome();
+        }
     } else {
-      getHome();
+        getHome();
     }
-  
-  }
+}
 
-function getHome() {
+function getHome () {
     // setting the location
-    window.location = "#dashboard"
+    window.location = '#dashboard'
 
 
-    let main = document.querySelector('main');
+    const main = document.querySelector('main');
 
-    main.innerHTML = ejs.src_views_index({ friends: [ {name : "not-geri"} ]});
+    main.innerHTML = ejs.src_views_index({ friends: [{ name: 'not-geri' }] });
 
     /*
     NOTHING TO FETCH FOR THE MOMENT
@@ -83,48 +80,42 @@ function getHome() {
         */
 }
 
-function getFollow() {
-    window.location = "#follow?id=none";
+function getFollow () {
+    window.location = '#follow?id=none';
 
-    let main = document.querySelector('main');
+    const main = document.querySelector('main');
 
     main.innerHTML = ejs.src_views_follow();
-
 }
 
-function getFriendList() {
+function getFriendList () {
+    window.location = '#friendlist?id=none';
 
-    window.location = "#friendlist?id=none";
+    const main = document.querySelector('main');
 
-    let main = document.querySelector('main');
-
-    main.innerHTML = ejs.src_views_friendlist({ friends: [{name: "geri" }, {name: "geri" }, {name: "geri" }, {name: "geri" }, {name: "geri" }, {name: "geri" }, {name: "geri" }] });
+    main.innerHTML = ejs.src_views_friendlist({ friends: [{ name: 'geri' }, { name: 'geri' }, { name: 'geri' }, { name: 'geri' }, { name: 'geri' }, { name: 'geri' }, { name: 'geri' }] });
 }
 
-function getDiscover() {
+function getDiscover () {
+    window.location = '#dicover?id=none';
 
-    window.location = "#dicover?id=none";
-
-    let main = document.querySelector('main');
+    const main = document.querySelector('main');
 
     main.innerHTML = ejs.src_views_discover();
-
 }
 
-function getRooms() {
-    
-    window.location = "#rooms?id=none";
+function getRooms () {
+    window.location = '#rooms?id=none';
 
-    let main = document.querySelector('main');
+    const main = document.querySelector('main');
 
     main.innerHTML = ejs.src_views_wip(); // work in progress
 }
 
-function getExchange() {
-    
-    window.location = "#exchange?id=none";
+function getExchange () {
+    window.location = '#exchange?id=none';
 
-    let main = document.querySelector('main');
+    const main = document.querySelector('main');
 
     main.innerHTML = ejs.src_views_wip(); // work in progress
 }
