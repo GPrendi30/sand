@@ -1,0 +1,21 @@
+<section class="room">
+    <!-- central part -->
+    <section class="chat">
+        <p id="messages"><%= room.messages%></p>
+    </section>
+
+    <!-- below the chat messages -->
+    <section class="input">
+        <label for="msg"></label>
+		<input id="msg" type="text" name="msg" value="" placeholder="Type here your message"/>
+		<button id="send">Send</button>
+        <button id="leave_room">Leave room</button>
+    </section>
+
+    <!-- member list aside -->
+    <section class="members">
+        <section><%= room.owner%></section>
+        <section><%= room.admin%></section>
+        <section><%= room.members %></section>
+    </section>
+</section>  
