@@ -58,7 +58,6 @@ function removeSensitiveData (user) {
     if (user.friendlist) {
         delete user.friendlist
     }
-
 }
 
 // TODO Write Documentation

@@ -177,7 +177,7 @@ function init (server) {
                 models.users.replaceOne(filter, user, { upsert: true })
                     .then(result => {
                         if (result !== undefined) {
-                            // 
+                            //
                             console.log('removed' + friend + ' from ' + unlockerUser + 'blocked')
                             socket.emit('friend.successfully.ulocked', unlocked)
                         } else {
