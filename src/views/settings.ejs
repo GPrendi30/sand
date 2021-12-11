@@ -1,7 +1,7 @@
 <html>
     <body>
 
-        <form method="POST" action="user/settings/<%= result._id %>" enctype="multipart/form-data">
+        <form method="POST" action="user/settings/<%= result._id %>?req=password" enctype="multipart/form-data">
 
             <label for="old_password">Old password:</label>
             <input type="text" name="old_password" required>
@@ -15,14 +15,21 @@
             <input type="submit" value="Change password">
         </form>
 
-        <form method="POST" action="user/settings/<%= result._id %>" enctype="multipart/form-data">
+        <form method="POST" action="user/settings/<%= result._id %>?req=settings" enctype="multipart/form-data">
             <label for="email">Change email:</label>
             <input type="text" name="email" required>
 
             <input type="submit" value="Change email">
         </form>
 
-        <form method="POST" action="user/settings/<%= result._id %>" enctype="multipart/form-data">
+        <form method="POST" action="user/settings/<%= result._id %>?req=bio" enctype="multipart/form-data">
+            <label for="bio">Change bio:</label>
+            <input type="text" name="bio">
+
+            <input type="submit" value="Change bio">
+        </form>
+
+        <form method="POST" action="user/settings/<%= result._id %>?req=ppic" enctype="multipart/form-data">
             <label for="upload">Choose an image to upload:</label>
             <input type="file" id="file" name="profile_picture" accept="image/*">
             <button type = "button" id="regenerate_image" name="regenerate_image"> Regenerate Image </button>
