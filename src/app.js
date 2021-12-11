@@ -6,6 +6,7 @@ const logger = require('morgan')
 const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
+const store = require('./redis').store;
 
 const routers = require('./routes');
 require('./models'); // run database
@@ -13,20 +14,30 @@ require('./models'); // run database
 require('./ejs-compile')
 
 const app = express()
-const { passport } = require('./login')
+
+
+const { passport } = require('./login');
+
+
+
+app.use(session({
+    secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
+    resave: false,
+    saveUninitialized: true,
+    store: store,  // using the redis store
+    cookie: {
+        maxAge: 1000 * 60 * 30, // 30 minutes
+        expires: new Date(Date.now() + 1000 * 60 * 30), // 30 minutes
+        httpOnly: true
+    }
+}));
 
 /*  passportjs
   Local authentication
+  Redis cache
 */
-app.use(session({
-  secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
-  resave: false,
-  saveUninitialized: true
-}));
-
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -37,7 +48,7 @@ app.use(express.json({ limit: '4MB' }));
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(fileUpload({
-  limits: { fileSize: 50 * 1024 * 1024 }, safeFileNames: true, preserveExtension: 4, debug: false
+    limits: { fileSize: 50 * 1024 * 1024 }, safeFileNames: true, preserveExtension: 4, debug: false
 }))
 app.use(methodOverride('_method'));
 
@@ -56,6 +67,7 @@ app.use('/logout', routers.logout);
 app.use('/follow', routers.follow);
 app.use('/discover', routers.discover);
 app.use('/friendlist', routers.friendlist);
+app.use('/rooms', routers.rooms);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -71,14 +83,13 @@ app.use(function (req, res, next) {
  * @param {object} next
  * @returns renders the error page.
  */
-app.use(function (err, req, res, next) {
+app.use(function (req, res, next) {
     // set locals, only providing error in development
-    res.locals.message = err.message
-    res.locals.error = req.app.get('env') === 'development' ? err : {}
+    //res.locals.message = err.message
+    //res.locals.error = req.app.get('env') === 'development' ? err : {}
 
     // render the error page
-    res.status(err.status || 500)
-    res.render('error')
+    res.status(500).end();
 })
 
 module.exports = app

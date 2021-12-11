@@ -7,7 +7,7 @@ router.get('/', function (req, res, next) {
         res.render('discover');
     } else {
         res.status(406).end();
-    } 
+    }
 })
 
 // export the required modules

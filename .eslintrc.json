@@ -25,7 +25,8 @@
         "node/no-path-concat": "off",
         "eol-last": "warn",
         "no-new-wrappers": "off",
-        "no-useless-escape": "off"
+        "no-useless-escape": "off",
+        "no-undef": "warn"
     },
     "ignorePatterns": ["src/test/*", "src/public/js/*.min.js"]
 }
