@@ -3,5 +3,9 @@
         "uri": "",
         "db_name": "sand" ,
         "collection_name": "users"
+    },
+
+    "cache": {
+        "url": ""
     }
 }

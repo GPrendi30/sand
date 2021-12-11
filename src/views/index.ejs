@@ -1,131 +1,36 @@
-<!DOCTYPE html>
-<html>
+<!-- Uncomment (one at a time!) to test different main views-->
+<!-- TODO add dashboard here -->
 
-<%- include('./includes/head', { title: 'S.A.N.D' }) %>
+<section id="friendlist">
 
-    <body onload="init()">
+  <section class="page" id="your_friends">
+    <h1>Your friends</h1>
+    <ul>
+      <% friends.forEach( friend=> { %>
+        <li class="friend">
+          <section class="shadow" id="info">
+            <div id="avatar"></div>
+            <h1 id="name">
+              <%= friend.name %>
+            </h1>
+            <p>Lorem ipsum dolor sit amet.</p>
+          </section>
+          <div id="buttons">
+            <button class="grow_hover" id="profile">See Profile</button>
+            <button class="grow_hover" id="message">Message</button>
+            <button class="grow_hover" id="unfriend">Unfriend</button>
+          </div>
+        </li>
 
-        <!-- TODO: Transfer this page structure to index.html-->
-        <%- include('header') %>
+        <% }); %>
+    </ul>
+  </section>
 
-            <!-- Minimize navbar by adding: class="minimized" -->
-            <%- include('./includes/navbar'); %>
+  <section id="bookmarks">
+    <% for(let i=0; i < 9; i++) { %>
+      <% let style='grid-area: ' + (1 + 2*i) + ' / 1 / ' + (4 + 2*i) + ' / 2' %>
+        <div style="<%= style %>" id="bm<%=i%>" class="bookmark"></div>
+        <% }; %>
+  </section>
 
-                <main>
-                    <!-- Uncomment (one at a time!) to test different main views-->
-                    <!-- TODO add dashboard here -->
-
-                    <section id="graph" style="width: 100%; height: 100%">
-
-                    </section>
-
-                </main>
-
-                <%- include('./includes/aside_closed'); %>
-
-                    <%- include('./includes/footer'); %>
-
-                        <script src="/js/echarts.min.js"></script>
-                        <script src="/js/echarts.simple.min.js"></script>
-                        <script>
-                            function init() {
-                                let graphContainer = document.getElementById('graph')
-
-                                var myChart = echarts.init(graphContainer);
-                                var option;
-                                option = {
-                                    "xAxis": {
-                                        "type": "category",
-                                        "data": [
-                                            "11/6",
-                                            "11/7",
-                                            "11/8",
-                                            "11/9",
-                                            "11/10",
-                                            "11/11",
-                                            "11/12",
-                                            "11/13",
-                                            "11/14",
-                                            "11/15",
-                                            "11/16",
-                                            "11/17",
-                                            "11/18",
-                                            "11/19",
-                                            "11/20",
-                                            "11/21",
-                                            "11/22",
-                                            "11/23",
-                                            "11/24",
-                                            "11/25",
-                                            "11/26",
-                                            "11/27",
-                                            "11/28",
-                                            "11/29",
-                                            "11/30",
-                                            "12/1",
-                                            "12/2",
-                                            "12/3",
-                                            "12/4",
-                                            "12/5",
-                                            "12/6"
-                                        ]
-                                    },
-                                    "yAxis": {
-                                        "type": "value"
-                                    },
-                                    "series": [
-                                        {
-                                            "data": [
-                                                78.0922,
-                                                74.20675,
-                                                82.44,
-                                                236.4761,
-                                                176.5232,
-                                                225.53629999999998,
-                                                188.51900000000003,
-                                                257.999,
-                                                506.53875942069,
-                                                299.38460000000003,
-                                                1070.3106000000007,
-                                                487.3142,
-                                                154.72549999999998,
-                                                81.38,
-                                                141.3808,
-                                                94.986,
-                                                104.36749999999999,
-                                                145.768,
-                                                164.4546,
-                                                198.9748,
-                                                69.58,
-                                                54.21000000000001,
-                                                107.80550000000001,
-                                                98.0568,
-                                                167.05900000000005,
-                                                146.1399,
-                                                134.8352572380754,
-                                                103.55,
-                                                88.92,
-                                                67.201,
-                                                31.6074
-                                            ],
-                                            "type": "bar",
-                                            "showBackground": true,
-                                            "backgroundStyle": {
-                                                "color": "rgba(180, 180, 180, 0.2)"
-                                            }
-                                        }
-                                    ]
-                                };
-
-
-                                if (option && typeof option === 'object') {
-                                    myChart.setOption(option);
-                                }
-
-                            }
-
-                        </script>
-
-    </body>
-
-</html>
+</section>

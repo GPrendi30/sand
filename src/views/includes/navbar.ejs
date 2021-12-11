@@ -1,17 +1,21 @@
-<nav id="navbar">
-    <% let pages=["home", "exchange" , "discover" , "follow" , "friendlist" , "rooms" ]; %>
+<% let pages=["home", "exchange" , "discover" , "follow" , "friendlist" , "rooms" ]; %>
 
-        <div id="nav_buttons">
-            <ul>
-                <% pages.forEach( p=> { %>
-                    <%- include('navbar_item', {p}); %>
-                        <% }); %>
-            </ul>
+    <div id="nav_buttons">
+        <ul>
+            <% pages.forEach( p=> { %>
+                <li><a class="underline_animation" href="/<%= p %>">
+                        <div class="nav-icon" id="<%= p %>"></div>
+                        <h1>
+                            <% let title=p.charAt(0).toUpperCase() + p.slice(1); %>
+                                <%= title %>
+                        </h1>
+                    </a></li>
+                <% }); %>
+        </ul>
 
-            <section id="options">
-                <button class="grow_hover nav-icon" id="currency"></button>
-                <button class="nav-icon grow_hover" id="settings"></button>
-                <button class="grow_hover nav-icon" id="minmax"></button>
-            </section>
-        </div>
-</nav>
+        <section id="options">
+            <button class="grow_hover nav-icon" id="currency"></button>
+            <button class="nav-icon grow_hover" id="settings"></button>
+            <button class="grow_hover nav-icon" id="minmax"></button>
+        </section>
+    </div>
