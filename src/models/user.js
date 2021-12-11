@@ -2,7 +2,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
 const userSchema = new Schema({
     username: {
         type: String,
@@ -24,7 +23,7 @@ const userSchema = new Schema({
     friendlist: [String],
     friendRequest: [String],
     friendRequestSent: [String],
-    ppic: String, // profile picture, TODO change to buffer when uploading a file
+    ppic: Buffer, // profile picture, TODO change to buffer when uploading a file
     bio: String,
     tracking: [String],
     recentlyViewed: [String],
@@ -33,8 +32,18 @@ const userSchema = new Schema({
         theme: String,
         currency: String
         // add more preferences
-    }
-});
+    },
+    chats: [{ 
+        type: Schema.Types.ObjectId,
+        ref: 'Chat'
+    }]
+}, { timestamps: true, collection: 'users2' });
 
-module.exports = mongoose.model('User', userSchema);
+userSchema.methods.addChat = function (chat) {
+    this.chats.push(chat._id);
+}
+
+const model = mongoose.model('User', userSchema);
+
+module.exports = model;
 
