@@ -1,3 +1,12 @@
+body {
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #form-container {
     background-color: rgb(167, 165, 167);
     width: 550px;
@@ -108,4 +117,33 @@
 
 #form-container #alternative input {
     background-color: rgb(185, 247, 185);
+}
+
+/* Make signup page slightly smaller */
+
+div.signup#form-container > #title {
+    margin-top: 40px;
+}
+
+div.signup#form-container > form > label {
+    margin: 0px;
+    margin-bottom: 15px;
+}
+
+div.signup#form-container > form > label > input {
+    height:40px;
+    font-size: 16px;
+}
+
+div.signup#form-container > form > label > h3 {
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+div.signup#form-container > form > input {
+    margin: 20px 0px 0px 0px;
+}
+
+div.signup#form-container #alternative {
+    padding: 10px;
 }
