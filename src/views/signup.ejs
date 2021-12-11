@@ -4,35 +4,61 @@
     <title>
         <%= title %>
     </title>
+    <link href="stylesheets/login_signup.css" rel="stylesheet" />
 </head>
 
 <body>
-    
-    <form method="POST" action="/signup" enctype="multipart/form-data">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required>
 
-        <label for="name">Name:</label>
-        <input type="text" name="name" required>
+    <div id="form-container" class="signup">
 
-        <label for="surname">Surname:</label>
-        <input type="text" name="surname" required>
+        <section id="title">
+            <h1>Sign up</h1>
+            <h2>Create a new account to continue to S.A.N.D</h2>
+        </section>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" required>
+        <form method="POST" action="/signup" enctype="multipart/form-data">
+            <label for="username">
+                <h3>Username</h3>
+                <input type="text" name="username" required>
+            </label>
 
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
+            <label for="name">
+                <h3>Name</h3>
+                <input type="text" name="name" required>
+            </label>
 
-        <label for="retype_password">Retype Password:</label>
-        <input type="password" name="retype_password" required>
+            <label for="surname">
+                <h3>Surname</h3>
+                <input type="text" name="surname" required>
+            </label>
 
-        <input type="submit" value="Signup">
-    </form>
+            <label for="email">
+                <h3>Email</h3>
+                <input type="email" name="email" required>
+            </label>
 
-    <form method="GET" action="/login">
-        <input type="submit" value="Login">
-    </form>
+            <label for="password">
+                <h3>Password</h3>
+                <input type="password" name="password" required>
+            </label>
+
+            <label for="retype_password">
+                <h3>Retype Password</h3>
+                <input type="password" name="retype_password" required>
+            </label>
+
+            <input class="grow_hover" type="submit" value="Sign up">
+        </form>
+
+        <section id="alternative">
+            <h3>Already have an account?</h3>
+            <form method="GET" action="/login">
+                <input class="grow_hover" type="submit" value="Login">
+            </form>
+        </section>
+
+    </div>
+
 </body>
 
 </html>
