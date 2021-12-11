@@ -8,11 +8,11 @@ const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
 const apiKey = process.env.OPENSEA_API;
 
 /**
- * Function to get the general data of a collection giving a collection slug.
+ * Function to get the general data of a collection passing as parameter a collection slug.
  * @param string slug, the collection slug
  * @returns {object} object with all the data.
  */
-async function getCollectionData (slug) {
+async function getCollectionDataWithSlug (slug) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/collection/' + slug,
@@ -24,6 +24,27 @@ async function getCollectionData (slug) {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
 
+    return response.data;
+}
+
+/**
+ * Function to get the general data of a collection passing as parameter a collection address.
+ * @param string the collection address
+ * @returns {object} object with all the data.
+ */
+async function getCollectionDataWithAddress (address) {
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/asset_contract/' + address,
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
+    }
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    // getCollectionDataWithSlug(response.data.collection.slug).then(result => { console.log(result) });
     return response.data;
 }
 
@@ -54,7 +75,7 @@ async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimes
  * @param string contractAddress, the contract address of the collection.
  * @param int startTimestamp, show events listed after this timestamp.
  * @param int endTimestamp, show events listed before this timestamp.
- * @returns {object} object with data of time and sell price [{ time: 'time', price: 'price'}].
+ * @returns {object} object with data of time and sell price [{ time: 'time', price: 'price'}, ...].
  */
 async function createArrayWithPrices (contractAddress, startTimestamp, endTimestamp) {
     const data = [];
@@ -135,6 +156,95 @@ async function dailyVolume (contractAddress, timeInDays) {
     } catch (error) { console.error(error); }
 
     return dailyVolumeArray;
+}
+
+/**
+ * Function to get the collection of a user by passing a wallet address.
+ * @param string walletAddress, the collection wallet address.
+ * @returns {object} object with all the data.
+ */
+async function getCollectionsOfWallet (walletAddress) {
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/collections',
+        params: {
+            asset_owner: walletAddress,
+            offset: '0',
+            limit: '300'
+        }
+    }
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    return response;
+}
+
+/**
+ * Function to get the collection of a user by passing a wallet address.
+ * @param string walletAddress, the collection wallet address.
+ * @returns {object} object with all the data.
+ */
+async function getWalletTokenValues (walletAddress) {
+    let response;
+    const record = {};
+    try {
+        response = await getCollectionsOfWallet(walletAddress);
+        response.data.forEach(token => {
+            const key = token.slug;
+            const count = token.owned_asset_count;
+            record[key] = count;
+        })
+    } catch (error) { console.error(error); }
+
+    return record;
+}
+
+/**
+ * Function to check the difference between two objects and return what was added.
+ * @param {object} oldSet, object containing the old data.
+ * @param {object} newSet, object containing the new data .
+ * @returns {object} object with the difference between the two objects.
+ */
+function returnDifference (oldSet, newSet) {
+    const newTokens = {};
+    // check the token that have been added to the new set
+    for (const [key, value] of Object.entries(newSet)) {
+        if (key in oldSet) {
+            if (oldSet[key] !== newSet[key]) {
+                newTokens[key] = newSet[key] - oldSet[key];
+            }
+        } else {
+            newTokens[key] = newSet[key];
+        }
+    }
+    // check the token that have been removed from the old set
+    for (const [key, value] of Object.entries(oldSet)) {
+        if (!(key in newSet)) {
+            newTokens[key] = -1 * (oldSet[key]);
+        }
+    }
+
+    console.log(newTokens)
+    return newTokens;
+}
+
+/**
+ * Function to check the difference between two objects and return what was added.
+ * @param string walletAddress, the address that we want to track.
+ * @param string time, .
+ * @returns {object} object with the difference between the two objects.
+ */
+function getChanges (walletAddress, time) {
+    getWalletTokenValues(walletAddress).then(firstSet => {
+        setTimeout(() => {
+            getWalletTokenValues(walletAddress).then(secondSet => {
+                returnDifference(firstSet, secondSet);
+            })
+        }, time);
+    })
 }
 
 module.exports.dailyVolume = dailyVolume;
