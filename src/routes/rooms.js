@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const { isLoggedIn } = require('../login');
 const router = express.Router()
 
 /* GET exchange page. */
