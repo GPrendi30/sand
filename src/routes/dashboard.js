@@ -16,4 +16,4 @@ router.get('/home', function (req, res, next) {
 
 
 // export the required modules
-module.exports = router
+module.exports = router;
