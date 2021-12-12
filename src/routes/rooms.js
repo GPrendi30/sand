@@ -27,8 +27,15 @@ router.get('/', function (req, res, next) {
     //     messages: messages
     // }
     // res.render('single_room', room)
+
+    // TODO: Remove testing variables and return room.js to original state
+    const obj = {
+        result: {
+            _id: 0
+        }
+    }
     
-    res.render('wip');
+    res.render('settings', obj);
 })
 
 module.exports = router;

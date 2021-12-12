@@ -1,0 +1,98 @@
+#settings_container {
+    background-color: #87878a;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div#settings {
+    background-color: #f0f0f0;
+    height: 100%;
+    width: 100%;
+    min-width: 700px;
+    max-width: 1400px;
+}
+
+div#settings input {
+    border-style: none;
+    border-radius: 5px;
+}
+
+/* Profile Picture Area */
+section#profile_picture {
+    background-color: sandybrown;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section#profile_picture > #picture {
+    max-width: 200px;
+    background-color: red;
+}
+
+/* User Info Area */
+section#user_info {
+    background-color: skyblue;
+}
+
+/* Password Area */
+section#password {
+    background-color: thistle;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding: 40px 0px;
+}
+
+section#password h2 {
+    letter-spacing: 0.5px;
+    font-weight: normal;
+    font-size: 28px;
+}
+
+section#password h3 {
+    font-weight: normal;
+}
+
+section#password form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: fit-content;
+}
+
+section#password form > * {
+    display: flex;
+    flex-direction: column;
+}
+
+section#password form > label > input {
+    height: 40px;
+    width: 350px;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+/* Makes input elements look like buttons */
+div#settings .button {
+    background-color: #f0f0f0;
+    border-style: none;
+    font-weight: bolder;
+    min-width: 80px;
+    width: fit-content;
+    border-radius: 15px;
+    padding: 0px 20px;
+    height: 35px;
+    box-shadow: rgba(0, 0, 0, 0.03) 0px 5px 10px, rgba(0, 0, 0, 0.03) 0px 6px 6px;
+    transition: all .1s ease-out;
+}
+
+div#settings .button:hover {
+    transform: scale(1.07);
+    cursor: pointer;
+}
