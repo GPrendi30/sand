@@ -23,25 +23,35 @@
                 </form>
             </section>
 
-            <section id="user_info">
-                <form method="POST" action="user/settings/<%= result._id %>?req=settings" enctype="multipart/form-data">
-                    <label for="email">Change email:</label>
-                    <input type="text" name="email" required>
-        
-                    <input class="button" type="submit" value="Change email">
-                </form>
-        
-                <form method="POST" action="user/settings/<%= result._id %>?req=bio" enctype="multipart/form-data">
-                    <label for="bio">Change bio:</label>
-                    <input type="text" name="bio">
-        
-                    <input class="button" type="submit" value="Change bio">
-                </form>
+            <section class="settings_section" id="user_info">
+
+                <h2 class="title" >Modify your profile information</h1>
+
+                <div>
+                    <form method="POST" action="user/settings/<%= result._id %>?req=settings" enctype="multipart/form-data">
+                        <label for="email">
+                            <h3>Change your email</h3>
+                            <input type="text" name="email" required>
+                            <input class="button" type="submit" value="Change email">
+                        </label>
+                    </form>
+            
+                    <form method="POST" action="user/settings/<%= result._id %>?req=bio" enctype="multipart/form-data">
+                        <label for="bio">
+                            <h3>Change your bio</h3>
+                            <input type="text" name="bio">
+                            <input class="button" type="submit" value="Change bio">
+                        </label>
+                    </form>
+                </div>
+
+                
             </section>
 
-            <section id="password">
+            <section class="settings_section" id="password">
 
-                <h2>Modify your password</h1>
+                <h2 class="title" >Modify your password</h1>
+
                 <form method="POST" action="user/settings/<%= result._id %>?req=password" enctype="multipart/form-data">
 
                     <label for="old_password">
