@@ -12,7 +12,7 @@
     min-width: 700px;
     max-width: 1400px;
     display: grid;
-    grid-template-columns: 1fr 250px;
+    grid-template-columns: 1fr 300px;
     grid-template-rows: 1fr 75px;
     grid-template-areas: 
     "chat members"
@@ -80,11 +80,62 @@
 
 /* === Members Aside ===== */
 .room > #members {
-    background-color: skyblue;
+    background-color: rgb(190, 176, 165);
+    padding-top: 20px;
     grid-area: members;
     height: 100%;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
+
+#members > section {
+    padding: 10px;
+}
+
+#members > section > h2 {
+    margin-bottom: 10px;
+    margin-left: 15px;
+    letter-spacing: 1px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.member_list > .room_member {
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+.member_list > .room_member:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.room_member > #username {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: rgb(97, 91, 91);
+}
+
+.room_member > img {
+    max-height: 100%;
+    margin-right: 10px;
+    border-radius: 500px;
+}
+
+.room_member:hover {
+    background-color: rgb(161, 144, 136);
+    cursor: pointer;
+}
+
+.room_member:hover > #username {
+    color: rgb(39, 39, 39) !important;
+}
+
 
 /* === Input Bar ===== */
 .room > #input {
