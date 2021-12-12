@@ -97,7 +97,7 @@ function init (server) {
                 }).catch(err=>{ console.log(err) });
             })
         })
-        socket.io('unfriend', unfriend =>{
+        socket.on('unfriend', unfriend =>{
             let user = unfriend.user // the user who unfriends friend
             const friend = unfriend.friend // the unfriended friend
             const filter = { username: user }

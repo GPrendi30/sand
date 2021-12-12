@@ -1,6 +1,3 @@
-const { Session } = require('express-session');
-const { session } = require('passport');
-
 const socket = io();
 
 
@@ -14,6 +11,7 @@ socket.on('disconnect', () => {
     console.log('Browser disconnected');
 });
 
+const user = "me";
 function initClient () {
     // ************************************** BUTTONS **************************************
     // button in the html page to send the friend request (one for each user showed)
@@ -35,7 +33,7 @@ function initClient () {
         // create friend Request object to send with sender username, receiver username,
         // event.target.tagName where tag name user is the field with the friend request target username
         // passing the button so that it can change from add to request sent.
-        const friendRequest = { sender: session.passport.user, receiver: event.target.user }
+        const friendRequest = { sender: user, receiver: event.target.user }
         socket.emit('friend.request.sent', friendRequest)
     })
 
@@ -50,7 +48,7 @@ function initClient () {
 
     // accept friend request when clicking on accept button
     acceptFriendRequest.addEventListener('click', (event)=>{
-        const acceptance = { receiver: session.passport.user, sender: event.target.user }
+        const acceptance = { receiver: user, sender: event.target.user }
         socket.emit('friend.request.accepted', acceptance)
     })
 
@@ -64,7 +62,7 @@ function initClient () {
     // ************************************** UNFRIEND **************************************
     // unfriend friend
     unfriend.addEventListener('click', (event)=>{
-        const unfriend = { user: session.passport.user, friend: event.target.user }
+        const unfriend = { user: user, friend: event.target.user }
         socket.emit('unfriend', unfriend);
     })
     // unfriend successfull
@@ -74,7 +72,7 @@ function initClient () {
     // ************************************** END UNFRIEND **************************************
 
     blockuser.addEventListener('click', (event)=>{
-        const blocked = { user: session.passport.user, friend: event.target.user }
+        const blocked = { user: user, friend: event.target.user }
         socket.emit('block.friend', blocked)
     })
     socket.on('friend.successfully.blocked', blocked => {
@@ -82,7 +80,7 @@ function initClient () {
     })
 
     unlockuser.addEventListener('click', (event)=>{
-        const unlocked = { user: session.passport.user, friend: event.target.user }
+        const unlocked = { user: user, friend: event.target.user }
         socket.emit('unlock.friend', unlocked)
     })
     socket.on('friend.successfully.ulocked', unlocked=>{
