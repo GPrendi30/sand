@@ -13,12 +13,17 @@
 
             <h1>Edit Your Profile</h1>
 
-            <section id="profile_picture">
+            <section class="settings_section" id="profile_picture">
                 <img id="picture" src="images/user1.png" alt="profile">
                 <form method="POST" action="user/settings/<%= result._id %>?req=ppic" enctype="multipart/form-data">
-                    <label for="upload">Choose an image to upload:</label>
-                    <input  type="file" id="file" name="profile_picture" accept="image/*">
-                    <button type="button" id="regenerate_image" name="regenerate_image"> Regenerate Image </button>
+                    <div>
+                        <label for="upload">
+                            <h3>Choose an image to upload</h3>
+                            <input  type="file" id="file" name="profile_picture" accept="image/*">
+                        </label>
+                        <button class="button" type="button" id="regenerate_image" name="regenerate_image"> Regenerate Image </button>
+                    </div>
+                    
                     <input class="button" type="submit" value="Change profile picture">
                 </form>
             </section>
@@ -30,7 +35,7 @@
                 <div>
                     <form method="POST" action="user/settings/<%= result._id %>?req=settings" enctype="multipart/form-data">
                         <label for="email">
-                            <h3>Change your email</h3>
+                            <h3>Email address</h3>
                             <input type="text" name="email" required>
                             <input class="button" type="submit" value="Change email">
                         </label>
@@ -38,7 +43,7 @@
             
                     <form method="POST" action="user/settings/<%= result._id %>?req=bio" enctype="multipart/form-data">
                         <label for="bio">
-                            <h3>Change your bio</h3>
+                            <h3>Biography</h3>
                             <input type="text" name="bio">
                             <input class="button" type="submit" value="Change bio">
                         </label>
