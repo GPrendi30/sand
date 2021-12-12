@@ -7,8 +7,8 @@
       <!-- TODO: Make card generation dynamic
                      Eg: collections.forEach( include('discover_item')) -->
 
-        <% let collection = [{"title": "Animal Pattern" , "img" : "/images/animal_pattern.jpg" }, {"title": "Abstract Art" , "img" : "/images/abstract_art.jpg" },{"title": "Dark" , "img" : "/images/dark_art.jpg" }] %>
-        <% collection.forEach( item => { %>
+        <!-- <% let collection = [{"title": "Animal Pattern" , "img" : "/images/animal_pattern.jpg" }, {"title": "Abstract Art" , "img" : "/images/abstract_art.jpg" },{"title": "Dark" , "img" : "/images/dark_art.jpg" }] %> -->
+        <% data.forEach( item => { %>
           <li class="discover_item grow_hover shadow"><a href="/item/info">
               <img src="<%= item.img %>" alt="<%= item.title %>">
               <h1><%= item.title %></h1>

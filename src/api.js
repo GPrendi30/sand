@@ -22,9 +22,9 @@ async function getCollectionDataWithSlug (slug) {
     let response;
     try {
         response = await axios.request(options);
+        console.log(response.data)
+        return response.data;
     } catch (error) { console.error(error); }
-
-    return response.data;
 }
 
 /**

@@ -187,11 +187,11 @@ function getSignup() {
 
 // yes
 function getDiscover() {
-    window.location = '#dicover?id=none';
+    window.location = '#discover?id=none';
 
     const main = document.querySelector('main');
 
-    main.innerHTML = ejs.src_views_discover();
+    // main.innerHTML = ejs.src_views_discover();
 
     fetch('/discover',
         {
@@ -204,7 +204,7 @@ function getDiscover() {
         }
         return res.json(); // another promise
     })
-        .then(data => ejs.src_views_discover(data))
+        .then(data => ejs.src_views_discover({ data }))
         .then(html => {
             main.innerHTML = html;
         })
