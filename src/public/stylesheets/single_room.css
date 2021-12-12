@@ -1,0 +1,93 @@
+#room_container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.room {
+    height: 100%;
+    width: 100%;
+    min-width: 700px;
+    max-width: 1400px;
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    grid-template-rows: 1fr 75px;
+    grid-template-areas: 
+    "chat members"
+    "input members";
+}
+
+/* === Chat Area ===== */
+.room > #chat {
+    background-color: rgb(233, 224, 215);
+    grid-area: chat;
+    height: 100%;
+    padding: 0px 85px;
+    padding-bottom: 30px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.room > #chat > .message {
+    width: fit-content;
+    margin: 30px 15px 0px 15px;
+}
+
+.message > * {
+    margin: 0px;
+}
+
+.message > #username {
+    max-width: 250px;
+    margin-bottom: 5px;
+    width: fit-content;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.5px;
+    font-size: 18px;
+}
+
+.message > #msg {
+    background-color: #f5f3f3;
+    border-radius: 10px;
+    min-width: 100px;
+    max-width: 1100px;
+    width: fit-content;
+    padding: 10px;
+    padding-right: 30px;
+    font-size: 17px;
+}
+
+/* Msg of user who is logged in */
+.room > #chat > .message.mine {
+    align-self: flex-end;
+}
+
+/* If multiple messages are sent back to back by the same user, hide username */
+.message.stream {
+    margin-top: 5px !important;
+}
+
+.message.stream > #username {
+    display: none;
+}
+
+/* === Members Aside ===== */
+.room > #members {
+    background-color: skyblue;
+    grid-area: members;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+/* === Input Bar ===== */
+.room > #input {
+    background-color: rosybrown;
+    grid-area: input;
+}

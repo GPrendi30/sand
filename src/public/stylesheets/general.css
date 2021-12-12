@@ -7,10 +7,12 @@
     margin: 0px;
     padding: 0px;
     color: black !important;
+    box-sizing: border-box;
 }
 
 body {
     padding: 0px !important;
+    font-family: sans-serif;
 }
 
 #header,
