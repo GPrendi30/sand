@@ -247,5 +247,36 @@ function getChanges (walletAddress, time) {
     })
 }
 
+/**
+ * Function to check the difference between two objects and return what was added.
+ * @param string walletAddress, the address that we want to track.
+ * @param string time, time in seconds.
+ * @returns {object} object with the difference between the two objects.
+ */
+async function trackWallet (walletAddress, time) {
+    const occuredAfter = currentTimestamp - time
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/events',
+        params: {
+            account_address: walletAddress,
+            only_opensea: 'false',
+            offset: '0',
+            limit: '300',
+            occurred_after: occuredAfter
+        },
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
+    }
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    console.log(response)
+    return response;
+}
+
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
+
