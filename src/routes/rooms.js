@@ -1,51 +1,69 @@
 const express = require('express');
 const { isLoggedIn } = require('../login');
 const router = express.Router()
+
 const message1 = {
     user: 'gery',
-    message: 'welcome back to this moment',
-    time: '21.09.2052'
+    username: 'the gery',
+    body: 'welcome back to this moment',
+    attachments: ['images'],
+    timestamp: '21.09.2052'
 }
 const message2 = {
-    user: 'jim',
-    message: 'Thanks',
-    time: '21.09.2002'
+    user: 'swush',
+    username: 'push',
+    body: 'nice',
+    attachments: ['images'],
+    timestamp: '21.09.2052'
 }
 const message3 = {
-    user: 'not gery',
-    message: 'My Ananas fell',
-    time: '01.02.2052'
+    user: 'paul',
+    username: 'tatu',
+    body: 'sweet',
+    attachments: ['images'],
+    timestamp: '21.09.2052'
+}
+
+const chat1 = { 
+    users: ['not gery', 'every body else but gery and admins'],
+    messages: [message1, message2, message3] 
 }
 
 const room1 = {
-    name: 'Tananas',
     author: 'geri',
-    admin: ['jim', 'bob', 'geri'],
-    users: ['not gery', 'every body else but gery and admins'],
-    messages: [message1, message2, message3]
-}
-const room2 = {
+    description: 'nice',
     name: 'Tananas',
-    author: 'geri',
-    admin: ['jim', 'bob', 'geri'],
-    users: ['not gery', 'every body else but gery and admins'],
-    messages: [message1, message2, message3]
+    icon: 'tha pic',
+    admins: ['jim', 'bob', 'geri'],
+    members: ['not gery', 'every body else but gery and admins'],
+    chat: chat1
 }
+const room2 = room1
+const room3 = room2
+const rooms = [room1, room2, room3]
+
 /* GET exchange page. */
 router.get('/', isLoggedIn, function (req, res, next) {
-    const roomName = req.query.roomNAme;
     if (req.accepts('application/json')) {
-        if (!(roomname)) {
-            res.json(rooms)
-        } else if (user.chat.roomName) {
-            res.json(user.chats.roomName)
-        } else {
+        if (!rooms) {
             res.status(404).end()
         }
+        res.json(rooms)
     } else {
         res.status(406).end()
     }
-    res.render('wip')
 })
+
+// room id not user id
+router.get('/:_id', isLoggedIn, function (req, res, next) {
+    if (req.accepts('application/json')) {
+        if (id === undefined) {
+            res.status(404).end()
+        }
+        res.json(rooms)
+    } else {
+        res.status(406).end()
+    }
+}
 
 module.exports = router;
