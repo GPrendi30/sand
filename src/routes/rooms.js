@@ -1,8 +1,9 @@
-const express = require('express')
+const express = require('express');
+const { isLoggedIn } = require('../login');
 const router = express.Router()
 
 /* GET exchange page. */
-router.get('/', function (req, res, next) {
+router.get('/', isLoggedIn, function (req, res, next) {
     res.render('wip')
 })
 
