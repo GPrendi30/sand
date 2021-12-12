@@ -1,0 +1,180 @@
+#room_container {
+    background-color: #87878a;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.room {
+    height: 100%;
+    width: 100%;
+    min-width: 700px;
+    max-width: 1400px;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: 1fr 75px;
+    grid-template-areas: 
+    "chat members"
+    "input members";
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+/* === Chat Area ===== */
+
+.room > #chat {
+    position: relative;
+    background-color: white;
+    grid-area: chat;
+    height: 100%;
+    padding: 0px 85px;
+    padding-bottom: 30px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.room > #chat > .message {
+    width: fit-content;
+    margin: 30px 15px 0px 15px;
+}
+
+.message > * {
+    margin: 0px;
+}
+
+.message > #username {
+    max-width: 250px;
+    margin-bottom: 5px;
+    width: fit-content;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.5px;
+    font-size: 18px;
+}
+
+.message > #msg {
+    background-color: #e9e9ec;
+    border-radius: 10px;
+    min-width: 100px;
+    max-width: 1100px;
+    width: fit-content;
+    padding: 10px;
+    padding-right: 30px;
+    font-size: 17px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 5px, rgba(0, 0, 0, 0.05) 0px 3px 3px;
+}
+
+/* Msg of user who is logged in */
+.room > #chat > .message.mine {
+    align-self: flex-end;
+}
+
+/* If multiple messages are sent back to back by the same user, hide username */
+.message.stream {
+    margin-top: 7px !important;
+}
+
+.message.stream > #username {
+    display: none;
+}
+
+/* === Members Aside ===== */
+.room > #members {
+    background-color: #f0f0f0;
+    padding-top: 20px;
+    grid-area: members;
+    height: 100%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#members > section {
+    padding: 10px;
+}
+
+#members > section > h2 {
+    margin-bottom: 10px;
+    margin-left: 15px;
+    letter-spacing: 1px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.member_list > .room_member {
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+.member_list > .room_member:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.room_member > #username {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: rgb(97, 91, 91);
+}
+
+.room_member > img {
+    max-height: 100%;
+    margin-right: 10px;
+    border-radius: 500px;
+}
+
+.room_member:hover {
+    background-color: rgb(189, 189, 192);
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 5px 10px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+}
+
+.room_member:hover > #username {
+    color: rgb(39, 39, 39) !important;
+}
+
+
+/* === Input Bar ===== */
+.room > #input {
+    background-color: rgb(189, 189, 192);
+    grid-area: input;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.room > #input > * {
+    margin: 0px 20px;
+}
+
+.room > #input input {
+    margin-right: 10px;
+    border-style: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 750px;
+    height: 35px;
+    word-wrap: normal;
+}
+
+.room > #input button {
+    background-color: #f0f0f0;
+    font-weight: bolder;
+    min-width: 80px;
+    padding: 0px 20px;
+    height: 35px;
+    box-shadow: rgba(0, 0, 0, 0.03) 0px 5px 10px, rgba(0, 0, 0, 0.03) 0px 6px 6px;
+}
+
+.room > #input button:hover {
+    transform: scale(1.1);
+}
