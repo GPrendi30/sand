@@ -19,7 +19,7 @@ router.get('/', async function (req, res, next) {
             if (data) {
                 // console.log(data.collection.name)
                 // console.log(data.collection.banner_image_url)
-                collection.push({ title: data.collection.name, img: data.collection.banner_image_url, link: '/discover/' + slug })
+                collection.push({ title: data.collection.name, img: data.collection.image_url, link: '/discover/' + slug }) // get large image => substitute data.collection.image_url with data.collection.large_image_url
             }
         }))
         res.send(collection);
@@ -32,21 +32,23 @@ router.get('/', async function (req, res, next) {
 router.get('/:slug', async function (req, res, next) {
     const slug = req.params.slug
     if (req.accepts('json')) {
-        const collectionData = [];
+        let collectionData;
         const data = await getCollectionDataWithSlug(slug)
         if (data) {
-            collectionData.push({
+            collectionData = {
                 title: data.collection.name,
+                slug: slug,
                 img: data.collection.image_url,
                 banner_img: data.collection.banner_image_url,
                 OpenSea_link: 'https://opensea.io/collection/' + slug,
                 total_volume: data.collection.stats.total_volume,
                 num_owners: data.collection.stats.num_owners,
                 num_assets: data.collection.stats.count
-            })
+            }
         }
         console.log(collectionData)
-        res.send(collectionData);
+        // res.send(collectionData);
+        res.render('single_collection', { data: collectionData })
     } else {
         res.status(406).end();
     }

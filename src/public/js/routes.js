@@ -259,4 +259,25 @@ function getExchange() {
         .catch(err => { console.error(err); });
 }
 
+// function getDiscoverSingleCollection() {
+//     window.location = '#discover?id=single_collection';
 
+//     const main = document.querySelector('main');
+
+//     fetch('/discover/',
+//         {
+//             method: 'GET',
+//             headers: { Accept: 'application/json' }
+//         }
+//     ).then(res => {
+//         if (res.status >= 400) {
+//             throw new Error(res.status);
+//         }
+//         return res.json(); // another promise
+//     })
+//         .then(data => ejs.src_views_discover({ data }))
+//         .then(html => {
+//             main.innerHTML = html;
+//         })
+//         .catch(err => { console.error(err); });
+// }
