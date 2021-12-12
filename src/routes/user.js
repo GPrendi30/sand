@@ -141,12 +141,26 @@ router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
             if (user === null) {
                 res.status(404).end();
             } else {
-                res.json(user.settings)
+                // res.json(user.settings)
+                res.render('settings', { result: user })
             }
         }).catch(err => { console.log(err) })
     } else {
         res.status(406).end()
     }
+})
+
+router.put('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
+    const filter = { _id: new ObjectId(req.params._id) };
+
+    const modify = {}
+    modify[req.query.req] = req.body[req.query.req];
+    console.log(modify)
+    models.users.findOneAndUpdate(filter, { $set: modify }, { upsert: true }) // update + insert = upsert
+        .then(result => {
+            const found = (result.upsertedCount === 0);
+            res.status(found ? 200 : 201).json(result);
+        });
 })
 
 /* GET user assets page. */
