@@ -227,7 +227,6 @@ function returnDifference (oldSet, newSet) {
         }
     }
 
-    console.log(newTokens)
     return newTokens;
 }
 
@@ -249,3 +248,5 @@ function getChanges (walletAddress, time) {
 
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
+module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;
+module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
