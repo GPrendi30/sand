@@ -64,6 +64,6 @@ router.get('/:_id', isLoggedIn, function (req, res, next) {
     } else {
         res.status(406).end()
     }
-}
+})
 
-module.exports = router;
+module.exports = router
