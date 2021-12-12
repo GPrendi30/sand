@@ -1,7 +1,8 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
-const models = require('./models').model;
+const connection = require('./models');
+const User = require('./models/user');
 const ObjectID = require('mongodb').ObjectID;
 
 /**
@@ -16,7 +17,7 @@ passport.serializeUser((user, done) => {
  */
 passport.deserializeUser((id, done) => {
     const filter = { _id: new ObjectID(id) };
-    models.users.findOne(filter, (err, res) => {
+    User.findOne(filter, (err, res) => {
         done(err, res);
     });
 })
@@ -86,7 +87,7 @@ async function hashUserPassword (user) {
  * Strategy for local authentication.
  */
 passport.use(new LocalStrategy(function (username, password, done) {
-    models.users.findOne({ username: username }, function (err, user) {
+    User.findOne({ username: username }, function (err, user) {
         if (err) return done(err);
         if (!user) return done(null, false, { message: 'Incorrect username.' });
 

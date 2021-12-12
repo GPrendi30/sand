@@ -10,6 +10,7 @@ require('dotenv').config() // read .env file
 const uri = (config.uri || process.env.MONGODB_URI) + '/' + config.db_name
 const dbName = config.db_name
 
+
 /* connect to mongodb
   - uri is the mongodb uri
   - dbName is the name of the database
@@ -25,3 +26,5 @@ mongoose
 mongoose.connection.on('error', err => {
     console.log('Mongodb error:', err);
 });
+
+module.exports = mongoose.connection;

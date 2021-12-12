@@ -33,11 +33,16 @@ const userSchema = new Schema({
         currency: String
         // add more preferences
     },
-    chats: [{ 
+    chats: [{
         type: Schema.Types.ObjectId,
         ref: 'Chat'
+    }],
+
+    blocked: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }]
-}, { timestamps: true, collection: 'users2' });
+}, { timestamps: true, collection: 'users' });
 
 userSchema.methods.addChat = function (chat) {
     this.chats.push(chat._id);
