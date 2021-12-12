@@ -17,12 +17,36 @@ router.get('/', async function (req, res, next) {
         await Promise.all(collectionSlugs.map(async slug => {
             const data = await getCollectionDataWithSlug(slug)
             if (data) {
-                console.log(data.collection.name)
-                console.log(data.collection.banner_image_url)
-                collection.push({ title: data.collection.name, img: data.collection.banner_image_url })
+                // console.log(data.collection.name)
+                // console.log(data.collection.banner_image_url)
+                collection.push({ title: data.collection.name, img: data.collection.banner_image_url, link: '/discover/' + slug })
             }
         }))
         res.send(collection);
+    } else {
+        res.status(406).end();
+    }
+})
+
+/* GET discover page. */
+router.get('/:slug', async function (req, res, next) {
+    const slug = req.params.slug
+    if (req.accepts('json')) {
+        const collectionData = [];
+        const data = await getCollectionDataWithSlug(slug)
+        if (data) {
+            collectionData.push({
+                title: data.collection.name,
+                img: data.collection.image_url,
+                banner_img: data.collection.banner_image_url,
+                OpenSea_link: 'https://opensea.io/collection/' + slug,
+                total_volume: data.collection.stats.total_volume,
+                num_owners: data.collection.stats.num_owners,
+                num_assets: data.collection.stats.count
+            })
+        }
+        console.log(collectionData)
+        res.send(collectionData);
     } else {
         res.status(406).end();
     }
