@@ -1,11 +1,14 @@
-<section> <%= user.username %> </section>
-<img id="ppic" src="<%= user.ppic %>">
-<section> <%= user.bio %></section>
-<button type = "button" id="settings" name="settings"> Settings </button>
 
-<section id="friendlist"></section>
-<section id="friendrequests"> </section>
-<section id="blocked"> </section>
-
-<section id="tracking"></section>
-<section id="recentlyviewed"> </section>
+    <section> <%= user.username %> </section>
+    <section id="name"><%= user.name %> </section>
+    <section id="surname"><%= user.surname%> </section>
+    <img id="ppic" src=<%= user.ppic %>>
+    <section> <%= user.email %></section>
+    <button type = "button" id="settings" name="settings"> Settings </button>
+    <section id="bio"><%= user.bio %> </section>
+    <section id="friendlist"><%= user.friendlist%> </section>
+    <section id="friendrequests"><%= user.friendrequests %> </section>
+    <section id="blocked"><%= user.blocked%> </section>
+    <section id="tracking"><%= user.tracking %> </section>
+    <section id="recentlyviewed"><%= user.recentlyviewed %> </section>
+    <section id="collection"><%= user.collection%> </section>
