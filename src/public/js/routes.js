@@ -119,3 +119,5 @@ function getExchange () {
 
     main.innerHTML = ejs.src_views_wip(); // work in progress
 }
+
+

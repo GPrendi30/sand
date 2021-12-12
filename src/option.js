@@ -30,11 +30,17 @@ async function getOptionForBarChart (contractAddress, timeInDays) {
         dailyVolumeArray = await dailyVolume(contractAddress, timeInDays)
 
         option = {
+            title: {
+                show: true,
+                text: 'Waterfall'
+              },
             xAxis: {
                 type: 'category',
-                data: dateArray
+                data: dateArray,
+                name: 'Dates'
             },
             yAxis: {
+                name: 'Volume',
                 type: 'value'
             },
             series: [
