@@ -1,4 +1,5 @@
 #room_container {
+    background-color: #87878a;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -17,11 +18,14 @@
     grid-template-areas: 
     "chat members"
     "input members";
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 /* === Chat Area ===== */
+
 .room > #chat {
-    background-color: rgb(233, 224, 215);
+    position: relative;
+    background-color: white;
     grid-area: chat;
     height: 100%;
     padding: 0px 85px;
@@ -54,7 +58,7 @@
 }
 
 .message > #msg {
-    background-color: #f5f3f3;
+    background-color: #e9e9ec;
     border-radius: 10px;
     min-width: 100px;
     max-width: 1100px;
@@ -62,6 +66,7 @@
     padding: 10px;
     padding-right: 30px;
     font-size: 17px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 3px 5px, rgba(0, 0, 0, 0.05) 0px 3px 3px;
 }
 
 /* Msg of user who is logged in */
@@ -71,7 +76,7 @@
 
 /* If multiple messages are sent back to back by the same user, hide username */
 .message.stream {
-    margin-top: 5px !important;
+    margin-top: 7px !important;
 }
 
 .message.stream > #username {
@@ -80,7 +85,7 @@
 
 /* === Members Aside ===== */
 .room > #members {
-    background-color: rgb(190, 176, 165);
+    background-color: #f0f0f0;
     padding-top: 20px;
     grid-area: members;
     height: 100%;
@@ -128,8 +133,9 @@
 }
 
 .room_member:hover {
-    background-color: rgb(161, 144, 136);
+    background-color: rgb(189, 189, 192);
     cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 5px 10px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
 }
 
 .room_member:hover > #username {
@@ -139,6 +145,36 @@
 
 /* === Input Bar ===== */
 .room > #input {
-    background-color: rosybrown;
+    background-color: rgb(189, 189, 192);
     grid-area: input;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.room > #input > * {
+    margin: 0px 20px;
+}
+
+.room > #input input {
+    margin-right: 10px;
+    border-style: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 750px;
+    height: 35px;
+    word-wrap: normal;
+}
+
+.room > #input button {
+    background-color: #f0f0f0;
+    font-weight: bolder;
+    min-width: 80px;
+    padding: 0px 20px;
+    height: 35px;
+    box-shadow: rgba(0, 0, 0, 0.03) 0px 5px 10px, rgba(0, 0, 0, 0.03) 0px 6px 6px;
+}
+
+.room > #input button:hover {
+    transform: scale(1.1);
 }

@@ -45,6 +45,7 @@ body {
 /* Page Layout */
 
 body {
+    background-color: #f0f0f0;
     display: grid;
     grid-template-columns: auto 1fr 185px;
     grid-template-rows: 75px 1fr 70px;
