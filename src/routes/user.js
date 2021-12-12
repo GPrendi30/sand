@@ -129,6 +129,26 @@ router.get('/:_id', function (req, res, next) {
     }
 })
 
+/* Get single user */
+router.get('/profile/:_id', isLoggedInSpecialized, function (req, res, next) {
+    if (req.accepts('application/json')) {
+        let filter
+        try {
+            filter = { _id: new ObjectId(req.params._id) }
+        } catch (e) { res.status(404) }
+        models.users.findOne(filter).then(result => {
+            const user = result
+            if (user === null) {
+                res.status(404).end()
+            } else {
+                res.render('profile', { user })
+            }
+        })
+    } else {
+        res.status(406).end()
+    }
+})
+
 /* GET user settings page. */
 router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
     if (req.accepts('application/json')) {
@@ -141,8 +161,8 @@ router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
             if (user === null) {
                 res.status(404).end();
             } else {
-                // res.json(user.settings)
-                res.render('settings', { result: user })
+                res.json(user.settings)
+                // res.render('settings', { result: user })
             }
         }).catch(err => { console.log(err) })
     } else {
