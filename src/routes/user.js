@@ -58,6 +58,9 @@ function removeSensitiveData (user) {
     if (user.friendlist) {
         delete user.friendlist
     }
+    // if (user.chats) {
+    //     delete user.chats
+    // }
 }
 
 // TODO Write Documentation
@@ -70,7 +73,7 @@ function createUser (req) {
         name: req.body.name,
         surname: req.body.surname,
         wallet: req.body.wallet,
-        collection: req.body.collection,
+        // collection: req.body.collection,
         friendlist: req.body.friendlist,
         friendrequests: req.body.friendrequests,
         blocked: req.body.blocked,
@@ -79,6 +82,8 @@ function createUser (req) {
         bio: req.body.bio,
         tracking: req.body.tracking,
         recentlyviewed: req.body.tracking
+        // chats: {},
+        // rooms: []
     }
     return user
 }
@@ -190,7 +195,6 @@ router.get('/recentlyviewed/:_id', isLoggedInSpecialized, function (req, res, ne
         } catch (e) {
             return res.status(404);
         }
-
         models.users.findOne(filter).then(result => {
             const user = result
             if (user === null) {
@@ -277,6 +281,33 @@ router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {
         }
     })
 })
+
+router.get('/chats/:_id', isLoggedInSpecialized, function(req, res, next) {
+    let filter
+
+    const chatID = req.query.chat;
+    try {
+        filter = { _id: new ObjectId(req.params._id) }
+    } catch (e) { res.status(404) }
+    models.users.findOne(filter).then(result => {
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            if (!(chatID)) {
+                res.json(user.chats)
+            } else if (user.chats.chatID) {
+                res.json(user.chats.chatID)
+            } else {
+                res.status(404).end()
+            }
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+
+
 
 /**
  * @DEPRECATED
