@@ -17,8 +17,6 @@ router.get('/', async function (req, res, next) {
         await Promise.all(collectionSlugs.map(async slug => {
             const data = await getCollectionDataWithSlug(slug)
             if (data) {
-                // console.log(data.collection.name)
-                // console.log(data.collection.banner_image_url)
                 collection.push({ title: data.collection.name, img: data.collection.image_url, link: '/discover/' + slug }) // get large image => substitute data.collection.image_url with data.collection.large_image_url
             }
         }))
@@ -46,8 +44,6 @@ router.get('/:slug', async function (req, res, next) {
                 num_assets: data.collection.stats.count
             }
         }
-        console.log(collectionData)
-        // res.send(collectionData);
         res.render('single_collection', { data: collectionData })
     } else {
         res.status(406).end();
