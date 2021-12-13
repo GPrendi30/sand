@@ -1,14 +1,77 @@
+<html>
 
-    <section> <%= user.username %> </section>
-    <section id="name"><%= user.name %> </section>
-    <section id="surname"><%= user.surname%> </section>
-    <img id="ppic" src=<%= user.ppic %>>
-    <section> <%= user.email %></section>
-    <button type = "button" id="settings" name="settings"> Settings </button>
-    <section id="bio"><%= user.bio %> </section>
-    <section id="friendlist"><%= user.friendlist%> </section>
-    <section id="friendrequests"><%= user.friendrequests %> </section>
-    <section id="blocked"><%= user.blocked%> </section>
-    <section id="tracking"><%= user.tracking %> </section>
-    <section id="recentlyviewed"><%= user.recentlyviewed %> </section>
-    <section id="collection"><%= user.collection%> </section>
+<head>
+    <link href="stylesheets/profile.css" rel="stylesheet" />
+    <link href="stylesheets/general.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="profile_container">
+        <div id="profile">
+            <h1>Your Profile</h1>
+
+            <div id="top_section">
+
+                <section id="user_info">
+                    <img id="ppic" src="<%= user.ppic %>">
+                    <h1>
+                        <%= user.username %>
+                    </h1>
+                    <div id="user_bio">
+                        
+                        <p>
+                            <%= user.bio %>
+                        </p>
+                    </div>
+                    <button class="button" type="button" id="settings" name="settings"> Settings </button>
+                </section>
+
+                <section id="data">
+                    <section class="profile_data" id="tracking">
+                        <h1>Tracking</h1>
+                        <div class="tracking_list">
+                            <ul>
+                                <li class="tracking_li"></li>
+                                <li class="tracking_li"></li>
+                                <li class="tracking_li"></li>
+                            </ul>
+                        </div>
+                        <button class="button">See More</button>
+                    </section>
+                    <section class="profile_data" id="recentlyviewed">
+                        <h1>Recently Viewed</h1>
+                        <div class="tracking_list">
+                            <ul>
+                                <li class="tracking_li"></li>
+                                <li class="tracking_li"></li>
+                                <li class="tracking_li"></li>
+                            </ul>
+                        </div>
+                        <button class="button">See More</button>
+                    </section>
+                </section>
+
+            </div>
+            
+            <section id="friends">
+                <section id="friendlist">
+                    <h3>Your Friends</h3>
+                    <div></div>
+                </section>
+                <section id="friendrequests">
+                    <h3>Friend Requests</h3>
+                    <div></div>
+                </section>
+                <section id="blocked">
+                    <h3>Blocked</h3>
+                    <div></div>
+                </section>
+            </section>
+            
+            
+
+        </div>
+    </div>
+</body>
+
+</html>
