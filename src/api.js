@@ -248,10 +248,10 @@ function getChanges (walletAddress, time) {
 }
 
 /**
- * Function to check the difference between two objects and return what was added.
+ * Function to get all the events happened to a wallet in the desired time.
  * @param string walletAddress, the address that we want to track.
  * @param string time, time in seconds.
- * @returns {object} object with the difference between the two objects.
+ * @returns {object} object with all the events.
  */
 async function trackWallet (walletAddress, time) {
     const occuredAfter = currentTimestamp - time
@@ -311,8 +311,3 @@ async function prettyTrackingSales (walletAddress, time) {
 
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
-
-// Tracked wallet: Name of the wallet
-// this wallet did:
-// sold this
-// bought this
