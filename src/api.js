@@ -227,7 +227,6 @@ function returnDifference (oldSet, newSet) {
         }
     }
 
-    console.log(newTokens)
     return newTokens;
 }
 
@@ -272,17 +271,15 @@ async function trackWallet (walletAddress, time) {
     try {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
-    // console.log(response.data.asset_events)
-    // console.log(response.data.asset_events[0].transaction)
-    // console.log(walletAddress === response.data.asset_events[0].seller.address)
+
     return response.data.asset_events;
 }
 
 /**
- * Function to check the difference between two objects and return what was added.
+ * Function to get all the events happened to a wallet in the desired time.
  * @param string walletAddress, the address that we want to track.
  * @param string time, time in seconds.
- * @returns {object} object with the difference between the two objects.
+ * @returns {object} object with the events happened to the wallet on that time, positive values means bought something and viceversa.
  */
 async function prettyTrackingSales (walletAddress, time) {
     const changedTokens = {};
@@ -304,7 +301,6 @@ async function prettyTrackingSales (walletAddress, time) {
         })
     } catch (error) { console.error(error); }
 
-    console.log(changedTokens)
     // positive values means that the tracked address bought the asset
     return changedTokens;
 }
