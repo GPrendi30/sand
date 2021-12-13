@@ -109,26 +109,7 @@ router.get('/', function (req, res, next) {
     })
 })
 
-/* Get single user */
-router.get('/:_id', function (req, res, next) {
-    if (req.accepts('application/json')) {
-        let filter
-        try {
-            filter = { _id: new ObjectId(req.params._id) }
-        } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result => {
-            const user = result
-            if (user === null) {
-                res.status(404).end()
-            } else {
-                removeSensitiveData(user)
-                res.json(user)
-            }
-        })
-    } else {
-        res.status(406).end()
-    }
-})
+
 
 /* Get single user */
 router.get('/profile/:_id', isLoggedInSpecialized, function (req, res, next) {
@@ -151,11 +132,12 @@ router.get('/profile/:_id', isLoggedInSpecialized, function (req, res, next) {
 })
 
 /* GET user settings page. */
-router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
+router.get('/settings/', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
+        console.log(req.session.passport.user)
         try {
-            filter = { _id: new ObjectId(req.params._id) }
+            filter = { _id: new ObjectId(req.session.passport.user) }
         } catch (e) { res.status(404) }
         models.users.findOne(filter).then(result => {
             const user = result
@@ -171,8 +153,10 @@ router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
     }
 })
 
-router.put('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
-    const filter = { _id: new ObjectId(req.params._id) };
+router.put('/settings/', isLoggedIn, function (req, res, next) {
+
+
+    const filter = { _id: new ObjectId(req.passport.user) };
 
     const modify = {}
     modify[req.query.req] = req.body[req.query.req];
@@ -393,6 +377,28 @@ router.delete('/:_id', isLoggedInSpecialized, function (req, res) {
         }
     });
 });
+
+/* Get single user */
+router.get('/:_id', function (req, res, next) {
+    if (req.accepts('application/json')) {
+        let filter
+        try {
+            filter = { _id: new ObjectId(req.params._id) }
+        } catch (e) { res.status(404) }
+        models.users.findOne(filter).then(result => {
+            const user = result
+            if (user === null) {
+                res.status(404).end()
+            } else {
+                removeSensitiveData(user)
+                res.json(user)
+            }
+        })
+    } else {
+        res.status(406).end()
+    }
+})
+
 
 router.get('/identicon/:username', function (req, res) {
     const identicon = generateIdenticon(req.params.username, Date.now())

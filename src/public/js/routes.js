@@ -1,5 +1,5 @@
 
-function linkClick (href) {
+function linkClick(href) {
     const url = new URL(href); // parse link address
 
     if (url.pathname === '/home') {
@@ -20,7 +20,7 @@ function linkClick (href) {
 }
 
 
-function parsePath () {
+function parsePath() {
     const hash = window.location.hash
     if (hash) {
         if (hash === '#dashboard') {
@@ -39,7 +39,7 @@ function parsePath () {
     }
 }
 
-function getHome () {
+function getHome() {
     // setting the location
     window.location = '#dashboard'
 
@@ -82,7 +82,7 @@ function getHome () {
 
 
 // yes
-function getFollow () {
+function getFollow() {
     const main = document.querySelector('main');
     fetch('/follow', {
         method: 'GET'
@@ -99,7 +99,7 @@ function getFollow () {
         });
 }
 
-function getFriendList () {
+function getFriendList() {
     const main = document.querySelector('main');
 
     window.location = '#friendlist?id=none';
@@ -142,7 +142,7 @@ function getFriendList () {
         });
 }
 
-function getLogin (lastLocation) {
+function getLogin(lastLocation) {
     window.location = '#login';
 
     document.getElementById('content').innerHTML = ejs.src_views_login();
@@ -171,7 +171,7 @@ function getLogin (lastLocation) {
     });
 }
 
-function getSignup () {
+function getSignup() {
     window.location = '#signup';
 
     document.getElementById('content').innerHTML = ejs.src_views_signup();
@@ -199,7 +199,7 @@ function getSignup () {
 }
 
 // yes
-function getDiscover () {
+function getDiscover() {
     window.location = '#discover?id=none';
 
     const main = document.querySelector('main');
@@ -226,7 +226,7 @@ function getDiscover () {
 
 
 // yes
-function getRooms () {
+function getRooms() {
     fetch('/rooms',
         {
             method: 'GET',
@@ -247,7 +247,7 @@ function getRooms () {
         .catch(err => { console.error(err); });
 }
 
-function getExchange () {
+function getExchange() {
     window.location = '#exchange?id=none';
     const main = document.querySelector('main');
 
@@ -272,10 +272,10 @@ function getExchange () {
         .catch(err => { console.error(err); });
 }
 
-function getSettings () {
+function getSettings() {
     window.location = '#settings'
     const main = document.querySelector('#content');
-    fetch('/user/settings/61ad6f782ca3a5597924d09f',
+    fetch('/user/settings/',
         {
             method: 'GET',
             headers: { Accept: 'application/json' }

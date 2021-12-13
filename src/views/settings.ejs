@@ -6,7 +6,7 @@
 
         <section class="settings_section" id="profile_picture">
             <img id="picture" src="images/user1.png" alt="profile">
-            <form method="POST" action="/user/settings/<%= result._id %>?req=ppic" enctype="multipart/form-data">
+            <form method="POST" action="/user/settings?req=ppic" enctype="multipart/form-data">
                 <div>
                     <label for="upload">
                         <h3>Choose an image to upload</h3>
@@ -25,7 +25,7 @@
             <h2 class="title">Modify your profile information</h1>
 
                 <div>
-                    <form method="POST" action="/user/settings/<%= result._id %>?req=email&_method=PUT"
+                    <form method="POST" action="/user/settings?req=email&_method=PUT"
                         enctype="multipart/form-data">
                         <label for="email">
                             <h3>Email address</h3>
@@ -34,7 +34,7 @@
                         </label>
                     </form>
 
-                    <form method="POST" action="/user/settings/<%= result._id %>?req=bio&_method=PUT" enctype="multipart/form-data">
+                    <form method="POST" action="/user/settings?req=bio&_method=PUT" enctype="multipart/form-data">
                         <label for="bio">
                             <h3>Biography</h3>
                             <input type="text" name="bio" value="<%= result.bio %>">
