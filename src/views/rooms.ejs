@@ -5,8 +5,8 @@
       <h1>Chat Rooms</h1>
       <ul class="discover_lineup">
             <!-- Used place holders -->
-            <% let rooms_ = [{"title": "Chat 1" , "img" : "/images/chat.png" }, {"title": "Chat 2" , "img" : "/images/chat.png" }, {"title": "Chat 3" , "img" : "/images/chat.png" }] %>
-            <% rooms_.forEach( item => { %>
+            <% let rooms = [{"title": "Chat 1" , "img" : "/images/chat.png" }, {"title": "Chat 2" , "img" : "/images/chat.png" }, {"title": "Chat 3" , "img" : "/images/chat.png" }] %>
+            <% rooms.forEach( item => { %>
                 <li class="discover_item grow_hover shadow"><a href="/item/info">
                     <img src="<%= item.img %>" alt="<%= item.title %>">
                     <h1><%= item.title %></h1>
@@ -33,7 +33,6 @@
     
     <!-- too see the invites to join privates rooms -->
     <section class="invites">
-        <%= room.invites %>
         <button id="accept_invite">accept invite</button>
     <section>
   
