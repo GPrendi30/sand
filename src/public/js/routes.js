@@ -162,7 +162,9 @@ function getLogin(lastLocation) {
             method: 'POST',
             body: formdata
         }).then(res => {
-            getHome();
+            if (res.url.includes('/login'))
+                getLogin();
+            else getHome();
         });
     });
 
@@ -187,7 +189,8 @@ function getSignup() {
             method: 'POST',
             body: formdata
         }).then(res => {
-            getLogin();
+            if (res.url.includes('signup')) getSignup()
+            else getLogin();
         });
     });
 
@@ -277,7 +280,56 @@ function getSettings() {
 
     window.location = '#settings'
     const main = document.querySelector('#content');
-    main.innerHTML = ejs.src_views_settings({ result: { _id: 0 } })
+    fetch('/user/settings/61ad6f782ca3a5597924d09f',
+        {
+            method: 'GET',
+            headers: { Accept: 'application/json' }
+        }
+    ).then(res => {
+        if (res.status >= 400) {
+            throw new Error(res.status);
+        }
+        return res; // another promise
+    })
+
+        .then(async res => {
+            if (res.url.includes('/login')) {
+                getLogin()
+            } else {
+                const data = await res.json();
+                main.innerHTML = ejs.src_views_settings({ result: data });
+
+                main.querySelector('#regenerate_image').onclick = () => {
+                    fetch('/user/identicon/random')
+                    .then(res => res.blob())
+                    .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    console.log(blob)
+                    main.querySelector('#picture').src = url;
+                })
+                }
+                
+
+                main.querySelectorAll("form").forEach(form => {
+                    form.addEventListener("submit", (event) => {
+                        event.preventDefault();
+                        const form = new FormData(event.target);
+                        console.log(form.action);
+
+                        let method = event.target.method;
+                        fetch(event.target.action, {
+                            method: method,
+                            body: form
+                        }).then(res => {
+                            alert('Profile updated')
+                            getSettings();
+                        });
+                    });
+
+                })
+            }
+        })
+        .catch(err => { console.error(err); });
 }
 
 // function getDiscoverSingleCollection() {
