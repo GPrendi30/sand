@@ -58,6 +58,12 @@ function removeSensitiveData (user) {
     if (user.friendlist) {
         delete user.friendlist
     }
+    if (user.chats) {
+        delete user.chats
+    }
+    if (user.rooms) {
+        delete user.rooms
+    }
 }
 
 // TODO Write Documentation
@@ -70,7 +76,7 @@ function createUser (req) {
         name: req.body.name,
         surname: req.body.surname,
         wallet: req.body.wallet,
-        collection: req.body.collection,
+        // collection: req.body.collection,
         friendlist: req.body.friendlist,
         friendrequests: req.body.friendrequests,
         blocked: req.body.blocked,
@@ -79,6 +85,8 @@ function createUser (req) {
         bio: req.body.bio,
         tracking: req.body.tracking,
         recentlyviewed: req.body.tracking
+        // chats: {},
+        // rooms: []
     }
     return user
 }
@@ -121,6 +129,26 @@ router.get('/:_id', function (req, res, next) {
     }
 })
 
+/* Get single user */
+router.get('/profile/:_id', isLoggedInSpecialized, function (req, res, next) {
+    if (req.accepts('application/json')) {
+        let filter
+        try {
+            filter = { _id: new ObjectId(req.params._id) }
+        } catch (e) { res.status(404) }
+        models.users.findOne(filter).then(result => {
+            const user = result
+            if (user === null) {
+                res.status(404).end()
+            } else {
+                res.render('profile', { user })
+            }
+        })
+    } else {
+        res.status(406).end()
+    }
+})
+
 /* GET user settings page. */
 router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
     if (req.accepts('application/json')) {
@@ -134,11 +162,25 @@ router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
                 res.status(404).end();
             } else {
                 res.json(user.settings)
+                // res.render('settings', { result: user })
             }
         }).catch(err => { console.log(err) })
     } else {
         res.status(406).end()
     }
+})
+
+router.put('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
+    const filter = { _id: new ObjectId(req.params._id) };
+
+    const modify = {}
+    modify[req.query.req] = req.body[req.query.req];
+    console.log(modify)
+    models.users.findOneAndUpdate(filter, { $set: modify }, { upsert: true }) // update + insert = upsert
+        .then(result => {
+            const found = (result.upsertedCount === 0);
+            res.status(found ? 200 : 201).json(result);
+        });
 })
 
 /* GET user assets page. */
@@ -190,7 +232,6 @@ router.get('/recentlyviewed/:_id', isLoggedInSpecialized, function (req, res, ne
         } catch (e) {
             return res.status(404);
         }
-
         models.users.findOne(filter).then(result => {
             const user = result
             if (user === null) {
@@ -277,6 +318,33 @@ router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {
         }
     })
 })
+
+router.get('/chats/:_id', isLoggedInSpecialized, function(req, res, next) {
+    let filter
+
+    const chatID = req.query.chat;
+    try {
+        filter = { _id: new ObjectId(req.params._id) }
+    } catch (e) { res.status(404) }
+    models.users.findOne(filter).then(result => {
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            if (!(chatID)) {
+                res.json(user.chats)
+            } else if (user.chats.chatID) {
+                res.json(user.chats.chatID)
+            } else {
+                res.status(404).end()
+            }
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+
+
 
 /**
  * @DEPRECATED

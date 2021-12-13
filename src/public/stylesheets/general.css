@@ -6,11 +6,13 @@
 * {
     margin: 0px;
     padding: 0px;
-    color: black !important;
+    color: rgb(39, 39, 39);
+    box-sizing: border-box;
 }
 
 body {
     padding: 0px !important;
+    font-family: sans-serif;
 }
 
 #header,
@@ -43,6 +45,7 @@ body {
 /* Page Layout */
 
 body {
+    background-color: #f0f0f0;
     display: grid;
     grid-template-columns: auto 1fr 185px;
     grid-template-rows: 75px 1fr 70px;
