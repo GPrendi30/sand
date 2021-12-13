@@ -28,6 +28,7 @@ router.get('/data', async function (req, res, next) {
     if (req.accepts('json')) {
         if (chartType === 'bar') {
             const option = await getOptionForBarChart(contractAddress, time);
+            console.log(option);
             res.status(200).send(option);
         } else if (chartType === 'scatter') {
             const option = await getOptionForScatterChart(contractAddress, time)

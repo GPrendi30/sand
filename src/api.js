@@ -22,9 +22,9 @@ async function getCollectionDataWithSlug (slug) {
     let response;
     try {
         response = await axios.request(options);
-    } catch (error) { console.error(error); }
 
-    return response.data;
+        return response.data;
+    } catch (error) { console.error(error); }
 }
 
 /**
@@ -307,3 +307,5 @@ async function prettyTrackingSales (walletAddress, time) {
 
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
+module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;
+module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
