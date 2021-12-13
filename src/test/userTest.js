@@ -367,7 +367,7 @@ describe('Connecting to database', function () {
               //console.log('settings'+settings)
               assert(result);
               assert(settings);
-              expect(JSON.stringify(settings)).to.equal(JSON.stringify(result.settings))
+              expect(JSON.stringify(settings)).to.equal(JSON.stringify(result))
               done()
             })
         })

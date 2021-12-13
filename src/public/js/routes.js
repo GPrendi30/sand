@@ -1,5 +1,5 @@
 
-function linkClick(href) {
+function linkClick (href) {
     const url = new URL(href); // parse link address
 
     if (url.pathname === '/home') {
@@ -20,7 +20,7 @@ function linkClick(href) {
 }
 
 
-function parsePath() {
+function parsePath () {
     const hash = window.location.hash
     if (hash) {
         if (hash === '#dashboard') {
@@ -39,7 +39,7 @@ function parsePath() {
     }
 }
 
-function getHome() {
+function getHome () {
     // setting the location
     window.location = '#dashboard'
 
@@ -82,14 +82,14 @@ function getHome() {
 
 
 // yes
-function getFollow() {
+function getFollow () {
     const main = document.querySelector('main');
     fetch('/follow', {
-        method: "GET"
+        method: 'GET'
     })
         .then(res => {
             if (res.status >= 400) {
-                console.log("error");
+                console.log('error');
             } else if (res.url.includes('/login')) {
                 getLogin();
             } else {
@@ -99,9 +99,7 @@ function getFollow() {
         });
 }
 
-function getFriendList() {
-
-
+function getFriendList () {
     const main = document.querySelector('main');
 
     window.location = '#friendlist?id=none';
@@ -119,12 +117,11 @@ function getFriendList() {
     });
 
     fetch('/user/friends/61b51e6166ee527f461c77b7', {
-        method: "GET"
+        method: 'GET'
     })
         .then(res => {
             if (res.status >= 400) {
-                console.log("error");
-
+                console.log('error');
             } else if (res.url.includes('/login')) {
                 getLogin();
             } else {
@@ -143,11 +140,9 @@ function getFriendList() {
                 });
             }
         });
-
-
 }
 
-function getLogin(lastLocation) {
+function getLogin (lastLocation) {
     window.location = '#login';
 
     document.getElementById('content').innerHTML = ejs.src_views_login();
@@ -162,7 +157,9 @@ function getLogin(lastLocation) {
             method: 'POST',
             body: formdata
         }).then(res => {
-            getHome();
+            if (res.url.includes('/login')) {
+                getLogin();
+            } else getHome();
         });
     });
 
@@ -174,7 +171,7 @@ function getLogin(lastLocation) {
     });
 }
 
-function getSignup() {
+function getSignup () {
     window.location = '#signup';
 
     document.getElementById('content').innerHTML = ejs.src_views_signup();
@@ -187,7 +184,9 @@ function getSignup() {
             method: 'POST',
             body: formdata
         }).then(res => {
-            getLogin();
+            if (res.url.includes('signup')) {
+                getSignup()
+            } else getLogin();
         });
     });
 
@@ -200,7 +199,7 @@ function getSignup() {
 }
 
 // yes
-function getDiscover() {
+function getDiscover () {
     window.location = '#discover?id=none';
 
     const main = document.querySelector('main');
@@ -227,7 +226,7 @@ function getDiscover() {
 
 
 // yes
-function getRooms() {
+function getRooms () {
     fetch('/rooms',
         {
             method: 'GET',
@@ -235,7 +234,7 @@ function getRooms() {
         }
     ).then(res => {
         if (res.status >= 400) {
-            console.log("error");
+            console.log('error');
         } else if (res.url.includes('/login')) {
             getLogin();
         } else {
@@ -248,7 +247,7 @@ function getRooms() {
         .catch(err => { console.error(err); });
 }
 
-function getExchange() {
+function getExchange () {
     window.location = '#exchange?id=none';
     const main = document.querySelector('main');
 
@@ -273,11 +272,58 @@ function getExchange() {
         .catch(err => { console.error(err); });
 }
 
-function getSettings() {
-
+function getSettings () {
     window.location = '#settings'
     const main = document.querySelector('#content');
-    main.innerHTML = ejs.src_views_settings({ result: { _id: 0 } })
+    fetch('/user/settings/61ad6f782ca3a5597924d09f',
+        {
+            method: 'GET',
+            headers: { Accept: 'application/json' }
+        }
+    ).then(res => {
+        if (res.status >= 400) {
+            throw new Error(res.status);
+        }
+        return res; // another promise
+    })
+
+        .then(async res => {
+            if (res.url.includes('/login')) {
+                getLogin()
+            } else {
+                const data = await res.json();
+                main.innerHTML = ejs.src_views_settings({ result: data });
+
+                main.querySelector('#regenerate_image').onclick = () => {
+                    fetch('/user/identicon/random')
+                        .then(res => res.blob())
+                        .then(blob => {
+                            const url = URL.createObjectURL(blob);
+                            console.log(blob)
+                            main.querySelector('#picture').src = url;
+                        })
+                }
+
+
+                main.querySelectorAll('form').forEach(form => {
+                    form.addEventListener('submit', (event) => {
+                        event.preventDefault();
+                        const form = new FormData(event.target);
+
+
+                        const method = event.target.method;
+                        fetch(event.target.action, {
+                            method: method,
+                            body: form
+                        }).then(res => {
+                            alert('Profile updated')
+                            getSettings();
+                        });
+                    });
+                })
+            }
+        })
+        .catch(err => { console.error(err); });
 }
 
 // function getDiscoverSingleCollection() {
