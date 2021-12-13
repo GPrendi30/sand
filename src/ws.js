@@ -13,10 +13,11 @@ io.use(wrap(passport.session()));
 
 // authentication validator
 io.use((socket, next) => {
+    // if request.user is an object (is not undefined)
+    // the passport has authenticated a user
     if (socket.request.user) {
-        console.log(socket.request.user)
         next();
-    } else {
+    } else { // no user authorization.
         next(new Error('unauthorized'))
     }
 });
@@ -151,7 +152,7 @@ function init(server) {
                     }).catch(err => { console.log(err) });
             }).catch(err => { console.log(err) });
         });
-        
+
         socket.on('block.friend', blocked => {
             const blockerUser = blocked.user // the user who unfriends friend
             let user
