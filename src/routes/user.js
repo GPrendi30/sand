@@ -163,7 +163,7 @@ router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
                 res.status(404).end();
             } else {
                 res.json(user)
-                //res.render('settings', { result: user })
+                // res.render('settings', { result: user })
             }
         }).catch(err => { console.log(err) })
     } else {
@@ -320,7 +320,7 @@ router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {
     })
 })
 
-router.get('/chats/:_id', isLoggedInSpecialized, function(req, res, next) {
+router.get('/chats/:_id', isLoggedInSpecialized, function (req, res, next) {
     let filter
 
     const chatID = req.query.chat;

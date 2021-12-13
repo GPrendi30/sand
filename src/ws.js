@@ -22,7 +22,7 @@ io.use((socket, next) => {
     }
 });
 
-function init(server) {
+function init (server) {
     console.log('Starting Web Server');
 
     io.attach(server);
@@ -215,7 +215,6 @@ function init(server) {
             }).catch(err => { console.log(err) });
         })
     })
-
 }
 // module.exports.eventBus = eventBus;
 module.exports.init = init
