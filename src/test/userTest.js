@@ -28,6 +28,8 @@ function createUser(username, password, email, name, surname, wallet, collection
     recentlyviewed: [],
     friendrequests: [],
     blocked: [],
+    chats: {},
+    rooms: [],
   }
   return user
 }
@@ -68,6 +70,8 @@ describe('Testing remove sensitive data function', function () {
     expect(user.tracking).to.be.an('array').that.is.empty
     expect(user.friendrequests).to.be.an('array').that.is.empty
     expect(user.blocked).to.be.an('array').that.is.empty
+    expect(user.rooms).to.be.an('array').that.is.empty
+    expect(user.chats).to.be.empty
 
     // deletion and check after
     removeSensitiveData(user)
@@ -84,6 +88,9 @@ describe('Testing remove sensitive data function', function () {
     expect(user.ppic).to.equal('ppic')
     expect(user.bio).to.equal('bio')
     expect(user.tracking).to.be.undefined
+    expect(user.rooms).to.be.undefined
+    expect(user.chats).to.be.undefined
+
     done()
   })
 })

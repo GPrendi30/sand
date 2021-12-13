@@ -246,6 +246,65 @@ function getChanges (walletAddress, time) {
     })
 }
 
+/**
+ * Function to get all the events happened to a wallet in the desired time.
+ * @param string walletAddress, the address that we want to track.
+ * @param string time, time in seconds.
+ * @returns {object} object with all the events.
+ */
+async function trackWallet (walletAddress, time) {
+    const occuredAfter = currentTimestamp - time
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/events',
+        params: {
+            account_address: walletAddress,
+            only_opensea: 'false',
+            offset: '0',
+            limit: '300',
+            occurred_after: occuredAfter
+        },
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
+    }
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    return response.data.asset_events;
+}
+
+/**
+ * Function to get all the events happened to a wallet in the desired time.
+ * @param string walletAddress, the address that we want to track.
+ * @param string time, time in seconds.
+ * @returns {object} object with the events happened to the wallet on that time, positive values means bought something and viceversa.
+ */
+async function prettyTrackingSales (walletAddress, time) {
+    const changedTokens = {};
+
+    try {
+        const set = await trackWallet(walletAddress, time)
+        set.forEach(event => {
+            if (event.event_type === 'successful') {
+                if (event.collection_slug in changedTokens && event.seller.address.toLowerCase() === walletAddress.toLowerCase()) {
+                    changedTokens[event.collection_slug]--
+                } else if (event.collection_slug in changedTokens && event.seller.address.toLowerCase() !== walletAddress.toLowerCase()) {
+                    changedTokens[event.collection_slug]++
+                } else if (!(event.collection_slug in changedTokens) && event.seller.address.toLowerCase() === walletAddress.toLowerCase()) {
+                    changedTokens[event.collection_slug] = -1
+                } else if (!(event.collection_slug in changedTokens) && event.seller.address.toLowerCase() !== walletAddress.toLowerCase()) {
+                    changedTokens[event.collection_slug] = 1
+                }
+            }
+        })
+    } catch (error) { console.error(error); }
+
+    // positive values means that the tracked address bought the asset
+    return changedTokens;
+}
+
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
 module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;

@@ -1,0 +1,20 @@
+<!-- Messages sent by current user have an additional class -->
+<!-- For testing purposes, assume current user is user3-->
+<% if (msg.user.id === 'user3') { %>
+    <% if (msg.user.id === prev) { %> 
+        <section class="message stream mine">
+    <% } else { %>
+        <section class="message mine">
+        <% prev = msg.user.id %>
+    <% } %>
+<% } else { %>
+    <% if (msg.user.id === prev) { %> 
+        <section class="message stream">
+    <% } else { %>
+        <section class="message">
+        <% prev = msg.user.id %>
+    <% } %>
+<% } %>
+    <h1 id="username"> <%= msg.user.username %> </h1>
+    <p id="msg"> <%= msg.msg %> </p>
+</section>
