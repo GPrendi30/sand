@@ -104,6 +104,20 @@ function getFriendList() {
 
     const main = document.querySelector('main');
 
+    window.location = '#friendlist?id=none';
+    main.innerHTML = ejs.src_views_friendlist({
+        friends:
+            [
+                { name: 'geri' },
+                { name: 'geri' },
+                { name: 'geri' },
+                { name: 'geri' },
+                { name: 'geri' },
+                { name: 'geri' },
+                { name: 'geri' }
+            ]
+    });
+
     fetch('/user/friends/61b51e6166ee527f461c77b7', {
         method: "GET"
     })
@@ -228,8 +242,8 @@ function getRooms() {
             window.location = '#rooms?id=none';
 
             const main = document.querySelector('main');
-            main.innerHTML = ejs.src_views_wip(); // work in progress
-        } 
+            main.innerHTML = ejs.src_views_rooms(); // work in progress
+        }
     })
         .catch(err => { console.error(err); });
 }
@@ -257,6 +271,13 @@ function getExchange() {
             // main.innerHTML = html; there is no main yet
         })
         .catch(err => { console.error(err); });
+}
+
+function getSettings() {
+
+    window.location = '#settings'
+    const main = document.querySelector('#content');
+    main.innerHTML = ejs.src_views_settings({ result: { _id: 0 } })
 }
 
 // function getDiscoverSingleCollection() {
