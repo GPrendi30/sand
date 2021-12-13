@@ -272,11 +272,47 @@ async function trackWallet (walletAddress, time) {
     try {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
+    // console.log(response.data.asset_events)
+    // console.log(response.data.asset_events[0].transaction)
+    // console.log(walletAddress === response.data.asset_events[0].seller.address)
+    return response.data.asset_events;
+}
 
-    console.log(response)
-    return response;
+/**
+ * Function to check the difference between two objects and return what was added.
+ * @param string walletAddress, the address that we want to track.
+ * @param string time, time in seconds.
+ * @returns {object} object with the difference between the two objects.
+ */
+async function prettyTrackingSales (walletAddress, time) {
+    const changedTokens = {};
+
+    try {
+        const set = await trackWallet(walletAddress, time)
+        set.forEach(event => {
+            if (event.event_type === 'successful') {
+                if (event.collection_slug in changedTokens && event.seller.address.toLowerCase() === walletAddress.toLowerCase()) {
+                    changedTokens[event.collection_slug]--
+                } else if (event.collection_slug in changedTokens && event.seller.address.toLowerCase() !== walletAddress.toLowerCase()) {
+                    changedTokens[event.collection_slug]++
+                } else if (!(event.collection_slug in changedTokens) && event.seller.address.toLowerCase() === walletAddress.toLowerCase()) {
+                    changedTokens[event.collection_slug] = -1
+                } else if (!(event.collection_slug in changedTokens) && event.seller.address.toLowerCase() !== walletAddress.toLowerCase()) {
+                    changedTokens[event.collection_slug] = 1
+                }
+            }
+        })
+    } catch (error) { console.error(error); }
+
+    console.log(changedTokens)
+    // positive values means that the tracked address bought the asset
+    return changedTokens;
 }
 
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
 
+// Tracked wallet: Name of the wallet
+// this wallet did:
+// sold this
+// bought this
