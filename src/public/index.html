@@ -23,7 +23,7 @@
         <img id="loading">
         <section id="graph" style="width: 50vw; height: 70vh">
 
-            
+
         </section>
     </main>
 
@@ -62,6 +62,7 @@
         let footer = document.querySelector('footer');
         footer.innerHTML += ejs.src_views_includes_footer();
 
+
     </script>
     <script>
         let web3;
@@ -70,15 +71,30 @@
         function init() {
 
             // to modify to get data from form in html page
-            getBarGraph()
+            
+            document.querySelector('button#settings').onclick = () => {
+                console.log('hello')
+                getSettings();
+            }
 
             document.getElementById('wallet').onclick = async () => {
                 web3 = await connectWeb3()
                 if (web3)
                     document.getElementById('connected_indicator').classList.add('online')
             };
+         
 
-
+            const navbar = document.querySelector('nav');
+            const minmax = document.getElementById('minmax')
+            minmax.onclick = () => {
+                let classList = Array.from(navbar.classList);
+                if (classList.includes('minimized')) {
+                    
+                    navbar.classList = classList.filter(el => el != 'minimized');
+                } else {
+                    navbar.classList += 'minimized';
+                }
+            }
 
             document.querySelectorAll("nav a").forEach(a => {
                 console.log(a);
@@ -88,11 +104,13 @@
                     linkClick(event.currentTarget.href);
                 })
             })
+
+            getBarGraph()
         }
 
         function getBarGraph() {
             document.getElementById("graph").style.backgroundImage = "url(/images/loading.gif)";
-            
+
             fetch('/graph/data?chart=bar&address=0x1a92f7381b9f03921564a437210bb9396471050c&time=3')
                 .then(res => res.json())
                 .then(option => {
@@ -103,6 +121,9 @@
                 })
                 .catch(err => { console.log(err) });
         }
+
+
+
     </script>
 
 </body>
