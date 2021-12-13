@@ -11,7 +11,7 @@ socket.on('disconnect', () => {
     console.log('Browser disconnected');
 });
 
-const user = "me";
+const user = 'me';
 function initClient () {
     // ************************************** BUTTONS **************************************
     // button in the html page to send the friend request (one for each user showed)

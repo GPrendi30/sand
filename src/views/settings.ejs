@@ -6,7 +6,7 @@
 
         <section class="settings_section" id="profile_picture">
             <img id="picture" src="images/user1.png" alt="profile">
-            <form method="POST" action="user/settings/<%= result._id %>?req=ppic" enctype="multipart/form-data">
+            <form method="POST" action="/user/settings/<%= result._id %>?req=ppic" enctype="multipart/form-data">
                 <div>
                     <label for="upload">
                         <h3>Choose an image to upload</h3>
@@ -25,19 +25,19 @@
             <h2 class="title">Modify your profile information</h1>
 
                 <div>
-                    <form method="POST" action="user/settings/<%= result._id %>?req=settings"
+                    <form method="POST" action="/user/settings/<%= result._id %>?req=email&_method=PUT"
                         enctype="multipart/form-data">
                         <label for="email">
                             <h3>Email address</h3>
-                            <input type="text" name="email" required>
+                            <input type="text" name="email" value=<%= result.email %> required>
                             <input class="button" type="submit" value="Change email">
                         </label>
                     </form>
 
-                    <form method="POST" action="user/settings/<%= result._id %>?req=bio" enctype="multipart/form-data">
+                    <form method="POST" action="/user/settings/<%= result._id %>?req=bio&_method=PUT" enctype="multipart/form-data">
                         <label for="bio">
                             <h3>Biography</h3>
-                            <input type="text" name="bio">
+                            <input type="text" name="bio" value="<%= result.bio %>">
                             <input class="button" type="submit" value="Change bio">
                         </label>
                     </form>
@@ -46,15 +46,15 @@
 
         </section>
 
-        <form method="POST" action="/user/settings/<%= result._id %>?req=email&_method=PUT"
+        <!-- <form method="POST" action="/user/settings/<%= result._id %>?req=email&_method=PUT"
             enctype="multipart/form-data">
             <label for="email">Change email:</label>
             <input type="email" name="email" required value=<%=result.email %>>
 
             <h2 class="title">Modify your password</h2>
-        </form>
+        </form> -->
 
-        <form method="POST" action="/user/settings/<%= result._id %>?req=bio&_method=PUT" enctype="multipart/form-data">
+        <!-- <form method="POST" action="/user/settings/<%= result._id %>?req=bio&_method=PUT" enctype="multipart/form-data">
             <label for="bio">Change bio:</label>
             <input type="text" name="bio" value=<%=result.bio %>>
 
@@ -74,14 +74,14 @@
             </label>
 
             <input class="button" type="submit" value="Change password">
-        </form>
+        </form> -->
 
-        <form method="POST" action="/user/settings/<%= result._id %>?req=ppic&_method=PUT"
+        <!-- <form method="POST" action="/user/settings/<%= result._id %>?req=ppic&_method=PUT"
             enctype="multipart/form-data">
             <label for="upload">Choose an image to upload:</label>
             <input type="file" id="file" name="profile_picture" accept="image/*">
             <button type="button" id="regenerate_image" name="regenerate_image"> Regenerate Image </button>
             <input type="submit" value="Change profile picture">
-        </form>
+        </form> -->
     </div>
 </div>
