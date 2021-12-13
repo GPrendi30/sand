@@ -1,5 +1,7 @@
 const dailyVolume = require('./api.js').dailyVolume;
 const createArrayWithPrices = require('./api.js').createArrayWithPrices;
+const getCollectionDataWithAddress = require('./api.js').getCollectionDataWithAddress;
+const getCollectionDataWithSlug = require('./api.js').getCollectionDataWithSlug;
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
 const lastMidnight = new Date(currentDate.setHours(0, 0, 0, 0));
@@ -26,20 +28,35 @@ async function getOptionForBarChart (contractAddress, timeInDays) {
 
     let dailyVolumeArray;
     let option;
+    let title;
     try {
         dailyVolumeArray = await dailyVolume(contractAddress, timeInDays)
+        title = (await getCollectionDataWithAddress(contractAddress)).collection.name;
 
         option = {
+            title: {
+                show: true,
+                text: title,
+                left: 'center',
+                top: 10
+            },
+            tooltip: {
+                formatter: function (args) {
+                    return "Date + " + args[0].name + ": " + args[0].value
+                }
+            },
             xAxis: {
                 type: 'category',
-                data: dateArray
+                data: dateArray,
+                name: 'Dates'
             },
             yAxis: {
+                name: 'Volume (ETH)',
                 type: 'value'
             },
             series: [
                 {
-                    data: dailyVolumeArray,
+                    data: dailyVolumeArray.map(data => data.toFixed(2)),
                     type: 'bar',
                     showBackground: true,
                     backgroundStyle: {

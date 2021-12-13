@@ -1,0 +1,15 @@
+<section class="single_collection">
+    <!-- central part -->
+    <title> <%= data.title %> </title>
+    <section class="collection_images">
+        <img src="<%= data.img %>" id="collection_img">
+        <img src="<%= data.banner_img %>" id="collection_banner_img">
+    </section>
+
+    <section class="collection_data">
+        <p> Items: <b><%= data.num_assets %></b> </p>
+        <p> Owners: <b><%= data.num_owners %></b> </p>
+        <p> Total volume: <b><%= data.total_volume %></b> </p>
+        <p> Link to OpenSea: <a href="https://opensea.io/collection/<%= data.slug %>"> <%= data.title %> </a> </p>
+    </section>
+</section>  

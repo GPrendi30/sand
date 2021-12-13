@@ -4,7 +4,6 @@
     <link href="stylesheets/settings.css" rel="stylesheet" />
     <link href="stylesheets/general.css" rel="stylesheet" />
 </head>
-
 <body>
 
     <div id="settings_container">
@@ -53,11 +52,15 @@
                 
             </section>
 
-            <section class="settings_section" id="password">
+        <form method="POST" action="/user/settings/<%= result._id %>?req=email&_method=PUT" enctype="multipart/form-data">
+            <label for="email">Change email:</label>
+            <input type="email" name="email" required value=<%= result.email %>>
 
                 <h2 class="title" >Modify your password</h1>
 
-                <form method="POST" action="user/settings/<%= result._id %>?req=password" enctype="multipart/form-data">
+        <form method="POST" action="/user/settings/<%= result._id %>?req=bio&_method=PUT" enctype="multipart/form-data">
+            <label for="bio">Change bio:</label>
+            <input type="text" name="bio" value=<%= result.bio %>>
 
                     <label for="old_password">
                         <h3>Old Password</h3>
@@ -77,10 +80,12 @@
                     <input class="button" type="submit" value="Change password">
                 </form>
 
-            </section>
-        </div>
-
-    </div>
+        <form method="POST" action="/user/settings/<%= result._id %>?req=ppic&_method=PUT" enctype="multipart/form-data">
+            <label for="upload">Choose an image to upload:</label>
+            <input type="file" id="file" name="profile_picture" accept="image/*">
+            <button type = "button" id="regenerate_image" name="regenerate_image"> Regenerate Image </button>
+            <input type="submit" value="Change profile picture">
+        </form>
     
 </body>
 

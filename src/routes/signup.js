@@ -60,7 +60,9 @@ function createUser (username, password, email, name, surname) {
         recentlyviewed: [],
         blocked: [],
         collection: [],
-        settings: { currency: 'eth', mode: 'dark' }
+        settings: { currency: 'eth', mode: 'dark' },
+        chats: {},
+        rooms: []
     }; // will be updated by the user schema of mongoose in M3
 }
 module.exports = router;
