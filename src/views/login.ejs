@@ -1,20 +1,27 @@
-<html>
-    <head>
-        <title><%= title %></title>
-    </head>
+<div class="form-container">
 
-    <body>
-        <form method="POST" action="/login" enctype="multipart/form-data">
-            <label for="username">Username:</label>
+    <section id="title">
+        <h1>Welcome back!</h1>
+        <h2>Log in to your account to continue to S.A.N.D</h2>
+    </section>
+
+    <form method="POST" id="loginForm" action="/login" enctype="multipart/form-data">
+        <label for="username">
+            <h3>Username</h3>
             <input type="text" name="username" required>
-            <label for="password">Password:</label>
+        </label>
+        <label for="password">
+            <h3>Password</h3>
             <input type="password" name="password" required>
-            <input type="submit" value="Login">
-            
-        </form>
-        <form method="GET" action="/signup">
-            <input type="submit" value="Signup">
-        </form>
-    </body>
+        </label>
+        <input class="grow_hover" type="submit" value="Login">
+    </form>
 
-</html>
+    <section id="alternative">
+        <h3>Don't have an account yet?</h3>
+        <form method="GET" id="signupRedirect" action="/signup">
+            <input class="grow_hover" type="submit" value="Sign up">
+        </form>
+    </section>
+
+</div>
