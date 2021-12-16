@@ -309,3 +309,49 @@ module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
 module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;
 module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
+
+
+async function getAllEventsSince (time, offset = 0) {
+    const timestmp = Math.trunc(Date.now() / 1000)
+    const occuredAfter = timestmp - time
+    console.log(timestmp, occuredAfter)
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/events',
+        params: { only_opensea: 'false', offset: offset, limit: '300', occurred_after: occuredAfter, event_type: 'successful' },
+        headers: { Accept: 'application/json', 'X-API-KEY': 'ca17564f13624bdcb6e5c721174e4a9e' }
+    };
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    const events = response.data.asset_events
+    console.log(events.length)
+    events.forEach(event => {
+        console.log(event.event_type)
+    })
+}
+
+async function plotEvents(time) {
+    let offset = 0;
+    const events = [];
+    const empty = {
+        asset_events: []
+    }
+    let data = await getAllEventsSince(time, offset);
+    while (data !== empty) {
+        events.push(data);
+        offset += 300;
+        data = await getAllEventsSince(time, offset);
+    }
+    console.log(events);
+}
+
+setInterval(async () => {
+    console.log('Monitoring')
+    //console.log(returnDifference(prev, newData))
+    await getAllEventsSince(15)
+    //console.log(currentTimestamp, Date.now() / 1000);
+}, 10000) // 10s
