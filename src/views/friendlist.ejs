@@ -1,31 +1,32 @@
 <section id="friendlist">
 
-      <section class="page" id="your_friends">
-          <h1>Your friends</h1>
+    <section class="page" id="your_friends">
+        <div id="list">
           <ul>
               <% friends.forEach( friend => { %>
                   <li class="friend">
                     <section class="shadow" id="info">
-                        <div id="avatar"></div>
+                        <img id="avatar" src="images/user1.png" alt="<%= friend.name %>">
                         <h1 id="name"><%= friend.name %></h1>
-                        <p>Lorem ipsum dolor sit amet.</p>
                     </section>
                     <div id="buttons">
-                        <button class="grow_hover" id="profile">See Profile</button>
-                        <button class="grow_hover" id="message">Message</button>
-                        <button class="grow_hover" id="unfriend">Unfriend</button>
+                        <button class="button" id="profile">See Profile</button>
+                        <button class="button" id="message">Message</button>
+                        <button class="button" id="unfriend">Unfriend</button>
                     </div>
                 </li>
 
               <% }); %>
           </ul>
-      </section>
-  
-      <section id="bookmarks">
-          <% for(let i=0; i < 9; i++) { %>
-              <% let style = 'grid-area: ' + (1 + 2*i) + ' / 1 / ' + (4 + 2*i) + ' / 2' %>
-              <div style="<%= style %>" id="bm<%=i%>" class="bookmark"></div>
-          <% }; %>
-      </section>
-  
-  </section>
+        </div>
+        
+    </section>
+
+    <section id="bookmarks">
+        <% for(let i=0; i < 9; i++) { %>
+            <% let style = 'grid-area: ' + (1 + 2*i) + ' / 1 / ' + (4 + 2*i) + ' / 2' %>
+            <div style="<%= style %>" id="bm<%=i%>" class="bookmark"></div>
+        <% }; %>
+    </section>
+
+</section>

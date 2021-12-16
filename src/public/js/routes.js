@@ -1,3 +1,4 @@
+const { MinKey } = require("mongodb");
 
 function linkClick(href) {
     const url = new URL(href); // parse link address
@@ -46,7 +47,8 @@ function getHome() {
 
     const main = document.querySelector('main');
 
-    main.innerHTML = ejs.src_views_index({ friends: [{ name: 'not-geri' }] });
+    main.innerHTML = ejs.src_views_index(
+        { friends: [{ name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }] });
 
     /*
     NOTHING TO FETCH FOR THE MOMENT

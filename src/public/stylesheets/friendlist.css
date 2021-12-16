@@ -2,7 +2,7 @@ section#friendlist {
     width: 85%;
     min-width: 400px;
     min-height: 600px;
-    margin: 50px 20px;
+    margin: 20px;
     display: grid;
     grid-template-columns: 5fr minmax(120px, 1fr);
     grid-template-rows: 1fr;
@@ -14,6 +14,7 @@ section.page {
     grid-area: pg;
     z-index: 12;
     width: 100%;
+    max-height: 650px;
 }
 
 section.page>h1 {
@@ -127,9 +128,15 @@ section#bookmarks :nth-child(9) {
 
 /* Friend items */
 
+.page > #list {
+    height: 100%;
+}
+
 section.page ul {
+    height: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 
 li.friend {
@@ -153,8 +160,7 @@ li.friend #info h1 {
     font-size: 1.5em;
 }
 
-li.friend #info div {
-    background-image: url("/images/user.svg");
+li.friend #info #avatar {
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: center;
@@ -166,13 +172,4 @@ li.friend #buttons {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-}
-
-li.friend #buttons button {
-    background-color: #f0f0f0;
-    font-weight: bolder;
-    min-width: 80px;
-    padding: 0px 20px;
-    height: 35px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
