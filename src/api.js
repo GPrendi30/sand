@@ -1,10 +1,6 @@
 const axios = require('axios').default;
 require('dotenv').config();
 
-const currentDate = new Date();
-const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
-const lastMidnight = new Date(currentDate.setHours(0, 0, 0, 0));
-const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
 const apiKey = process.env.OPENSEA_API;
 
 /**
@@ -127,11 +123,14 @@ async function pullTokenDataByID (contractAddress, tokenID) {
  */
 async function dailyVolume (contractAddress, timeInDays) {
     const dailyVolumeArray = [];
+    const lastMidnight = new Date(new Date().setHours(0, 0, 0, 0));
+    const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
 
     // adding every needed day's volume getting volume day by day and pushing it into dailyVolumeArray
     for (let i = timeInDays; i > 0; --i) {
         let response;
         let volume = 0;
+
         const startTimestamp = lastMidnightTimestamp - 86400 * i;
         const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
         try {
@@ -145,7 +144,7 @@ async function dailyVolume (contractAddress, timeInDays) {
 
     // adding today's volume separately because it's a shorter amount of time (from last midnight to now)
     const startTimestamp = lastMidnightTimestamp;
-    const endTimestamp = currentTimestamp;
+    const endTimestamp = Math.trunc(Date.now() / 1000);
     try {
         let todayVolume = 0;
         const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
@@ -155,6 +154,7 @@ async function dailyVolume (contractAddress, timeInDays) {
         dailyVolumeArray.push(todayVolume);
     } catch (error) { console.error(error); }
 
+    console.log(dailyVolumeArray)
     return dailyVolumeArray;
 }
 
@@ -253,7 +253,8 @@ function getChanges (walletAddress, time) {
  * @returns {object} object with all the events.
  */
 async function trackWallet (walletAddress, time) {
-    const occuredAfter = currentTimestamp - time
+    const timestmp = Math.trunc(Date.now() / 1000)
+    const occuredAfter = timestmp - time
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/events',
