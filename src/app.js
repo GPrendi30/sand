@@ -21,8 +21,8 @@ const { passport } = require('./login');
 
 const mySession = session({
     secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
-    resave: false,
-    saveUninitialized: true,
+    resave: true,
+    saveUninitialized: false,
     store: store,  // using the redis store
     cookie: {
         maxAge: 1000 * 60 * 30, // 30 minutes
