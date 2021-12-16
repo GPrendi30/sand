@@ -1,3 +1,5 @@
+const { session } = require("passport");
+
 const socket = io();
 
 
@@ -24,6 +26,12 @@ function initClient () {
     const blockuser = document.getElementById('blockUser')
     // button to unlock a blcoked user
     const unlockuser = document.getElementById('unlockuser')
+    // track add to tracking list
+    const track = document.getElementById('track')
+    // untrack remove item from tracking list
+    const untrack = document.getElementById('untrack')
+    // button to remove member from room
+    const removeMember = document.getElementById('removerMember')
     // ************************************** END BUTTONS **********************************
 
     // ************************************** Friend Request **************************************
@@ -86,4 +94,33 @@ function initClient () {
     socket.on('friend.successfully.ulocked', unlocked=>{
         console.log(unlocked.friend + 'unlocked')
     })
+    //  Tracking
+    // general tracking event update (fetched data)
+    socket.on('tracking_update', update => {
+        console.log('update received')
+    })
+    // adding and removing from user tracking list
+    track.addEventListener('click', (event)=>{
+        const tracking = { user: session.passport.user, asset: event.target.asset }
+        socket.emit('track', tracking)
+    })
+    socket.on('asset.added', tracking => {
+        console.log('asset ' + tracking.asset + 'added to tracklist successfully')
+    })
+
+    untrack.addEventListener('click', (event)=>{
+        const untracking = { user: session.passport.user, asset: event.target.asset }
+        socket.emit('untrack', untracking)
+    })
+    socket.on('asset.removed', untracking => {
+        console.log('asset ' + untracking.asset + 'removed from tracklist successfully')
+    })
+
+
+    // rooms
+    // removeMember.addEventListener('click', event => {
+    //     const removed = { admin: session.passport.user, user: event.target.user }
+    //     socket.on('remove_member', )
+    // })
+
 }

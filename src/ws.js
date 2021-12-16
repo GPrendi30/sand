@@ -4,6 +4,8 @@ const eventBus = new EventEmitter();
 const models = require('./models').model
 const { passport } = require('./login')
 const session = require('./app').session
+const Room = require('../models/rooms');
+const User = require('../models/user');
 
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
@@ -214,7 +216,39 @@ function init (server) {
                     }).catch(err => { console.log(err) });
             }).catch(err => { console.log(err) });
         })
+
+        /////////////////////////// trackign
+
+        socket.on('track', async tracking=>{
+            const asset = tracking.asset
+            const user = await User.find(tracking.user)
+            user.tracking.push(asset)
+            user.recentlyViewed.push(asset)
+            const filter = { username: user.username }
+            await User.replaceOne(filter, user, { upsert: true })
+            console.log('asset: ' + asset + ' added to ' + user.username + ' tracking list')
+            console.log('asset: ' + asset + ' added to ' + user.username + ' recentlyviewed')
+            socket.emit('asset.added', tracking);
+        })
+
+        socket.on('untrack', async untracking=>{
+            const asset = untracking.asset
+            const user = await User.find(untracking.user)
+            const index = user.tracking.indexOf(asset)
+            user.tracking.splice(index, 1)
+            const filter = { username: user.username }
+            await User.replaceOne(filter, user, { upsert: true })
+            console.log('asset: ' + asset + ' added to ' + user.username + ' tracking list')
+            socket.emit('asset.removed', untracking);
+        })
+
+
     })
 }
+
+eventBus.on('tracking_update', update => {
+    console.log('sending tracking update...')
+    io.emit('update', update)
+})
 // module.exports.eventBus = eventBus;
 module.exports.init = init
