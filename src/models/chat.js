@@ -33,13 +33,12 @@ chatSchema.methods.addMessage = function (message) {
     this.messages.push(message);
 };
 
-chatSchema.methods.getMessages = function (user) {
-    const messages = this.messages.filter(message => message.username.equals(this));
-    return messages.map(message => { return { _id: undefined, ...message } });
+chatSchema.methods.getMessages = function () {
+    return this.messages.map(message => { return { _id: undefined, ...message._doc } });
 };
 
 chatSchema.methods.addUser = function (user) {
-    this.users.push(user._id);
+    this.users.push(user);
 }
 
 const chat = mongoose.model('Chat', chatSchema);

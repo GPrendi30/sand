@@ -20,9 +20,19 @@ const userSchema = new Schema({
     name: String,
     surname: String,
     assets: [String],
-    friendlist: [String],
-    friendRequest: [String],
-    friendRequestSent: [String],
+    friendlist: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+
+    }],
+    friendRequest: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    friendRequestSent: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     ppic: Buffer, // profile picture, TODO change to buffer when uploading a file
     bio: String,
     tracking: [String],
@@ -45,7 +55,51 @@ const userSchema = new Schema({
 }, { timestamps: true, collection: 'users' });
 
 userSchema.methods.addChat = function (chat) {
-    this.chats.push(chat._id);
+    this.chats.push(chat);
+}
+
+userSchema.methods.sendFriendRequest = function (friend) {
+    if (this.friendRequestSent.includes(friend._id)) return;
+
+    this.friendRequestSent.push(friend._id);
+}
+
+userSchema.methods.revokeFriendRequest = function (friend) {
+    if (!this.friendRequestSent.includes(friend._id)) return;
+    const idx = this.friendRequestSent.indexOf(friend._id);
+    this.friendRequest.splice(idx, 1);
+}
+
+
+userSchema.methods.acceptFriendRequest = function (friend) {
+    const idx = this.friendRequest.indexOf(friend._id);
+    if (idx < 0) return;
+
+    this.friendRequest.splice(idx, 1);
+    this.friendlist.push(friend._id);
+}
+
+userSchema.methods.declineFriendRequest = function (friend) {
+    const idx = this.friendRequest.indexOf(friend._id);
+
+    if (idx < 0) return;
+
+    this.friendRequest.splice(idx, 1);
+}
+
+
+
+userSchema.methods.blockFriend = function (friend) {
+    if (this.blocked.includes(friend._id)) return;
+
+    this.blocked.push(friend._id);
+}
+
+userSchema.methods.unblock = function (friend) {
+    const idx = this.blocked.indexOf(friend._id);
+    if (idx < 0) return;
+
+    this.blocked.splice(idx, 1);
 }
 
 const model = mongoose.model('User', userSchema);
