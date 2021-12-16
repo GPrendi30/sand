@@ -315,7 +315,7 @@ module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
 async function getAllEventsSince (time, offset = 0) {
     const timestmp = Math.trunc(Date.now() / 1000)
     const occuredAfter = timestmp - time
-    console.log(timestmp, occuredAfter)
+    // console.log(timestmp, occuredAfter)
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/events',
@@ -328,22 +328,32 @@ async function getAllEventsSince (time, offset = 0) {
         response = await axios.request(options);
     } catch (error) { console.error(error); }
 
-    const events = response.data.asset_events
-    console.log(events.length)
-    events.forEach(data => {
+    const events = []
+    response.data.asset_events.forEach(data => {
         const token = {
-            event: data.event_type,
-            id: data.asset.id,
-            collection: data.asset.name,
-            slug: data.asset.collection.slug,
-            link: data.asset.permalink,
-            price: data.total_price / 1000000000000000000 + ' ETH'
+            event: {
+                event: data.event_type,
+                price: data.total_price / 1000000000000000000,
+                currency: 'ETH',
+                seller: data.seller.address,
+                buyer: data.winner_account.address
+            },
+            token: {
+                name: data.asset.name,
+                id: data.asset.token_id,
+                collection: data.asset.collection.name,
+                slug: data.asset.collection.slug,
+                link: data.asset.permalink
+            }
         }
-        console.log(token)
+        events.push(token)
     })
+
+    console.log(events);
+    return events;
 }
 
-async function plotEvents(time) {
+async function plotEvents (time) {
     let offset = 0;
     const events = [];
     const empty = {
@@ -360,7 +370,7 @@ async function plotEvents(time) {
 
 setInterval(async () => {
     console.log('Monitoring')
-    //console.log(returnDifference(prev, newData))
+    // console.log(returnDifference(prev, newData))
     await getAllEventsSince(15)
-    //console.log(currentTimestamp, Date.now() / 1000);
+    // console.log(currentTimestamp, Date.now() / 1000);
 }, 10000) // 10s
