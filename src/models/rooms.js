@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const { Chat } = require('./chats');
+const { Chat } = require('./chat');
 
 const room = new Schema({
     author: {
@@ -14,7 +14,16 @@ const room = new Schema({
     icon: Buffer, // image
     admins: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    chats: Chat.schema
+    chat: { 
+        type: Chat.schema,
+        default: () => new Chat()
+    }
 }, { timestamps: true });
+
+room.methods.addAdmin = function (admin, user) {
+    if (!this.admins.includes(user)) {
+        this.admins.push(user);
+    }
+}
 
 module.exports = mongoose.model('Room', room);
