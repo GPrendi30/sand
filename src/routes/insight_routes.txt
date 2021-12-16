@@ -1,0 +1,89 @@
+//*******************User ROute 
+User implemented requests:    
+type                route                           auth            accepts                 desc
+get/put/delete      /                               no/yes/yes      json                    js with all Users withous sensitive data/edit user returns json user no sensitive data/delete user returns json user no sensitive data
+get                 /:_id                           no              json                    json user no sensitive data
+get                 /profile/                       yes             json                    render settings page passing the user (login required)
+get/put             /settings/                      yes             json/all                retrive json data or modify user data ( get renders settigns page settings)
+get                 /assets/                        yes             json                    json user assets
+get                 /friends/                       yes             json                    json user friend list
+get                 /recentlyviewed/                yes             json                    jsno user recentlyviewed
+get                 /following/                     yes             json                    json user tracking
+get                 /edit/                          yes             json                    json user no sensitive info
+get                 /friendrequests/                yes             json                    json user friend requests
+get                 /blocked/                       yes             json                    json user blocked user list
+get                 /chats/                         yes             all                     json user chats
+post                /chat/:username                 yes             all                     creates new chat between logged in user and /username user, res=json(newchat)
+get                 /chat/:_id                      yes             json                    renders single_chat page and if user in chat users returns chat json
+get                 /identicon/:username            no              json                    returns identicon
+
+User missing requests:                                      
+type                route                           auth            accepts                 desc
+
+//*******************chat                                   
+Missing routes                                  
+type                route                           auth            accepts                 desc
+get                 /                               yes                                     returns chat page/or user chat list?
+
+//*******************Dashboard                                  
+Dashboard implemented routes                                    
+type                route                           auth            accepts                 desc
+get                 /                               no              all                     redirict to /home
+get                 /home                           no              html                    render index passing title:S.A.N.D.
+
+//*******************Discover                                   
+Discover implemented routes                                 
+type                route                           auth            accepts                 desc
+get                 /                               no              json                    collection{{ title: data.collection.name, img: data.collection.image_url, link: '/discover/' + slug }}
+get                 /:slug                          no              json                    render (single_collection, {data: collectionData}  
+
+
+Discover Missing routes                                  
+type                route                           auth            accepts                 desc                                      
+
+//*******************Exchange                                   
+Exchange implemented routes                                 
+type                route                           auth            accepts                 desc
+get                 /                               no              all                     render wip
+get                 /token                          no              all                     render wip
+get                 /nft                            no              all                     render wip
+get                 /collection                     no              all                     render wip
+
+Exchange Missing routes                                 
+type                route                           auth            accepts                 desc
+
+//*******************Follow                                   
+Follow implemented routes                                 
+type                route                           auth            accepts                 desc
+get                 /                               yes             html                    render follow
+                                 
+Follow Missing routes 
+type                route                           auth            accepts                 desc
+
+//*******************Friendlist                                   
+Friendlist implemented routes                                 
+type                route                           auth            accepts                 desc
+get                 /                               yes             html                    render friendlist
+
+Friendlist Missing routes 
+type                route                           auth            accepts                 desc
+
+//*******************graph                                  
+graph implemented routes                                 
+type                route                           auth            accepts                 desc
+get                 /                               yes             html                    render graph
+get                 /types                          no              json                    returns { types: ['bar', 'scatter'] }
+get                 /data                           no              json                    returns option for the graph type
+graph Missing routes 
+type                route                           auth            accepts                 desc
+
+//*******************Rooms                                   
+Rooms implemented routes                                 
+type                route                           auth            accepts                 desc
+get                 /                               yes             json                    return json user rooms 
+get                 /:_id                           yes             json                    returns {messages ,room, author, user, admind} of the room
+post                /new                            yes                                     return res.json(newRoom) creates new room
+
+Rooms Missing routes 
+type                route                           auth            accepts                 desc
+post                /:_id                           yes                                     modifies room
