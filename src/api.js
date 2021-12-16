@@ -330,8 +330,16 @@ async function getAllEventsSince (time, offset = 0) {
 
     const events = response.data.asset_events
     console.log(events.length)
-    events.forEach(event => {
-        console.log(event.event_type)
+    events.forEach(data => {
+        const token = {
+            event: data.event_type,
+            id: data.asset.id,
+            collection: data.asset.name,
+            slug: data.asset.collection.slug,
+            link: data.asset.permalink,
+            price: data.total_price / 1000000000000000000 + ' ETH'
+        }
+        console.log(token)
     })
 }
 
