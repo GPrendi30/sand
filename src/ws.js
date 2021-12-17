@@ -309,7 +309,19 @@ function init (server) {
             const message = new Message({ user: sender, message: event.message })
         })
 
+        socket.on('send', msg=>{
+            const chat = msg.chat
+            const message = msg.message
+            chat.addMessage(message)
+            socket.emit('msg.sent', msg)
+        })
 
+        socket.on('add.user', addition=>{
+            const chat = addition.chat
+            const user = addition.user
+            chat.addUser(user)
+            socket.emit('user.added', addition)
+        })
     })
 }
 eventBus.on('io', () => {
