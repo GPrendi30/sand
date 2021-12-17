@@ -1,77 +1,85 @@
-<html>
+<div id="room_container">
+    <section class="room">
+        <!-- central part -->
+        <div id="chat_shadow"></div>
+        <section id="chat">
+            <% let prev %>
+                <% messages.forEach(msg=> { %>
+                    <% let info={ prev:prev, msg:msg} %>
+                        <% if (msg.user === author) { %>
+                            <% if (msg.user === prev) { %> 
+                                <section class="message stream mine">
+                            <% } else { %>
+                                <section class="message mine">
+                                <% prev = msg.user %>
+                            <% } %>
+                        <% } else { %>
+                            <% if (msg.user === prev) { %> 
+                                <section class="message stream">
+                            <% } else { %>
+                                <section class="message">
+                                <% prev = msg.user %>
+                            <% } %>
+                        <% } %>
+                        <h1 id="username"> <%= msg.username %> </h1>
+                        <p id="msg"> <%= msg.body %> </p>
+                            <% if (msg.user !=prev) { %>
+                                <% prev=msg.user %>
+                                    <% } %>
+                                        <% }); %>
+        </section>
 
-<head>
-    <link href="stylesheets/single_room.css" rel="stylesheet" />
-    <link href="stylesheets/general.css" rel="stylesheet" />
-</head>
+        <!-- below the chat messages -->
+        <section id="input">
+            <button class="grow_hover" id="leave_room">Leave room</button>
+            <div id="input">
+                <label for="msg">
+                    <input id="msg" type="text" name="msg" value="" placeholder="Type here your message" />
+                </label>
+                <button class="grow_hover" id="send">Send</button>
+            </div>
+        </section>
 
-<body>
+        <!-- member list aside -->
+        <section id="members">
+            <section id="admins">
 
-    <div id="room_container">
-        <section class="room">
-            <!-- central part -->
-            <div id="chat_shadow"></div>
-            <section id="chat">
-                <% let prev %>
-                <% messages.forEach(msg => { %>
-                    <% let info = {prev:prev, msg:msg} %>
-                    <%- include('includes/room_msg', info) %>
-                    <% if (msg.user.id != prev) { %>
-                        <% prev = msg.user.id %>
-                    <% } %>
-                <% }); %>
-            </section>
-        
-            <!-- below the chat messages -->
-            <section id="input">
-                <button class="grow_hover" id="leave_room">Leave room</button>
-                <div id="input">
-                    <label for="msg">
-                        <input id="msg" type="text" name="msg" value="" placeholder="Type here your message"/>
-                    </label>
-                    <button class="grow_hover" id="send">Send</button>
-                </div>
-            </section>
-        
-            <!-- member list aside -->
-            <section id="members">
-                <section id="admins">
-        
-                    <h2>Admins</h2>
-                    <ul class="member_list">
-                        <%- include('includes/room_member', {user:author, role:'author'}) %>
-                        <%- include('includes/room_member', {user:admins[1], role:'admin'}) %>
-                    </ul>
-        
+                <h2>Admins</h2>
+                <ul class="member_list">
+
+
+
                     <!-- TODO: Implement this version instead -->
-                    <%- /* include('room_member', {user:room.author, role:'author'}) */ %>
-                    <% /* admins.forEach( admin => { */ %>
-                        <% /* if (!room.isAuthor(admin)) { */ %>
-                            <%- /* include('room_member', {user:admin, role:'admin'}) */ %>
-                        <% /* }; */%>
-                    <% /* }); */%>
-                </section>
-                <section id="normal_members">
-        
-                    <h2>Members</h2>
-                    <ul class="member_list">
-                        <%- include('includes/room_member', {user:users[2], role:'user'}) %>
-                        <%- include('includes/room_member', {user:users[3], role:'user'}) %>
-                        <%- include('includes/room_member', {user:users[4], role:'user'}) %>
-                    </ul>
-        
-                    <!-- TODO: Implement this version instead -->
-                    <!-- <% users.forEach( user => { %>
-                        <% /* if (!room.isAdmin(user)) { */%>
-                            <%- /* include('room_member', {user:user, role:'user'}) */ %>
-                        <% /* }; */%>
-                    <% }); %> -->
-                </section>
+                    <li class="room_member author %> ">
+                        <img src="/images/user1.png" alt="<% author.username %>">
+                        <h1 id="username"> <%= author.username %> </h1>
+                    </li>
+                        <% admins.forEach( admin=> { %>
+                            <% if (!room.isAuthor(admin)) { %>
+                                <li class="room_member admin ">
+                                    <img src="/images/user1.png" alt="<% user.username %>">
+                                    <h1 id="username"> <%= user.username %> </h1>
+                                </li>
+                                    <% };%>
+                                        <% }); %>
+                </ul>
             </section>
-        </section>  
-    </div>
-    
-</body>
+            <section id="normal_members">
 
-</html>
+                <h2>Members</h2>
+                <ul class="member_list">
 
+                    <!-- TODO: Implement this version instead -->
+                    <% users.forEach( user=> { %>
+                        <% if (!room.isAdmin(user)) { %>
+                            <li class="room_member user">
+                                <img src="/images/user1.png" alt="<% user.username %>">
+                                <h1 id="username"> <%= user.username %> </h1>
+                            </li>
+                                <% }; %>
+                                    <% }); %>
+                </ul>
+            </section>
+        </section>
+    </section>
+</div>
