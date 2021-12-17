@@ -7,26 +7,21 @@ const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
 const store = require('./redis').store;
+const startTracking = require('./api').startTracking;
 
 const routers = require('./routes');
 require('./models'); // run database
-
 require('./ejs-compile')
-
 const app = express()
-
-
-const { passport } = require('./login');
-
 
 const mySession = session({
     secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     store: store,  // using the redis store
     cookie: {
         maxAge: 1000 * 60 * 30, // 30 minutes
-        expires: new Date(Date.now() + 1000 * 60 * 30), // 30 minutes
+        // expires: new Date(Date.now() + 1000 * 60 * 30), // 30 minutes
         httpOnly: true
     }
 })
@@ -37,6 +32,7 @@ app.use(mySession);
   Local authentication
   Redis cache
 */
+const { passport } = require('./login');
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -75,6 +71,9 @@ app.use(function (req, res, next) {
     next(createError(404))
 })
 
+
+//startTracking();
+
 // error handler
 /**
  * Middleware that handles the errors.
@@ -92,6 +91,8 @@ app.use(function (req, res, next) {
     // render the error page
     res.status(500).end();
 })
+
+startTracking()
 
 module.exports.app = app
 module.exports.session = mySession
