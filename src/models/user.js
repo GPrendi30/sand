@@ -57,6 +57,7 @@ userSchema.methods.addChat = function (chat) {
     this.chats.push(chat);
 }
 
+// update save the request to the friend.
 userSchema.methods.sendFriendRequest = function (friend) {
     if (this.friendRequestSent.includes(friend._id)) return;
 
@@ -84,6 +85,11 @@ userSchema.methods.declineFriendRequest = function (friend) {
     if (idx < 0) return;
 
     this.friendRequest.splice(idx, 1);
+}
+userSchema.methods.unFriend = function (friend) {
+    const idx = this.friendlist.indexOf(friend._id);
+    if (idx < 0) return;
+    this.friendlist.splice(idx, 1);
 }
 
 
