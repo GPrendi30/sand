@@ -67,6 +67,37 @@ async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimes
 }
 
 /**
+ * Function to get the number of sell events occurred between the two timestamps.
+ * @param string contractAddress, the contract address of the collection.
+ * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
+ * @returns {array} object with data representing the daily volume.
+ */
+async function dailySales (contractAddress, timeInDays) {
+    const dailySalesArray = [];
+    const lastMidnight = new Date(new Date().setHours(0, 0, 0, 0));
+    const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
+
+    for (let i = timeInDays; i > 0; --i) {
+        const startTimestamp = lastMidnightTimestamp - 86400 * i;
+        const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
+        try {
+            const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+            dailySalesArray.push(response.asset_events.length);
+        } catch (error) { console.error(error); }
+    }
+
+    // adding today's sales separately because it's a shorter amount of time (from last midnight to now)
+    const startTimestamp = lastMidnightTimestamp;
+    const endTimestamp = Math.trunc(Date.now() / 1000);
+    try {
+        const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+        dailySalesArray.push(response.asset_events.length);
+    } catch (error) { console.error(error); }
+
+    return dailySalesArray;
+}
+
+/**
  * Function to get the sell events occurred between the two timestamps in the form of an object [{ time: 'time', price: 'price'}].
  * @param string contractAddress, the contract address of the collection.
  * @param int startTimestamp, show events listed after this timestamp.
@@ -154,7 +185,6 @@ async function dailyVolume (contractAddress, timeInDays) {
         dailyVolumeArray.push(todayVolume);
     } catch (error) { console.error(error); }
 
-    console.log(dailyVolumeArray)
     return dailyVolumeArray;
 }
 
@@ -357,6 +387,7 @@ function startTracking () {
     }, 10000) // 10s
 }
 
+module.exports.dailySales = dailySales;
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
 module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;

@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const { isLoggedIn } = require('../login');
-const getOptionForBarChart = require('../option.js').getOptionForBarChart
+const getOptionForDailyVolume = require('../option.js').getOptionForDailyVolume
 const getOptionForScatterChart = require('../option.js').getOptionForScatterChart
+const getOptionForDailySales = require('../option.js').getOptionForDailySales
 
 /* GET graph page. */
 router.get('/', isLoggedIn, function (req, res, next) {
@@ -26,8 +27,12 @@ router.get('/data', async function (req, res, next) {
     const time = req.query.time
     console.log(`${chartType} ${contractAddress} ${time}`)
     if (req.accepts('json')) {
-        if (chartType === 'bar') {
-            const option = await getOptionForBarChart(contractAddress, time);
+        if (chartType === 'dailyVolume') {
+            const option = await getOptionForDailyVolume(contractAddress, time);
+            console.log(option);
+            res.status(200).send(option);
+        } else if (chartType === 'dailySales') {
+            const option = await getOptionForDailySales(contractAddress, time);
             console.log(option);
             res.status(200).send(option);
         } else if (chartType === 'scatter') {
