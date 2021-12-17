@@ -1,7 +1,7 @@
 
 function linkClick(href) {
     const url = new URL(href); // parse link address
-
+    console.log(url)
     if (url.pathname === '/home') {
         getHome();
     } else if (url.pathname === '/discover') {
@@ -12,6 +12,8 @@ function linkClick(href) {
         getFriendList();
     } else if (url.pathname === '/rooms') {
         getRooms();
+    } else if (url.pathname.startsWith('/rooms/')) {
+        getRoom(url);
     } else if (url.pathname === '/exchange') {
         getExchange();
     } else if (url.pathname === '/settings') {
@@ -227,24 +229,54 @@ function getDiscover() {
 
 // yes
 function getRooms() {
+
+    function bufferToPng(data) {
+        const blob = new Blob([new Uint8Array(data.data)], { type: "application/octet-stream" });
+        return URL.createObjectURL(blob);
+    }
+
     fetch('/rooms',
         {
             method: 'GET',
             headers: { Accept: 'application/json' }
         }
-    ).then(res => {
+    ).then(async res => {
         if (res.status >= 400) {
             console.log('error');
         } else if (res.url.includes('/login')) {
             getLogin();
         } else {
             window.location = '#rooms?id=none';
-
+            const rooms = await res.json();
             const main = document.querySelector('main');
-            main.innerHTML = ejs.src_views_rooms(); // work in progress
+            main.innerHTML = ejs.src_views_rooms({ rooms, pngUrl: bufferToPng }); // work in progress
+
+            document.querySelectorAll("#content a").forEach(a => {
+                console.log(a);
+                a.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    linkClick(event.currentTarget.href);
+                })
+            })
         }
     })
         .catch(err => { console.error(err); });
+}
+
+function getRoom(url) {
+    fetch(url,
+        {
+            method: 'GET',
+            headers: { Accept: 'application/json' }
+        })
+        .then(res => res.json())
+        .then(roomData => {
+            window.location = '#' + url.pathname
+            const main = document.querySelector('main');
+            main.innerHTML = ejs.src_views_single_room(roomData); // work in progress
+        })
+        .catch(err => console.log(err))
 }
 
 function getExchange() {
