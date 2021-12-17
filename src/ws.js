@@ -1,11 +1,11 @@
 const io = require('socket.io')()
-const EventEmitter = require('events');
-const eventBus = new EventEmitter();
+const eventBus = require('./eventBus');
 const models = require('./models').model
 const { passport } = require('./login')
 const session = require('./app').session
 const Room = require('./models/rooms');
 const User = require('./models/user');
+const Message = require('./models/chat').Message;
 
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
@@ -304,13 +304,22 @@ function init (server) {
             console.log('desc added by ' + setting.admin + 'to' + room.getRoomId)
             socket.emit('desc.added', setting)
         })
+        socket.on('room.message.sent', event => {
+            const sender = socket.request.session.user;
+            const message = new Message({ user: sender, message: event.message })
+        })
+
+
     })
 }
+eventBus.on('io', () => {
+    console.log('io event')
+})
 
 eventBus.on('tracking_update', update => {
     console.log('sending tracking update...')
-    io.emit('update', update)
+    io.emit('tracking_update', update)
 })
 
-// module.exports.eventBus = eventBus;
-module.exports.init = init
+module.exports.eventBus = eventBus;
+module.exports.init = init;

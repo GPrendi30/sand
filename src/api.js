@@ -1,5 +1,6 @@
 const axios = require('axios').default;
 require('dotenv').config();
+const eventBus = require('./eventBus');
 
 const apiKey = process.env.OPENSEA_API;
 
@@ -383,7 +384,9 @@ async function getAllEventsSince (time, offset = 0) {
 function startTracking () {
     setInterval(async () => {
         console.log('Monitoring')
-        console.log(await getAllEventsSince(15))
+        const events = await getAllEventsSince(15)
+
+        eventBus.emit('tracking_update', events);
     }, 10000) // 10s
 }
 

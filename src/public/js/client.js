@@ -1,7 +1,5 @@
-const { session } = require("passport");
-
+const session  = { passport: { user: { id: 1 } } };
 const socket = io();
-
 
 // when the connection is active
 socket.on('connect', () =>{
@@ -13,9 +11,16 @@ socket.on('disconnect', () => {
     console.log('Browser disconnected');
 });
 
+socket.on('tracking_update', update => {
+    console.log(update)
+    console.log('update received')
+
+})
+
 const user = 'me';
 function initClient () {
     // ************************************** BUTTONS **************************************
+    
     // button in the html page to send the friend request (one for each user showed)
     const addFriendButton = document.getElementById('addFriend')
     // button in the html page to accept pending friend requests
@@ -37,7 +42,7 @@ function initClient () {
     // add admin
     const addAdmin = document.getElementById('addAdmin')
     // remove admin
-    const removeAdmin = documet.getElementById('removeAdmin')
+    const removeAdmin = document.getElementById('removeAdmin')
     // add member
     const addMember = document.getElementById('addMember')
     // button to remove member from room
@@ -117,9 +122,7 @@ function initClient () {
     })
     //  Tracking
     // general tracking event update (fetched data)
-    socket.on('tracking_update', update => {
-        console.log('update received')
-    })
+    
     // adding and removing from user tracking list
     track.addEventListener('click', (event)=>{
         const tracking = { user: session.passport.user, asset: event.target.asset }
