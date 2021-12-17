@@ -1,77 +1,105 @@
-<html>
+<div id="profile_container">
+    <div id="profile">
+        <h1>Your Profile</h1>
 
-<head>
-    <link href="stylesheets/profile.css" rel="stylesheet" />
-    <link href="stylesheets/general.css" rel="stylesheet" />
-</head>
+        <div id="top_section">
 
-<body>
-    <div id="profile_container">
-        <div id="profile">
-            <h1>Your Profile</h1>
-
-            <div id="top_section">
-
-                <section id="user_info">
-                    <img id="ppic" src="<%= user.ppic %>">
-                    <h1>
-                        <%= user.username %>
-                    </h1>
-                    <div id="user_bio">
-                        
-                        <p>
-                            <%= user.bio %>
-                        </p>
+            <section id="user_info">
+                <img id="ppic" src="<%= user.ppic %>">
+                <div id="info">
+                    <h1><%= user.username %></h1>
+                    <div id="name">
+                        <h1><%=user.name%></h1>
+                        <h1><%=user.surname%></h1>
                     </div>
-                    <button class="button" type="button" id="settings" name="settings"> Settings </button>
-                </section>
+                    <p><%=user.email%></p>
+                </div>
+                <div id="user_bio">
+                    <p><%= user.bio %></p>
+                </div>
+                <button class="button" type="button" id="settings" name="settings"> Settings </button>
+            </section>
 
-                <section id="data">
-                    <section class="profile_data" id="tracking">
-                        <h1>Tracking</h1>
-                        <div class="tracking_list">
-                            <ul>
-                                <li class="tracking_li"></li>
-                                <li class="tracking_li"></li>
-                                <li class="tracking_li"></li>
-                            </ul>
-                        </div>
-                        <button class="button">See More</button>
-                    </section>
-                    <section class="profile_data" id="recentlyviewed">
-                        <h1>Recently Viewed</h1>
-                        <div class="tracking_list">
-                            <ul>
-                                <li class="tracking_li"></li>
-                                <li class="tracking_li"></li>
-                                <li class="tracking_li"></li>
-                            </ul>
-                        </div>
-                        <button class="button">See More</button>
-                    </section>
+            <section id="data">
+                <section class="profile_data" id="tracking">
+                    <h1>Tracking</h1>
+                    <div class="tracking_list">
+                        <ul>
+                            <li class="tracking_li"></li>
+                            <li class="tracking_li"></li>
+                            <li class="tracking_li"></li>
+                        </ul>
+                    </div>
+                    <button class="button">See More</button>
                 </section>
-
-            </div>
-            
-            <section id="friends">
-                <section id="friendlist">
-                    <h3>Your Friends</h3>
-                    <div></div>
-                </section>
-                <section id="friendrequests">
-                    <h3>Friend Requests</h3>
-                    <div></div>
-                </section>
-                <section id="blocked">
-                    <h3>Blocked</h3>
-                    <div></div>
+                <section class="profile_data" id="recentlyviewed">
+                    <h1>Recently Viewed</h1>
+                    <div class="tracking_list">
+                        <ul>
+                            <li class="tracking_li"></li>
+                            <li class="tracking_li"></li>
+                            <li class="tracking_li"></li>
+                        </ul>
+                    </div>
+                    <button class="button">See More</button>
                 </section>
             </section>
-            
-            
 
         </div>
-    </div>
-</body>
+        
+        <section id="friends">
+            <section id="friendlist">
+                <h3>Your Friends</h3>
+                <ul class="list">
+                    <% if (user.friendlist.length == 0) { %>
+                        <div class="no_friends"></div>
+                    <% } else { %>
+                        <% for(let i = 0; i < 3; i++) { %>
+                            <% let friend = user.friendlist[i] %>
+                            <li class="friend">
+                                <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
+                                <h1 class="name">friend.username</h1>
+                            </li>
+                        <% }; %>
+                    <% }; %>
+                </ul>
+                <button>See More</button>
+            </section>
+            <section id="friendrequests">
+                <h3>Friend Requests</h3>
+                <ul class="list">
+                    <% if (user.friendrequests.length == 0) { %>
+                        <div class="no_friends"></div>
+                    <% } else { %>
+                        <% for(let i = 0; i < 3; i++) { %>
+                            <% let friend = user.friendlist[i] %>
+                            <li class="friend">
+                                <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
+                                <h1 class="name">friend.username</h1>
+                            </li>
+                        <% }; %>
+                    <% }; %>
+                </ul>
+                <button>See More</button>
+            </section>
+            <section id="blocked">
+                <h3>Blocked</h3>
+                <ul class="list">
+                    <% if (user.friendrequests.length == 0) { %>
+                        <div class="no_friends"></div>
+                    <% } else { %>
+                        <% for(let i = 0; i < 3; i++) { %>
+                            <% let friend = user.friendlist[i] %>
+                            <li class="friend">
+                                <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
+                                <h1 class="name">friend.username</h1>
+                            </li>
+                        <% }; %>
+                    <% }; %>
+                </ul>
+                <button>See More</button>
+            </section>
+        </section>
 
-</html>
+    </div>
+</div>
