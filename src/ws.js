@@ -6,6 +6,7 @@ const session = require('./app').session
 const Room = require('./models/rooms');
 const User = require('./models/user');
 const Message = require('./models/chat').Message;
+const Chat = require('./models/chat');
 
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
@@ -309,18 +310,22 @@ function init (server) {
             const message = new Message({ user: sender, message: event.message })
         })
 
-        socket.on('send', msg=>{
-            const chat = msg.chat
-            const message = msg.message
-            chat.addMessage(message)
-            socket.emit('msg.sent', msg)
+        socket.on('send', async event=>{
+            const chat = await Chat.find(event.chat)
+            const message = event.message
+            Chat.addMessage(message)
+            const filter = { _id: chat._id }
+            await Chat.replaceOne(filter, chat, { upsert: true })
+            socket.emit('message.sent', event)
         })
 
-        socket.on('add.user', addition=>{
-            const chat = addition.chat
-            const user = addition.user
+        socket.on('add.user', async event=>{
+            const chat = await Chat.find(event.chat)
+            const user = event.user
             chat.addUser(user)
-            socket.emit('user.added', addition)
+            const filter = { _id: chat._id }
+            await Chat.replaceOne(filter, chat, { upsert: true })
+            socket.emit('user.added', event)
         })
     })
 }

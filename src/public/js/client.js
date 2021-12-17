@@ -59,7 +59,7 @@ function initClient () {
     const acceptJoin = document.getElementById('acceptJoin')
 
     // chat
-    // send msg
+    // send event
     const send = document.getElementById('send')
     const addUser = document.getElementById('addUser')
     // ************************************** END BUTTONS **********************************
@@ -230,16 +230,16 @@ function initClient () {
         const msg = { chat: 'get chat', message: 'get message' }
         socket.emit('send', msg)
     })
-    socket.on('msg.sent', msg => {
-        console.log('message  ' + msg.message + 'sent successfully')
+    socket.on('message.sent', event => {
+        console.log('message  ' + event.message + 'sent successfully')
     })
 
     addUser.addEventListener('click', event => {
-        const addition = { chat: 'get chat', user: 'get user' }
-        socket.emit('add.user', addition)
+        const chat = { chat: 'get chat', user: 'get user' }
+        socket.emit('add.user', chat)
     })
 
-    socket.on('user.added', addition => {
-        console.log('user  ' + addition.user + ' added successfully')
+    socket.on('user.added', event => {
+        console.log('user  ' + event.user + ' added successfully')
     })
 }
