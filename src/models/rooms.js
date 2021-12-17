@@ -34,6 +34,10 @@ room.methods.isAuthor = function (author) {
     return this.author === author
 }
 
+room.methods.addInitialAdmin = function (author) {
+    this.admins.push(author)
+}
+
 room.methods.addAdmin = function (admin, user) {
     if (!this.isAdmin(user) && this.isAdmin(admin) && this.isMember(user)) {
         this.admins.push(user)
