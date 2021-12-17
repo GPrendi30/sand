@@ -65,6 +65,11 @@ function getHome() {
 
     user.friendlist = [friend, friend, friend, friend, friend];
     user.friendrequests = [friend, friend];
+
+    const collection = { name: 'CoolCats', img: 'images/user1.png' };
+
+    user.tracking = [collection, collection, collection, collection, collection];
+    user.blocked = [];
     
     main.innerHTML = ejs.src_views_profile({ user: user })
 

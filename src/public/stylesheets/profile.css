@@ -191,33 +191,33 @@
 }
 
 #profile > #top_section > #data .tracking_list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 100%;
-    height: 200px;
-    border-radius: 10px;
     background-color: rgb(199, 197, 197);
-    max-width: 650px;
-}
-
-.tracking_list > ul {
-    width: 100%;
+    width: 80%;
     min-height: 150px;
+    height: 60%;
     list-style-type: none;
     display: flex;
-    flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
     gap: 10px;
 }
 
-.tracking_list > ul > li {
+
+.tracking_list > li {
+    list-style-type: none;
     background-color: white;
     height: 100px;
-    min-width: 100px;
+    width: 100px;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.tracking_list > li > img {
+    height: 100%;
 }
 
 /* Buttons */

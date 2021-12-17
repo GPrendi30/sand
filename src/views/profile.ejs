@@ -39,25 +39,42 @@
             <section id="data">
                 <section class="profile_data" id="tracking">
                     <h1>Tracking</h1>
-                    <div class="tracking_list">
-                        <ul>
-                            <li class="tracking_li"></li>
-                            <li class="tracking_li"></li>
-                            <li class="tracking_li"></li>
-                        </ul>
-                    </div>
-                    <button class="button">See More</button>
+                    <ul class="tracking_list">
+                        <% if (user.tracking.length == 0) { %>
+                            <div class="no_collections">It appears you don't have any</div>
+                        <% } else { %>
+                            <% for(let i = 0; i < 3; i++) { %>
+                                <% if (user.tracking[i] != undefined) { %>
+                                    <% let col = user.tracking[i] %>
+                                    <li>
+                                        <img src="<%=col.img%>" alt="<%=col.name%>">
+                                        <h4 class="name"><%=col.name%></h4>
+                                    </li>
+                                <% } %>
+                            <% }; %>
+                        <% }; %>
+                    </ul>
+                    <% if (user.tracking.length > 0) { %>
+                        <button class="button" >See More</button>
+                    <% } %>
                 </section>
                 <section class="profile_data" id="recentlyviewed">
                     <h1>Recently Viewed</h1>
-                    <div class="tracking_list">
-                        <ul>
-                            <li class="tracking_li"></li>
-                            <li class="tracking_li"></li>
-                            <li class="tracking_li"></li>
-                        </ul>
-                    </div>
-                    <button class="button">See More</button>
+                    <ul class="tracking_list">
+                        <% if (user.recentlyviewed.length == 0) { %>
+                            <div class="no_collections">It appears you don't have any</div>
+                        <% } else { %>
+                            <% for(let i = 0; i < 3; i++) { %>
+                                <% if (user.recentlyviewed[i] != undefined) { %>
+                                    <% let col = user.recentlyviewed[i] %>
+                                    <li>
+                                        <img src="<%=col.img%>" alt="<%=col.name%>">
+                                        <h4 class="name"><%=col.name%></h4>
+                                    </li>
+                                <% } %>
+                            <% }; %>
+                        <% }; %>
+                    </ul>
                 </section>
             </section>
 
