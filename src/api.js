@@ -306,20 +306,16 @@ async function prettyTrackingSales (walletAddress, time) {
     return changedTokens;
 }
 
-module.exports.dailyVolume = dailyVolume;
-module.exports.createArrayWithPrices = createArrayWithPrices;
-module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;
-module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
-
-
 async function getAllEventsSince (time, offset = 0) {
     const timestmp = Math.trunc(Date.now() / 1000)
     const occuredAfter = timestmp - time
     // console.log(timestmp, occuredAfter)
+    // limit represent the limit of the event that we can get in a single API request
+    const limit = 300;
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/events',
-        params: { only_opensea: 'false', offset: offset, limit: '300', occurred_after: occuredAfter, event_type: 'successful' },
+        params: { only_opensea: 'false', offset: offset, limit: limit, occurred_after: occuredAfter, event_type: 'successful' },
         headers: { Accept: 'application/json', 'X-API-KEY': 'ca17564f13624bdcb6e5c721174e4a9e' }
     };
 
@@ -329,48 +325,40 @@ async function getAllEventsSince (time, offset = 0) {
     } catch (error) { console.error(error); }
 
     const events = []
+
     response.data.asset_events.forEach(data => {
-        const token = {
-            event: {
+        const event = {
+            metadata: {
                 event: data.event_type,
                 price: data.total_price / 1000000000000000000,
                 currency: 'ETH',
                 seller: data.seller.address,
                 buyer: data.winner_account.address
             },
-            token: {
+            asset: {
                 name: data.asset.name,
                 id: data.asset.token_id,
                 collection: data.asset.collection.name,
+                address: data.asset.asset_contract.address,
                 slug: data.asset.collection.slug,
                 link: data.asset.permalink
             }
         }
-        events.push(token)
+        events.push(event)
     })
 
-    console.log(events);
-    return events;
+    return events
 }
 
-async function plotEvents (time) {
-    let offset = 0;
-    const events = [];
-    const empty = {
-        asset_events: []
-    }
-    let data = await getAllEventsSince(time, offset);
-    while (data !== empty) {
-        events.push(data);
-        offset += 300;
-        data = await getAllEventsSince(time, offset);
-    }
-    console.log(events);
+function startTracking () {
+    setInterval(async () => {
+        console.log('Monitoring')
+        console.log(await getAllEventsSince(15))
+    }, 10000) // 10s
 }
 
-setInterval(async () => {
-    console.log('Monitoring')
-    // console.log(returnDifference(prev, newData))
-    await getAllEventsSince(15)
-    // console.log(currentTimestamp, Date.now() / 1000);
-}, 10000) // 10s
+module.exports.dailyVolume = dailyVolume;
+module.exports.createArrayWithPrices = createArrayWithPrices;
+module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;
+module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
+module.exports.startTracking = startTracking;
