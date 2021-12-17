@@ -1,10 +1,12 @@
 <section id="friendlist">
 
-    <section class="page" id="your_friends">
+    <!-- Change #page's class between sent_requests/friends/requests to change color -->
+
+    <section class="friends" id="page">
         <div id="list">
           <ul>
               <% friends.forEach( friend => { %>
-                  <li class="friend">
+                <li class="friend">
                     <section class="shadow" id="info">
                         <img id="avatar" src="images/user1.png" alt="<%= friend.name %>">
                         <h1 id="name"><%= friend.name %></h1>

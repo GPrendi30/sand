@@ -1,7 +1,12 @@
 
-* {
-    margin: 0px;
-    padding: 0px;
+:root {
+    --deepblue: #3B54BA;
+    --blue: #5889C5;
+    --lightblue: #90C1DA;
+    --lightpink: #A79DDC;
+    --pink:#9A71C1;
+    --purple: #6859BA;
+    --white: #f0f0f0;
 }
 
 #chat {
@@ -15,7 +20,7 @@
 
 footer {
     align-items: center;
-    background-image: linear-gradient(to left, #a9b7d2 , white); 
+    background-color: var(--lightblue);
     display: flex;
     height: 90px;
     justify-content: space-evenly;

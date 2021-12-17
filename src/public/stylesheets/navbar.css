@@ -1,8 +1,18 @@
+:root {
+    --deepblue: #3B54BA;
+    --blue: #5889C5;
+    --lightblue: #90C1DA;
+    --lightpink: #A79DDC;
+    --pink:#9A71C1;
+    --purple: #6859BA;
+    --white: #f0f0f0;
+}
+
 #navbar {
     grid-area: nav;
     max-width: 250px;
     height: 100%;
-    background-color: white;
+    background-color: var(--white);
 }
 
 #nav_buttons {
@@ -55,6 +65,7 @@
     align-items: center;
     text-decoration: none;
     padding: 10px;
+    color: #252B5C;
 }
 
 #navbar a h1 {
@@ -70,6 +81,7 @@
     background-position-y: center;
     background-position-x: center;
     background-size: 100%;
+    filter: invert(14%) sepia(36%) saturate(1734%) hue-rotate(205deg) brightness(102%) contrast(94%);
 }
 
 #nav_buttons>#options {
