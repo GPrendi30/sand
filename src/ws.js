@@ -63,22 +63,25 @@ function onAuthorizeFail(data, message, error, accept, times) {
     accept(null, false);
 }
 
+const authenticatedSockets = {};
+
 function init(server) {
     console.log('Starting Web Server');
 
     io.attach(server);
 
-    io.on('connection', function (socket) {
+    io.on('connection', async function (socket) {
+        // fetch user object from db for later use
+        // optimized to only fetch user once
+        authenticatedSockets[socket.id] = await User.findOne({ _id: socket.request.user._id });
+
         console.log('SOCKET ID:' + socket.id)
 
         socket.on('disconnect', function () {
             console.log('client disconnected id:', socket.id);
+            delete authenticatedSockets[socket.id];
         })
 
-        
-        // saving a socket in a session
-        // connecting the same session we use for the app to the sockets.
-        console.log(Object.keys(io.sockets.sockets))
         // RECEIVE AND HANDLE PENDING FRIEND REQUESTS
         socket.on('friend.request.sent', async friendRequest => {
             /**
