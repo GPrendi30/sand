@@ -33,7 +33,7 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
-    ppic: Buffer, // profile picture, TODO change to buffer when uploading a file
+    ppic: Buffer,
     bio: String,
     tracking: [String],
     recentlyViewed: [String],
@@ -47,7 +47,7 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Chat'
     }],
-
+	
     blocked: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -88,6 +88,20 @@ userSchema.methods.declineFriendRequest = function (friend) {
 }
 
 
+/**
+ asset can be either a wallet, a token address, or a collection slug.
+ 
+*/
+userSchema.methods.track = function (asset) {
+	if (this.tracking.indexOf(asset) >= 0) return;
+	this.tracking.push(asset);
+}
+
+userSchema.methods.untrack = function (asset) {
+	const idx = this.tracking.indexOf(asset);
+	if (idx < 0) return;
+	this.tracking.splice(idx, 1);
+}
 
 userSchema.methods.blockFriend = function (friend) {
     if (this.blocked.includes(friend._id)) return;
@@ -95,7 +109,7 @@ userSchema.methods.blockFriend = function (friend) {
     this.blocked.push(friend._id);
 }
 
-userSchema.methods.unblock = function (friend) {
+userSchema.methods.unblockFriend = function (friend) {
     const idx = this.blocked.indexOf(friend._id);
     if (idx < 0) return;
 
