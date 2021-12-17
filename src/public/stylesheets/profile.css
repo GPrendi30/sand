@@ -1,11 +1,11 @@
 #profile_container {
-    background-color: #87878a;
     width: 100%;
     height: fit-content !important;
     display: flex;
     justify-content: center;
     grid-column: 1/-1;
     grid-row: 1/-1;
+    padding-bottom: 50px;
 }
 
 #profile {
@@ -109,25 +109,59 @@
 
 /* Social */
 #profile > #friends {
-    margin-top: 30px;
-    background-color: white;
+    margin: 30px 15px 0px 15px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
 }
 
 #profile > #friends > section {
-    height: 300px;
+    background-color: rgb(199, 197, 197);
+    height: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     padding: 10px;
 }
 
-#profile > #friends > section > div {
-    background-color: rgb(199, 197, 197);
-    border-radius: 5px;
-    height: 100%;
-    width: 100%;
+#profile > #friends > section > h3 {
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+#friends > section > .list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 90%;
+    height: 300px;
+}
+
+#friends > section > .list > .no_friends {
+    max-width: 80%;
+    font-size: 17px;
+}
+
+#friends > section > button {
+    margin-top: auto;
+}
+
+#friends > section > .list > .friend {
+    background-color: rgb(240, 240, 240);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 65px;
+    width: 80%;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+}
+
+#friends li.friend > img {
+    height: 100%
 }
 
 /* Wallet Data */
@@ -189,7 +223,7 @@
 /* Buttons */
 /* TODO: Merge with other instances of this code */
 /* Makes input elements look like buttons */
-#profile .button {
+.button {
     background-color: white;
     border-style: none;
     font-weight: bolder;
@@ -206,7 +240,7 @@
     font-size: 16px;
 }
 
-#profile .button:hover {
+.button:hover {
     transform: scale(1.07);
     cursor: pointer;
 }

@@ -64,8 +64,7 @@ function getHome() {
     const friend = { username: 'AverageNFTFan', ppic: 'images/user2.png' }
 
     user.friendlist = [friend, friend, friend, friend, friend];
-    user.friendrequests = [friend, friend, friend, friend, friend];
-    user.blocked = [friend, friend, friend, friend, friend];
+    user.friendrequests = [friend, friend];
     
     main.innerHTML = ejs.src_views_profile({ user: user })
 
