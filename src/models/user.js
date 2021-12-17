@@ -58,6 +58,7 @@ userSchema.methods.addChat = function (chat) {
     this.chats.push(chat);
 }
 
+// update save the request to the friend.
 userSchema.methods.sendFriendRequest = function (friend) {
     if (this.friendRequestSent.includes(friend._id)) return;
 
@@ -86,6 +87,11 @@ userSchema.methods.declineFriendRequest = function (friend) {
 
     this.friendRequest.splice(idx, 1);
 }
+userSchema.methods.unFriend = function (friend) {
+    const idx = this.friendlist.indexOf(friend._id);
+    if (idx < 0) return;
+    this.friendlist.splice(idx, 1);
+}
 
 
 /**
@@ -93,14 +99,14 @@ userSchema.methods.declineFriendRequest = function (friend) {
  
 */
 userSchema.methods.track = function (asset) {
-	if (this.tracking.indexOf(asset) >= 0) return;
-	this.tracking.push(asset);
+    if (this.tracking.indexOf(asset) >= 0) return;
+    this.tracking.push(asset);
 }
 
 userSchema.methods.untrack = function (asset) {
-	const idx = this.tracking.indexOf(asset);
-	if (idx < 0) return;
-	this.tracking.splice(idx, 1);
+    const idx = this.tracking.indexOf(asset);
+    if (idx < 0) return;
+    this.tracking.splice(idx, 1);
 }
 
 userSchema.methods.blockFriend = function (friend) {
