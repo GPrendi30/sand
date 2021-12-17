@@ -6,9 +6,8 @@ const { passport, session } = require('./app')
 const sharedsession = require("express-socket.io-session");
 const Room = require('./models/rooms');
 const User = require('./models/user');
-const Message = require('./models/chat').Message;
+const { Chat, Message } = require('./models/chat')
 const store = require('./redis').store;
-
 
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
@@ -345,7 +344,23 @@ function init(server) {
             const message = new Message({ user: sender, message: event.message })
         })
 
+        socket.on('send', async event=>{
+            const chat = await Chat.find(event.chat)
+            const message = event.message
+            Chat.addMessage(message)
+            const filter = { _id: chat._id }
+            await Chat.replaceOne(filter, chat, { upsert: true })
+            socket.emit('message.sent', event)
+        })
 
+        socket.on('add.user', async event=>{
+            const chat = await Chat.find(event.chat)
+            const user = event.user
+            chat.addUser(user)
+            const filter = { _id: chat._id }
+            await Chat.replaceOne(filter, chat, { upsert: true })
+            socket.emit('user.added', event)
+        })
     })
 }
 eventBus.on('io', () => {
