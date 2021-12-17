@@ -47,7 +47,6 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Chat'
     }],
-	
     blocked: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -93,14 +92,14 @@ userSchema.methods.declineFriendRequest = function (friend) {
  
 */
 userSchema.methods.track = function (asset) {
-	if (this.tracking.indexOf(asset) >= 0) return;
-	this.tracking.push(asset);
+    if (this.tracking.indexOf(asset) >= 0) return;
+    this.tracking.push(asset);
 }
 
 userSchema.methods.untrack = function (asset) {
-	const idx = this.tracking.indexOf(asset);
-	if (idx < 0) return;
-	this.tracking.splice(idx, 1);
+    const idx = this.tracking.indexOf(asset);
+    if (idx < 0) return;
+    this.tracking.splice(idx, 1);
 }
 
 userSchema.methods.blockFriend = function (friend) {

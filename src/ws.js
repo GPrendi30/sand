@@ -1,17 +1,20 @@
 const io = require('socket.io')()
 const eventBus = require('./eventBus');
+const passportSocketIo = require('passport.socketio');
 const models = require('./models').model
-const { passport } = require('./login')
-const session = require('./app').session
+const { passport, session } = require('./app')
+const sharedsession = require("express-socket.io-session");
 const Room = require('./models/rooms');
 const User = require('./models/user');
 const Message = require('./models/chat').Message;
+const store = require('./redis').store;
+
 
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
-io.use(wrap(session));
-io.use(wrap(passport.initialize()));
-io.use(wrap(passport.session()));
+
+/*
+
 
 // authentication validator
 io.use((socket, next) => {
@@ -23,8 +26,45 @@ io.use((socket, next) => {
         next(new Error('unauthorized'))
     }
 });
+*/
 
-function init (server) {
+//io.use(wrap(passport.initialize()))
+
+io.use(sharedsession(session, {
+    autoSave: true
+}));
+
+io.use(passportSocketIo.authorize({
+    key: 'connect.sid',
+    secret: 'sandsandsandsand',
+    passport: passport,
+    store: store,
+    success: onAuthorizeSuccess,
+    fail: onAuthorizeFail
+}));
+
+
+
+function onAuthorizeSuccess(data, accept) {
+    console.log('successful connection to socket.io');
+   
+    
+    // The accept-callback still allows us to decide whether to
+    // accept the connection or not.
+    accept(null, true);
+}
+
+function onAuthorizeFail(data, message, error, accept, times) {
+    if (error) {
+        console.log('error')
+    }
+    console.log('failed connection to socket.io:', message);
+
+    // We use this callback to log all of our failed connections.
+    accept(null, false);
+}
+
+function init(server) {
     console.log('Starting Web Server');
 
     io.attach(server);
@@ -35,14 +75,10 @@ function init (server) {
             console.log('client disconnected id:', socket.id);
         })
 
-
+        
         // saving a socket in a session
         // connecting the same session we use for the app to the sockets.
-        const session = socket.request.session;
-        console.log(`saving sid ${socket.id} in session ${session.id}`);
-        session.socketId = socket.id;
-        session.save();
-
+        console.log(Object.keys(io.sockets.sockets))
         // RECEIVE AND HANDLE PENDING FRIEND REQUESTS
         socket.on('friend.request.sent', friendRequest => {
             // look for the friend request target and add request to his request list
@@ -219,7 +255,7 @@ function init (server) {
 
         // tracking
 
-        socket.on('track', async tracking=>{
+        socket.on('track', async tracking => {
             const asset = tracking.asset
             const user = await User.find(tracking.user)
             user.tracking.push(asset)
@@ -231,7 +267,7 @@ function init (server) {
             socket.emit('asset.added', tracking);
         })
 
-        socket.on('untrack', async untracking=>{
+        socket.on('untrack', async untracking => {
             const asset = untracking.asset
             const user = await User.find(untracking.user)
             const index = user.tracking.indexOf(asset)
@@ -278,7 +314,7 @@ function init (server) {
             socket.emit('member.removed', remove)
         })
 
-        socket.on('set.icon', async setting=>{
+        socket.on('set.icon', async setting => {
             const room = await Room.find(setting.room)
             room.setIcon(setting.admin, setting.icon)
             const filter = { _id: room.getRoomId() }
@@ -287,7 +323,7 @@ function init (server) {
             socket.emit('icon.setted', setting)
         })
 
-        socket.on('set.name', async setting=>{
+        socket.on('set.name', async setting => {
             const room = await Room.find(setting.room)
             room.setName(setting.admin, setting.name)
             const filter = { _id: room.getRoomId() }
@@ -296,7 +332,7 @@ function init (server) {
             socket.emit('name.added', setting)
         })
 
-        socket.on('set.desc', async setting=>{
+        socket.on('set.desc', async setting => {
             const room = await Room.find(setting.room)
             room.setDesc(setting.admin, setting.desc)
             const filter = { _id: room.getRoomId() }
