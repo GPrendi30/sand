@@ -93,8 +93,8 @@ function createUser (req) {
     return user
 }
 
-/* GET user/ALL page. */
-router.get('/all', function (req, res, next) {
+/* GET user page. */
+router.get('/', function (req, res, next) {
     User.find().toArray().then(result => {
         result.forEach(element => {
             removeSensitiveData(element)

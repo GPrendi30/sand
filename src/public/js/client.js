@@ -53,11 +53,15 @@ function initClient () {
     const setName = document.getElementById('setName')
     // set description
     const setDesc = document.getElementById('setDesc')
-
     // join request
     const join = document.getElementById('join')
     // accept join request
     const acceptJoin = document.getElementById('acceptJoin')
+
+    // chat
+    // send msg
+    const send = document.getElementById('send')
+    const addUser = document.getElementById('addUser')
     // ************************************** END BUTTONS **********************************
 
     // ************************************** Friend Request **************************************
@@ -122,7 +126,6 @@ function initClient () {
     })
     //  Tracking
     // general tracking event update (fetched data)
-    
     // adding and removing from user tracking list
     track.addEventListener('click', (event)=>{
         const tracking = { user: session.passport.user, asset: event.target.asset }
@@ -220,5 +223,23 @@ function initClient () {
 
     socket.on('joined', request =>{
         console.log('user joined')
+    })
+    // chat
+
+    send.addEventListener('click', event => {
+        const msg = { chat: 'get chat', message: 'get message' }
+        socket.emit('send', msg)
+    })
+    socket.on('msg.sent', msg => {
+        console.log('message  ' + msg.message + 'sent successfully')
+    })
+
+    addUser.addEventListener('click', event => {
+        const addition = { chat: 'get chat', user: 'get user' }
+        socket.emit('add.user', addition)
+    })
+
+    socket.on('user.added', addition => {
+        console.log('user  ' + addition.user + ' added successfully')
     })
 }
