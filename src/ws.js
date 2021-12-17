@@ -217,7 +217,7 @@ function init (server) {
             }).catch(err => { console.log(err) });
         })
 
-        /////////////////////////// trackign
+        // tracking
 
         socket.on('track', async tracking=>{
             const asset = tracking.asset
@@ -241,7 +241,42 @@ function init (server) {
             console.log('asset: ' + asset + ' added to ' + user.username + ' tracking list')
             socket.emit('asset.removed', untracking);
         })
+        // rooms
+        // admins
+        socket.on('add.admin', async add => {
+            const room = await Room.find(add.room)
+            room.addAdmin(add.author, add.user)
+            const filter = { _id: room.getRoomId() }
+            await Room.replaceOne(filter, room, { upsert: true })
+            console.log('admin' + add.user + 'added by ' + add.author + 'to' + room.getRoomId)
+            socket.emit('admin.added', add)
+        })
 
+        socket.on('remove.admin', async remove => {
+            const room = await Room.find(remove.room)
+            room.removeAdmin(remove.author, remove.user)
+            const filter = { _id: room.getRoomId() }
+            await Room.replaceOne(filter, room, { upsert: true })
+            socket.emit('admin.removed', remove)
+        })
+
+        // members
+        socket.on('add.member', async add => {
+            const room = await Room.find(add.room)
+            room.addMember(add.admin, add.user)
+            const filter = { _id: room.getRoomId() }
+            await Room.replaceOne(filter, room, { upsert: true })
+            console.log('member' + add.user + 'added by ' + add.admin + 'to' + room.getRoomId)
+            socket.emit('member.added', add)
+        })
+
+        socket.on('remove.member', async remove => {
+            const room = await Room.find(remove.room)
+            room.removeMember(remove.admin, remove.user)
+            const filter = { _id: room.getRoomId() }
+            await Room.replaceOne(filter, room, { upsert: true })
+            socket.emit('member.removed', remove)
+        })
 
     })
 }
@@ -250,5 +285,6 @@ eventBus.on('tracking_update', update => {
     console.log('sending tracking update...')
     io.emit('update', update)
 })
+
 // module.exports.eventBus = eventBus;
 module.exports.init = init

@@ -30,6 +30,16 @@ function initClient () {
     const track = document.getElementById('track')
     // untrack remove item from tracking list
     const untrack = document.getElementById('untrack')
+
+
+
+    // edit room??
+    // add admin
+    const addAdmin = document.getElementById('addAdmin')
+    // remove admin
+    const removeAdmin = documet.getElementById('removeAdmin')
+    // add member
+    const addMember = document.getElementById('addMember')
     // button to remove member from room
     const removeMember = document.getElementById('removerMember')
     // ************************************** END BUTTONS **********************************
@@ -118,9 +128,39 @@ function initClient () {
 
 
     // rooms
-    // removeMember.addEventListener('click', event => {
-    //     const removed = { admin: session.passport.user, user: event.target.user }
-    //     socket.on('remove_member', )
-    // })
 
+    // add/remove admin
+    addAdmin.addEventListener('click', event => {
+        const add = { room: session.passport.room, author: session.passport.user, user: event.target.user }
+        socket.emit('add.admin', add)
+    })
+    socket.on('admin added', add => {
+        console.log('admin' + add.user + 'added as admin');
+    })
+
+    removeAdmin.addEventListener('click', event => {
+        const remove = { room: session.passport.room, admin: session.passport.admin, user: event.target.user }
+        socket.emit('remove.admin', remove)
+    })
+    socket.on('admin removed', remove => {
+        console.log('admin' + remove.user + 'removed from admins');
+    })
+
+
+    // add/remove member
+    addMember.addEventListener('click', event => {
+        const add = { room: session.passport.room, admin: session.passport.user, user: event.target.user }
+        socket.emit('add.member', add)
+    })
+    socket.on('member added', add => {
+        console.log('member' + add.user + 'added');
+    })
+
+    removeMember.addEventListener('click', event => {
+        const remove = { room: session.passport.room, admin: session.passport.user, user: event.target.user }
+        socket.emit('remove.member', remove)
+    })
+    socket.on('member removed', remove => {
+        console.log('member' + remove.user + 'removed');
+    })
 }
