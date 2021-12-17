@@ -33,7 +33,7 @@ function initClient () {
 
 
 
-    // edit room??
+    // rooms
     // add admin
     const addAdmin = document.getElementById('addAdmin')
     // remove admin
@@ -42,6 +42,17 @@ function initClient () {
     const addMember = document.getElementById('addMember')
     // button to remove member from room
     const removeMember = document.getElementById('removerMember')
+    // set icon
+    const setIcon = document.getElementById('setIcon')
+    // set name
+    const setName = document.getElementById('setName')
+    // set description
+    const setDesc = document.getElementById('setDesc')
+
+    // join request
+    const join = document.getElementById('join')
+    // accept join request
+    const acceptJoin = document.getElementById('acceptJoin')
     // ************************************** END BUTTONS **********************************
 
     // ************************************** Friend Request **************************************
@@ -162,5 +173,49 @@ function initClient () {
     })
     socket.on('member removed', remove => {
         console.log('member' + remove.user + 'removed');
+    })
+
+    // room setting
+    setIcon.addEventListener('click', event=> {
+        const setting = { room: session.passport.room, admin: session.passport.user, icon: 'get icon someway' }
+        socket.on('set.icon', setting)
+    })
+
+    socket.on('icon.setted', setting => {
+        console.log('icon setted successfully')
+    })
+
+    setName.addEventListener('click', event=> {
+        const setting = { room: session.passport.room, admin: session.passport.user, name: 'get name somehow' }
+        socket.on('set.name', setting)
+    })
+    socket.on('name.added', setting => {
+        console.log('name setted successfully')
+    })
+    setDesc.addEventListener('click', event =>{
+        const setting = { room: session.passport.room, admin: session.passport.user, desc: 'get desc somewhere' }
+        socket.emit('set.desc', setting)
+    })
+    socket.on('desc.added', setting => {
+        console.log('descsetted successfully')
+    })
+
+    // room join request
+    join.addEventListener('click', event =>{
+        const request = { room: session.passport.room, user: session.passport.user }
+        socket.emit('join.request', request)
+    })
+
+    socket.on('join.requested', request =>{
+        console.log('join requested successfully')
+    })
+
+    acceptJoin.addEventListener('click', event =>{
+        const request = { room: session.passport.room, user: session.passport.user }
+        socket.emit('accept.join.request', request)
+    })
+
+    socket.on('joined', request =>{
+        console.log('user joined')
     })
 }

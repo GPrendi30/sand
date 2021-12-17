@@ -4,8 +4,8 @@ const eventBus = new EventEmitter();
 const models = require('./models').model
 const { passport } = require('./login')
 const session = require('./app').session
-const Room = require('../models/rooms');
-const User = require('../models/user');
+const Room = require('./models/rooms');
+const User = require('./models/user');
 
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
@@ -278,6 +278,32 @@ function init (server) {
             socket.emit('member.removed', remove)
         })
 
+        socket.on('set.icon', async setting=>{
+            const room = await Room.find(setting.room)
+            room.setIcon(setting.admin, setting.icon)
+            const filter = { _id: room.getRoomId() }
+            await Room.replaceOne(filter, room, { upsert: true })
+            console.log('icon added by ' + setting.admin + 'to' + room.getRoomId)
+            socket.emit('icon.setted', setting)
+        })
+
+        socket.on('set.name', async setting=>{
+            const room = await Room.find(setting.room)
+            room.setName(setting.admin, setting.name)
+            const filter = { _id: room.getRoomId() }
+            await Room.replaceOne(filter, room, { upsert: true })
+            console.log('name added by ' + setting.admin + 'to' + room.getRoomId)
+            socket.emit('name.added', setting)
+        })
+
+        socket.on('set.desc', async setting=>{
+            const room = await Room.find(setting.room)
+            room.setDesc(setting.admin, setting.desc)
+            const filter = { _id: room.getRoomId() }
+            await Room.replaceOne(filter, room, { upsert: true })
+            console.log('desc added by ' + setting.admin + 'to' + room.getRoomId)
+            socket.emit('desc.added', setting)
+        })
     })
 }
 
