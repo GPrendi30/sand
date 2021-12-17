@@ -390,9 +390,52 @@ function startTracking () {
     }, 10000) // 10s
 }
 
+/**
+ * Get a list with 300 random collections.
+ * @returns {object} object with all the data.
+ */
+ async function getCollections () {
+    // Returns a random integer from 1 to 100:
+    const offset = Math.floor(Math.random() * 49700) + 1;
+    console.log(offset);
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/collections',
+        params: { offset: offset, limit: '300' }
+    };
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    const allCollectionsData = []
+    response.data.collections.forEach(collection => {
+        let image = ''
+
+        if (collection.image_url === null) {
+            image = '/images/image_not_available.png'
+        } else {
+            image = collection.image_url
+        }
+        const collectionsData = {
+            title: collection.name,
+            img: image,
+            link: '/discover/' + collection.slug
+        }
+
+        allCollectionsData.push(collectionsData)
+    })
+
+    // console.log(response.data.collections[0].name)
+    console.log(allCollectionsData)
+    return allCollectionsData
+}
+
 module.exports.dailySales = dailySales;
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
 module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;
 module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
 module.exports.startTracking = startTracking;
+module.exports.getCollections = getCollections;

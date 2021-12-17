@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const getCollectionDataWithSlug = require('../api.js').getCollectionDataWithSlug;
+const getCollections = require('../api.js').getCollections;
 
 const collectionSlugs = [
     'cryptopunks', 'boredapeyachtclub', 'akc', 'neotokyo-outer-identities', 'clonex-mintvial',
@@ -13,13 +14,7 @@ const collectionSlugs = [
 /* GET discover page. */
 router.get('/', async function (req, res, next) {
     if (req.accepts('json')) {
-        const collection = [];
-        await Promise.all(collectionSlugs.map(async slug => {
-            const data = await getCollectionDataWithSlug(slug)
-            if (data) {
-                collection.push({ title: data.collection.name, img: data.collection.image_url, link: '/discover/' + slug }) // get large image => substitute data.collection.image_url with data.collection.large_image_url
-            }
-        }))
+        const collection = await getCollections();
         res.send(collection);
     } else {
         res.status(406).end();
