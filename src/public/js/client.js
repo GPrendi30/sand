@@ -249,5 +249,6 @@ function initClient () {
         // const notification = { msg: event.msg, time: event.time }
         popup.innerHTML = event.msg
         time.innerHTML = event.time
+        setTimeout(function () { popup.innerHTML = ''; time.innerHTML = '' }, 1000)
     })
 }
