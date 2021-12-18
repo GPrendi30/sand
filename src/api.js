@@ -1,8 +1,57 @@
 const axios = require('axios').default;
 require('dotenv').config();
 const eventBus = require('./eventBus');
+const redis = require('./redis').client;
 
 const apiKey = process.env.OPENSEA_API;
+
+// const object = {
+//     name: 'enrico',
+//     surname: 'di pietro'
+// }
+
+// redis.set('obj', object, function (err, reply) {
+//     console.log(err);
+//     console.log(reply);
+// });
+
+// const obj = redis.get('obj',
+//     function (err, reply) {
+//         console.log(err);
+//         console.log(reply);
+//     });
+
+// console.log('obj.name', obj.name)
+// console.log('obj.surname', obj.surname)
+
+// redis.hmset('slug', 'surrrname', 'enrico', 'surname', 'dipiee', function (err, reply) {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log(reply);
+//     }
+// });
+
+// redis.hget('fewrfmjewfjm', 'surname', function (err, reply) {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log(reply);
+//     }
+// });
+// if not in the cache response is null
+// redis.hget('shish', 'shishsh').then(res => { console.log(res) })
+
+// collectionData = {
+//     title: data.collection.name,
+//     slug: slug,
+//     img: data.collection.image_url,
+//     banner_img: data.collection.banner_image_url,
+//     OpenSea_link: 'https://opensea.io/collection/' + slug,
+//     total_volume: data.collection.stats.total_volume,
+//     num_owners: data.collection.stats.num_owners,
+//     num_assets: data.collection.stats.count
+// }
 
 /**
  * Function to get the general data of a collection passing as parameter a collection slug.
@@ -394,14 +443,14 @@ function startTracking () {
  * Get a list with 300 random collections.
  * @returns {object} object with all the data.
  */
- async function getCollections () {
+async function getCollections () {
     // Returns a random integer from 1 to 100:
-    const offset = Math.floor(Math.random() * 49700) + 1;
+    const offset = Math.floor(Math.random() * 49700);
     console.log(offset);
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/collections',
-        params: { offset: offset, limit: '300' }
+        params: { offset: offset, limit: '1' }
     };
 
     let response;
@@ -420,14 +469,52 @@ function startTracking () {
         }
         const collectionsData = {
             title: collection.name,
+            slug: collection.slug,
             img: image,
-            link: '/discover/' + collection.slug
+            banner_img: collection.banner_image_url,
+            link: '/discover/' + collection.slug,
+            OpenSea_link: 'https://opensea.io/collection/' + collection.slug,
+            total_volume: collection.stats.total_volume,
+            num_owners: collection.stats.num_owners,
+            num_assets: collection.stats.count
+
         }
+
+        console.log(collection.slug)
+
+        // redis.hmset('get_' + collection.slug,
+        //     'title', collectionsData.title,
+        //     'slug', collectionsData.slug,
+        //     'img', collectionsData.img,
+        //     'banner_img', collectionsData.banner_img,
+        //     'link', collectionsData.link,
+        //     'OpenSea_link', collectionsData.OpenSea_link,
+        //     'total_volume', collectionsData.total_volume,
+        //     'num_owners', collectionsData.num_owners,
+        //     'num_assets', collectionsData.num_assets,
+        //     function (err, reply) {
+        //         if (err) {
+        //             console.log(err);
+        //         } else {
+        //             console.log(reply);
+        //         }
+        //     }
+        // );
+
+        // collectionData = {
+        //     title: data.collection.name,
+        //     slug: slug,
+        //     img: data.collection.image_url,
+        //     banner_img: data.collection.banner_image_url,
+        //     OpenSea_link: 'https://opensea.io/collection/' + slug,
+        //     total_volume: data.collection.stats.total_volume,
+        //     num_owners: data.collection.stats.num_owners,
+        //     num_assets: data.collection.stats.count
+        // }
 
         allCollectionsData.push(collectionsData)
     })
 
-    // console.log(response.data.collections[0].name)
     console.log(allCollectionsData)
     return allCollectionsData
 }
@@ -439,3 +526,13 @@ module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;
 module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
 module.exports.startTracking = startTracking;
 module.exports.getCollections = getCollections;
+
+getCollections()
+
+// redis.hget('get_', 'surname', function (err, reply) {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log(reply);
+//     }
+// });
