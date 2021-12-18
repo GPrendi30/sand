@@ -13,7 +13,11 @@ const message = new Schema({
         required: true
     },
     body: String,
-    attachments: [Buffer] // in case of images
+    attachments: [Buffer], // in case of images
+    timestamp: {
+        type: Date,
+        default: () => Date.now()
+    }
 }, { timestamp: true });
 
 
@@ -26,11 +30,13 @@ const chatSchema = new Schema({
     messages: [message]
 }, { timestamps: true });
 
+const Message = mongoose.model('Message', message);
 
-chatSchema.methods.addMessage = function (message) {
-    if (!this.users.includes(message.user)) return // dont add message if user is not in chat.
+chatSchema.methods.sendMessage = function (user, message) {
+    const newMessage = new Message({ user: user._id, username: user.username, body: message });
+    // if (!this.users.includes(newMessage.user)) return // dont add message if user is not in chat.
 
-    this.messages.push(message);
+    this.messages.push(newMessage);
 };
 
 chatSchema.methods.getMessages = function () {
@@ -38,9 +44,16 @@ chatSchema.methods.getMessages = function () {
 };
 
 chatSchema.methods.addUser = function (user) {
-    this.users.push(user);
+    user.addChat(this);
+    this.users.push(user._id);
 }
 
-const chat = mongoose.model('Chat', chatSchema);
-module.exports.Chat = chat
-module.exports.Message = mongoose.model('Message', message);
+const Chat = mongoose.model('Chat', chatSchema);
+
+
+
+
+
+
+module.exports.Chat = Chat
+module.exports.Message = Message
