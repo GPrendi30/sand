@@ -9,7 +9,7 @@ const apiKey = process.env.OPENSEA_API;
  * @param string slug, the collection slug
  * @returns {object} object with all the data.
  */
-async function getCollectionDataWithSlug (slug) {
+async function getCollectionDataWithSlug(slug) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/collection/' + slug,
@@ -29,7 +29,7 @@ async function getCollectionDataWithSlug (slug) {
  * @param string the collection address
  * @returns {object} object with all the data.
  */
-async function getCollectionDataWithAddress (address) {
+async function getCollectionDataWithAddress(address) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/asset_contract/' + address,
@@ -52,7 +52,7 @@ async function getCollectionDataWithAddress (address) {
  * @param int endTimestamp, show events listed before this timestamp.
  * @returns {object} object with all the data.
  */
-async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimestamp) {
+async function getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/events?asset_contract_address=' + contractAddress + '&event_type=successful&only_opensea=false&offset=0&occurred_after=' + startTimestamp + '&occurred_before=' + endTimestamp + '&limit=300',
@@ -73,7 +73,7 @@ async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimes
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object with data representing the daily volume.
  */
-async function dailySales (contractAddress, timeInDays) {
+async function dailySales(contractAddress, timeInDays) {
     const dailySalesArray = [];
     const lastMidnight = new Date(new Date().setHours(0, 0, 0, 0));
     const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
@@ -82,7 +82,7 @@ async function dailySales (contractAddress, timeInDays) {
         const startTimestamp = lastMidnightTimestamp - 86400 * i;
         const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
         try {
-            const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+            const response = await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
             dailySalesArray.push(response.asset_events.length);
         } catch (error) { console.error(error); }
     }
@@ -91,7 +91,7 @@ async function dailySales (contractAddress, timeInDays) {
     const startTimestamp = lastMidnightTimestamp;
     const endTimestamp = Math.trunc(Date.now() / 1000);
     try {
-        const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+        const response = await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
         dailySalesArray.push(response.asset_events.length);
     } catch (error) { console.error(error); }
 
@@ -105,7 +105,7 @@ async function dailySales (contractAddress, timeInDays) {
  * @param int endTimestamp, show events listed before this timestamp.
  * @returns {object} object with data of time and sell price [{ time: 'time', price: 'price'}, ...].
  */
-async function createArrayWithPrices (contractAddress, startTimestamp, endTimestamp) {
+async function createArrayWithPrices(contractAddress, startTimestamp, endTimestamp) {
     const data = [];
     let res;
     try {
@@ -129,11 +129,11 @@ async function createArrayWithPrices (contractAddress, startTimestamp, endTimest
  * @param string tokenID, the ID of the token in the collection.
  * @returns {object} object with data of the specific token.
  */
-async function pullTokenDataByID (contractAddress, tokenID) {
+async function pullTokenDataByID(contractAddress, tokenID) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/assets?token_ids=' + tokenID +
-                '&asset_contract_address=' + contractAddress + '&order_direction=desc&offset=0&limit=30',
+            '&asset_contract_address=' + contractAddress + '&order_direction=desc&offset=0&limit=30',
         headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
     }
 
@@ -153,7 +153,7 @@ async function pullTokenDataByID (contractAddress, tokenID) {
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object with data representing the daily volume.
  */
-async function dailyVolume (contractAddress, timeInDays) {
+async function dailyVolume(contractAddress, timeInDays) {
     const dailyVolumeArray = [];
     const lastMidnight = new Date(new Date().setHours(0, 0, 0, 0));
     const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
@@ -166,7 +166,7 @@ async function dailyVolume (contractAddress, timeInDays) {
         const startTimestamp = lastMidnightTimestamp - 86400 * i;
         const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
         try {
-            response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+            response = await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
             response.asset_events.forEach(el => {
                 volume += (el.total_price / 1000000000000000000);
             })
@@ -179,7 +179,7 @@ async function dailyVolume (contractAddress, timeInDays) {
     const endTimestamp = Math.trunc(Date.now() / 1000);
     try {
         let todayVolume = 0;
-        const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+        const response = await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
         response.asset_events.forEach(el => {
             todayVolume += (el.total_price / 1000000000000000000);
         })
@@ -194,7 +194,7 @@ async function dailyVolume (contractAddress, timeInDays) {
  * @param string walletAddress, the collection wallet address.
  * @returns {object} object with all the data.
  */
-async function getCollectionsOfWallet (walletAddress) {
+async function getCollectionsOfWallet(walletAddress) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/collections',
@@ -218,7 +218,7 @@ async function getCollectionsOfWallet (walletAddress) {
  * @param string walletAddress, the collection wallet address.
  * @returns {object} object with all the data.
  */
-async function getWalletTokenValues (walletAddress) {
+async function getWalletTokenValues(walletAddress) {
     let response;
     const record = {};
     try {
@@ -239,7 +239,7 @@ async function getWalletTokenValues (walletAddress) {
  * @param {object} newSet, object containing the new data .
  * @returns {object} object with the difference between the two objects.
  */
-function returnDifference (oldSet, newSet) {
+function returnDifference(oldSet, newSet) {
     const newTokens = {};
     // check the token that have been added to the new set
     for (const [key, value] of Object.entries(newSet)) {
@@ -267,7 +267,7 @@ function returnDifference (oldSet, newSet) {
  * @param string time, .
  * @returns {object} object with the difference between the two objects.
  */
-function getChanges (walletAddress, time) {
+function getChanges(walletAddress, time) {
     getWalletTokenValues(walletAddress).then(firstSet => {
         setTimeout(() => {
             getWalletTokenValues(walletAddress).then(secondSet => {
@@ -283,7 +283,7 @@ function getChanges (walletAddress, time) {
  * @param string time, time in seconds.
  * @returns {object} object with all the events.
  */
-async function trackWallet (walletAddress, time) {
+async function trackWallet(walletAddress, time) {
     const timestmp = Math.trunc(Date.now() / 1000)
     const occuredAfter = timestmp - time
     const options = {
@@ -313,7 +313,7 @@ async function trackWallet (walletAddress, time) {
  * @param string time, time in seconds.
  * @returns {object} object with the events happened to the wallet on that time, positive values means bought something and viceversa.
  */
-async function prettyTrackingSales (walletAddress, time) {
+async function prettyTrackingSales(walletAddress, time) {
     const changedTokens = {};
 
     try {
@@ -337,7 +337,7 @@ async function prettyTrackingSales (walletAddress, time) {
     return changedTokens;
 }
 
-async function getAllEventsSince (time, offset = 0) {
+async function getAllEventsSince(time, offset = 0) {
     const timestmp = Math.trunc(Date.now() / 1000)
     const occuredAfter = timestmp - time
     // console.log(timestmp, occuredAfter)
@@ -353,40 +353,50 @@ async function getAllEventsSince (time, offset = 0) {
     let response;
     try {
         response = await axios.request(options);
-    } catch (error) { console.error(error); }
+    } catch (error) {
+        console.error('API throttled');
+    }
 
     const events = []
-
-    response.data.asset_events.forEach(data => {
-        const event = {
-            metadata: {
-                event: data.event_type,
-                price: data.total_price / 1000000000000000000,
-                currency: 'ETH',
-                seller: data.seller.address,
-                buyer: data.winner_account.address
-            },
-            asset: {
-                name: data.asset.name,
-                id: data.asset.token_id,
-                collection: data.asset.collection.name,
-                address: data.asset.asset_contract.address,
-                slug: data.asset.collection.slug,
-                link: data.asset.permalink
+    if (response && response.data) {
+        response.data.asset_events.forEach(data => {
+            const event = {}
+            if (data.asset) {
+                const asset = {
+                    name: data.asset.name,
+                    id: data.asset.token_id,
+                    collection: data.asset.collection.name,
+                    address: data.asset.asset_contract.address,
+                    slug: data.asset.collection.slug,
+                    link: data.asset.permalink
+                }
+                event.asset = asset;
             }
-        }
-        events.push(event)
-    })
+            if (data.seller && data.winner_account) {
+                event.metadata = {
+                    event: data.event_type,
+                    price: data.total_price / 1000000000000000000,
+                    currency: 'ETH',
+                    seller: data.seller.address,
+                    buyer: data.winner_account.address
+                }
+            }
+
+            events.push(event)
+        })
+    }
 
     return events
 }
 
-function startTracking () {
+function startTracking() {
     setInterval(async () => {
         console.log('Monitoring')
         const events = await getAllEventsSince(15)
-
-        eventBus.emit('tracking_update', events);
+        console.log(events.length)
+        if (events.length > 0) {
+            eventBus.emit('tracking_update', events);
+        }
     }, 10000) // 10s
 }
 
