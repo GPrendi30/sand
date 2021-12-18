@@ -19,18 +19,19 @@ const app = express()
 const { passport } = require('./login');
 
 
-
-app.use(session({
+const mySession = session({
     secret: 'sandsandsandsand', // TODO update to using env.SESSION_SECRET
-    resave: false,
-    saveUninitialized: true,
+    resave: true,
+    saveUninitialized: false,
     store: store,  // using the redis store
     cookie: {
         maxAge: 1000 * 60 * 30, // 30 minutes
         expires: new Date(Date.now() + 1000 * 60 * 30), // 30 minutes
         httpOnly: true
     }
-}));
+})
+
+app.use(mySession);
 
 /*  passportjs
   Local authentication
@@ -92,4 +93,5 @@ app.use(function (req, res, next) {
     res.status(500).end();
 })
 
-module.exports = app
+module.exports.app = app
+module.exports.session = mySession

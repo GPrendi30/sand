@@ -4,6 +4,7 @@ const router = express.Router()
 const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
 const { isLoggedIn, isLoggedInSpecialized } = require('../login');
+const generateIdenticon = require('../identicon').generateIdenticon;
 // HELPER FUNCTIONS
 
 /* TODO update with authentication, and also refactor the test */
@@ -161,7 +162,7 @@ router.get('/settings/:_id', isLoggedInSpecialized, function (req, res, next) {
             if (user === null) {
                 res.status(404).end();
             } else {
-                res.json(user.settings)
+                res.json(user)
                 // res.render('settings', { result: user })
             }
         }).catch(err => { console.log(err) })
@@ -319,7 +320,7 @@ router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {
     })
 })
 
-router.get('/chats/:_id', isLoggedInSpecialized, function(req, res, next) {
+router.get('/chats/:_id', isLoggedInSpecialized, function (req, res, next) {
     let filter
 
     const chatID = req.query.chat;
@@ -393,6 +394,9 @@ router.delete('/:_id', isLoggedInSpecialized, function (req, res) {
     });
 });
 
-
+router.get('/identicon/:username', function (req, res) {
+    const identicon = generateIdenticon(req.params.username, Date.now())
+    res.status(200).send(identicon)
+})
 // export the required modules
 module.exports = router
