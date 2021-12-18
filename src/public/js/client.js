@@ -242,4 +242,12 @@ function initClient () {
     socket.on('user.added', event => {
         console.log('user  ' + event.user + ' added successfully')
     })
+
+    socket.on('notify', event =>{
+        const popup = document.getElementById('popup')
+        const time = document.getElementById('time')
+        // const notification = { msg: event.msg, time: event.time }
+        popup.innerHTML = event.msg
+        time.innerHTML = event.time
+    })
 }
