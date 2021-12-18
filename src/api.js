@@ -69,6 +69,28 @@ async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimes
 }
 
 /**
+ * Function to get the sell events occurred between the two timestamps with collection slug.
+ * @param string collectionSlug, the contract address of the collection.
+ * @param int startTimestamp, show events listed after this timestamp.
+ * @param int endTimestamp, show events listed before this timestamp.
+ * @returns {object} object with all the data.
+ */
+async function getSalesFromStartToEndWithCollectionSlug (collectionSlug, startTimestamp, endTimestamp) {
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/events?collection_slug=' + collectionSlug + '&event_type=successful&only_opensea=false&offset=0&occurred_after=' + startTimestamp + '&occurred_before=' + endTimestamp + '&limit=300',
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
+    }
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    return response.data;
+}
+
+/**
  * Function to get the number of sell events occurred between the two timestamps.
  * @param string contractAddress, the contract address of the collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
@@ -181,6 +203,48 @@ async function dailyVolume (contractAddress, timeInDays) {
     try {
         let todayVolume = 0;
         const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+        response.asset_events.forEach(el => {
+            todayVolume += (el.total_price / 1000000000000000000);
+        })
+        dailyVolumeArray.push(todayVolume);
+    } catch (error) { console.error(error); }
+
+    return dailyVolumeArray;
+}
+
+/**
+ * Function to get the sell events occurred between the two timestamps in the form of an object [{ time: 'time', price: 'price'}] from a slug.
+ * @param string collectionSlug, the collection slug.
+ * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
+ * @returns {array} object with data representing the daily volume.
+ */
+async function dailyVolumeWithSlug (collectionSlug, timeInDays) {
+    const dailyVolumeArray = [];
+    const lastMidnight = new Date(new Date().setHours(0, 0, 0, 0));
+    const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
+
+    // adding every needed day's volume getting volume day by day and pushing it into dailyVolumeArray
+    for (let i = timeInDays; i > 0; --i) {
+        let response;
+        let volume = 0;
+
+        const startTimestamp = lastMidnightTimestamp - 86400 * i;
+        const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
+        try {
+            response =  await getSalesFromStartToEndWithCollectionSlug(collectionSlug, startTimestamp, endTimestamp)
+            response.asset_events.forEach(el => {
+                volume += (el.total_price / 1000000000000000000);
+            })
+            dailyVolumeArray.push(volume);
+        } catch (error) { console.error(error); }
+    }
+
+    // adding today's volume separately because it's a shorter amount of time (from last midnight to now)
+    const startTimestamp = lastMidnightTimestamp;
+    const endTimestamp = Math.trunc(Date.now() / 1000);
+    try {
+        let todayVolume = 0;
+        const response =  await getSalesFromStartToEndWithCollectionSlug(collectionSlug, startTimestamp, endTimestamp)
         response.asset_events.forEach(el => {
             todayVolume += (el.total_price / 1000000000000000000);
         })
@@ -476,7 +540,7 @@ async function returnGetSlugObjectFromCache (collectionSlug) {
 
         const data = {
             title: title,
-           slug: slug,
+            slug: slug,
             img: img,
             banner_img: bannerImg,
             link: link,
@@ -501,9 +565,18 @@ async function checkInCache (slug) {
 }
 
 function storeVolumeArrayInCache (collectionSlug, volumeArray) {
-    const stringifiedArray = JSON.stringify(volumeArray) // JSON.parse(..) to go back
+    // remove last element from array -> today's volume is not complete
+    volumeArray.pop()
 
-    redis.set('vol_' + collectionSlug, stringifiedArray, function (err, reply) {
+    const volumeObject = {
+        // last midnight date
+        latest: new Date(new Date().setHours(0, 0, 0, 0)),
+        data: volumeArray
+    }
+
+    const stringifiedObject = JSON.stringify(volumeObject) // JSON.parse(..) to go back
+
+    redis.set('vol_' + collectionSlug, stringifiedObject, function (err, reply) {
         if (err) {
             console.log(err);
         } else {
@@ -517,6 +590,11 @@ async function getVolumeArrayFromCache (collectionSlug) {
 
     console.log('Array got from cache ', JSON.parse(stringifiedArray))
     return JSON.parse(stringifiedArray)
+}
+
+function checkTimeDifference (date1, date2) {
+    const days = Math.trunc((date2 - date1) / 86400)
+
 }
 
 module.exports.dailySales = dailySales;
@@ -539,3 +617,46 @@ module.exports.checkInCache = checkInCache;
 // method to get volume(3) -> [1,2,3,       4]
 //                          first day    from midnight to now
 // when we fetch data we want to save everything except last element array array.pop()
+
+// console.log(new Date())
+// // '2021-12-18T21:28:50.279Z'
+// console.log(new Date() - new Date('2021-12-18T21:28:33.460Z'))
+
+// { latest: '2021-12-17T23:00:00.000Z', data: [ 5, 4, 3, 2 ] }
+// check data in cache -> time difference saved timestamp / now -> call function only on required days (note: dailyVolume(0) returns array with only volume from last midnight to now)
+
+async function getVolumeFromCache (collectionSlug, days) {
+    // if collection in cache do this:
+    const volumeObject = JSON.parse(await redis.get('vol_' + collectionSlug))
+    if (volumeObject !== null) {
+        console.log('volumeObject.latest: ', volumeObject.latest)
+        const elapsedDays = Math.trunc(((new Date() - new Date(volumeObject.latest)) / 1000) / 86400)
+
+        const requiredDays = days - elapsedDays
+        // passing now collectionSlug -> to correct in method dailyVolume
+        const fetchedVolume = await dailyVolumeWithSlug(collectionSlug, requiredDays)
+    }
+
+    // do the fetch only of the required days
+
+    // return option of the data in the cache + the fetched data
+
+    // dailyVolume(collectionAddress, elapsedDays)
+}
+
+// const stringifiedObject = JSON.stringify({
+//     latest: '2021-12-08T23:00:00.000Z',
+//     data: [5, 4, 3, 2, 1]
+// }) // JSON.parse(..) to go back
+
+// redis.set('vol_test2', stringifiedObject, function (err, reply) {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log('Collection ' + 'test2' + ' was added to cache');
+//     }
+// });
+
+// getVolumeFromCache('test2')
+
+// dailyVolumeWithSlug('cool-cats-nft', 3)
