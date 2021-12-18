@@ -17,6 +17,10 @@ socket.on('tracking_update', update => {
 
 })
 
+socket.on('hey there', () => {
+    console.log('general kenobi');
+})
+
 const user = 'me';
 function initClient () {
     // ************************************** BUTTONS **************************************
@@ -252,3 +256,44 @@ function initClient () {
         setTimeout(function () { popup.innerHTML = ''; time.innerHTML = '' }, 1000)
     })
 }
+
+function dosth (event) {
+    console.log(event);
+}
+
+socket.on('friend.request.sent.accpted', event => {
+    dosth(event)
+})
+
+socket.on('friend.request.sent.rejected', event => {
+    dosth(event)
+})
+
+socket.on('friend.request.accpted', event => {
+    dosth(event)
+})
+
+socket.on('friend.request.rejected', event => {
+    dosth(event)
+})
+
+socket.on('unfriend.request.accepted', event => {
+    dosth(event)
+})
+socket.on('unfriend.request.rejected', event => {
+    dosth(event)
+})
+
+socket.on('friend.request.block.accepted', event => {
+    dosth(event)
+})
+socket.on('friend.request.block.rejected', event => {
+    dosth(event)
+})
+socket.on('friend.request.unblock.accepted', event => {
+    dosth(event)
+})
+socket.on('friend.request.unblock.rejected', event => {
+    dosth(event)
+})
+
