@@ -1,11 +1,14 @@
+<% let my_rooms = [{"title": "Room1" , "img" : "/images/chat.png" }, {"title": "Room2" , "img" : "/images/chat.png" }, {"title": "Room3" , "img" : "/images/chat.png" }] %>
+<% let other_rooms = [{"title": "Chat 1" , "img" : "/images/chat.png" }, {"title": "Chat 2" , "img" : "/images/chat.png" }, {"title": "Chat 3" , "img" : "/images/chat.png" }] %>
+
 <section id="rooms">
 
     <!-- pubblic rooms -->
-    <article class="rooms_section" id="general">
-      <h1>Chat Rooms</h1>
+    <article class="your_rooms" id="general">
+      <h1>Rooms You've Joined</h1>
       <ul class="discover_lineup">
             <!-- Used place holders -->
-            <% let rooms_ = [{"title": "Chat 1" , "img" : "/images/chat.png" }, {"title": "Chat 2" , "img" : "/images/chat.png" }, {"title": "Chat 3" , "img" : "/images/chat.png" }] %>
+            
             <% rooms_.forEach( item => { %>
                 <li class="discover_item grow_hover shadow"><a href="/item/info">
                     <img src="<%= item.img %>" alt="<%= item.title %>">
@@ -17,8 +20,8 @@
     </article>
 
     <!-- private rooms -->
-    <article class="private_rooms_section" id="general">
-        <h1>Chat Rooms</h1>
+    <article class="explore_rooms" id="general">
+        <h1>Explore Rooms</h1>
         <ul class="discover_lineup">
               <!-- Used place holders -->
               <% rooms.forEach( item => { %>
