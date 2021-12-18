@@ -1,40 +1,48 @@
 <div id="room_container">
-    <section class="room">
+    <section class="room" >
         <!-- central part -->
-        <div id="chat_shadow"></div>
+        <div id="chat_shadow">
         <section id="chat">
             <% let prev %>
                 <% messages.forEach(msg=> { %>
                     <% let info={ prev:prev, msg:msg} %>
+                    
                         <% if (msg.user === author) { %>
                             <% if (msg.user === prev) { %> 
                                 <section class="message stream mine">
                             <% } else { %>
                                 <section class="message mine">
                                 <% prev = msg.user %>
+                            
                             <% } %>
+
                         <% } else { %>
                             <% if (msg.user === prev) { %> 
                                 <section class="message stream">
                             <% } else { %>
                                 <section class="message">
                                 <% prev = msg.user %>
+                               
                             <% } %>
                         <% } %>
                         <h1 id="username"> <%= msg.username %> </h1>
-                        <p id="msg"> <%= msg.body %> </p>
+                        <p id="msg"> <%= msg.body %></p>
+                        <p id = "time_stamp"> <%= new Date(msg.timestamp).toLocaleTimeString() %></p>
                             <% if (msg.user !=prev) { %>
                                 <% prev=msg.user %>
                                     <% } %>
+                                </section>
                                         <% }); %>
+                                                      
         </section>
+        </div>  
 
         <!-- below the chat messages -->
         <section id="input">
             <button class="grow_hover" id="leave_room">Leave room</button>
-            <div id="input">
+            <div id="input_div">
                 <label for="msg">
-                    <input id="msg" type="text" name="msg" value="" placeholder="Type here your message" />
+                    <input id="messageInput" type="text" name="msg" value="" placeholder="Type here your message" />
                 </label>
                 <button class="grow_hover" id="send">Send</button>
             </div>
@@ -55,7 +63,7 @@
                         <h1 id="username"> <%= author.username %> </h1>
                     </li>
                         <% admins.forEach( admin=> { %>
-                            <% if (!room.isAuthor(admin)) { %>
+                            <% if (admin._id != author._id) { %>
                                 <li class="room_member admin ">
                                     <img src="/images/user1.png" alt="<% user.username %>">
                                     <h1 id="username"> <%= user.username %> </h1>
@@ -71,7 +79,7 @@
 
                     <!-- TODO: Implement this version instead -->
                     <% users.forEach( user=> { %>
-                        <% if (!room.isAdmin(user)) { %>
+                        <% if (user._id != author._id) { %>
                             <li class="room_member user">
                                 <img src="/images/user1.png" alt="<% user.username %>">
                                 <h1 id="username"> <%= user.username %> </h1>
