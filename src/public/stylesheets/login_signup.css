@@ -1,27 +1,46 @@
+:root {
+    --deepblue: #3B54BA;
+    --blue: #5889C5;
+    --lightblue: #90C1DA;
+    --lightpink: #A79DDC;
+    --pink:#9A71C1;
+    --purple: #6859BA;
+    --white: #f0f0f0;
+    --black: #2d2d2d;
+}
+
 .form-container {
-    background-color: rgb(167, 165, 167);
     width: 550px;
     border-radius: 10px;
     border: 2px solid rgba(196, 194, 221, 0.1);
     overflow: hidden;
+    margin: 25px;
+}
+
+.form-container {
+    background: linear-gradient(167deg, rgba(104,89,186,1) 0%, rgba(154,113,193,1) 100%);
+}
+
+.form-container#signup {
+    background: linear-gradient(22deg, rgba(88,137,197,1) 0%, rgba(59,84,186,1) 100%);
 }
 
 .form-container * {
     font-family: sans-serif;
-    color: #080710;
+    color: var(--black);
 }
 
 .form-container input[type=submit] {
     cursor: pointer;
     border-style: none;
     border-radius: 500px;
-    background-color: #f0f0f0;
+    background-color: var(--white);
     font-size: 15px;
     font-weight: 700;
     min-width: 100px;
     padding: 0px 20px;
     height: 40px;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+    box-shadow: rgba(0, 0, 0, 0.03) 0px 10px 20px, rgba(0, 0, 0, 0.03) 0px 6px 6px;
 }  
 
 .form-container input[type=submit]:hover {
@@ -30,7 +49,6 @@
 
 /* ===== Greet message ===== */
 .form-container > #title {
-    /* background-color: lightgreen; */
     margin-top: 50px;
     display: flex;
     flex-direction: column;
@@ -38,10 +56,14 @@
     justify-content: space-around;
 }
 
+.form-container > #title > * {
+    color: var(--white);
+}
+
 .form-container > #title > h1 {
     letter-spacing: 0.5px;
     font-size: 45px;
-    font-weight: 500;
+    font-weight: bolder;
     text-align: center;
     margin: 0px;
     margin-top: 15px;
@@ -59,7 +81,6 @@
 .form-container > form {
     margin-top: 10px;
     margin-bottom: 40px;
-    /* background-color: lightsalmon; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -84,6 +105,7 @@
     margin-bottom: 10px;
     font-weight: 500;
     font-size: 20px;
+    color: var(--white);
 }
 
 .form-container > form > input {
@@ -92,7 +114,7 @@
 
 /* ===== Alternative option ===== */
 .form-container #alternative {
-    background-color: #f0f0f0;
+    background-color: var(--white);
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -106,8 +128,14 @@
     font-weight: 500;
 }
 
-.form-container #alternative input {
-    background-color: rgb(185, 247, 185);
+#alternative input {
+    color: var(--white);
+    background-color: var(--blue) !important;
+}
+
+#signup #alternative input {
+    background-color: var(--pink) !important;
+    color: var(--white);
 }
 
 /* Make signup page slightly smaller */
