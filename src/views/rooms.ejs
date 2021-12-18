@@ -1,43 +1,95 @@
-<% let my_rooms = [{"title": "Room1" , "img" : "/images/chat.png" }, {"title": "Room2" , "img" : "/images/chat.png" }, {"title": "Room3" , "img" : "/images/chat.png" }] %>
+<% let my_rooms = [{"title": "Room1" , "img" : "/images/chat.png" }, {"title": "Room2" , "img" : "/images/chat.png" }, {"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room1" , "img" : "/images/chat.png" }, {"title": "Room2" , "img" : "/images/chat.png" }, {"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room1" , "img" : "/images/chat.png" }, {"title": "Room2" , "img" : "/images/chat.png" }, {"title": "Room3" , "img" : "/images/chat.png" },] %>
 <% let other_rooms = [{"title": "Chat 1" , "img" : "/images/chat.png" }, {"title": "Chat 2" , "img" : "/images/chat.png" }, {"title": "Chat 3" , "img" : "/images/chat.png" }] %>
+<% user = { invites: [{name:'room0'},{name:'room00'},{name:'room000'}] } %>
 
 <section id="rooms">
 
-    <!-- pubblic rooms -->
-    <article class="your_rooms" id="general">
-      <h1>Rooms You've Joined</h1>
-      <ul class="discover_lineup">
-            <!-- Used place holders -->
-            
-            <% rooms_.forEach( item => { %>
-                <li class="discover_item grow_hover shadow"><a href="/item/info">
-                    <img src="<%= item.img %>" alt="<%= item.title %>">
-                    <h1><%= item.title %></h1>
-                </a></li>
+    <div id="top">
+        <!-- pubblic rooms -->
+    <article class="my_rooms" id="general">
+        <h1>Your Rooms</h1>
+        <p>Every room you have joined, or created.</p>
+        <ul class="discover_lineup rooms">
+              
+            <% my_rooms.forEach( item => { %>
+                <li>
+                    <div class="discover_item grow_hover shadow">
+                        <a href="/item/info">
+                            <img src="<%= item.img %>" alt="<%= item.title %>">
+                            <h1><%= item.title %></h1>
+                        </a>
+                    </div>
+                    <button>Leave</button>
+                </li>
             <% }) %>
-  
-      </ul>
-    </article>
-
-    <!-- private rooms -->
-    <article class="explore_rooms" id="general">
-        <h1>Explore Rooms</h1>
-        <ul class="discover_lineup">
-              <!-- Used place holders -->
-              <% rooms.forEach( item => { %>
-                  <li class="discover_item grow_hover shadow"><a href="/item/info">
-                      <img src="<%= item.img %>" alt="<%= item.title %>">
-                      <h1><%= item.title %></h1>
-                  </a></li>
-              <% }) %>
     
         </ul>
       </article>
+  
+      <!-- private rooms -->
+      <article class="explore_rooms" id="general">
+          <h1>Explore Rooms</h1>
+          <p>Meet others with the same interests as you, and keep up to date on recent news.</p>
+          <ul class="discover_lineup rooms">
+              
+            <% other_rooms.forEach( item => { %>
+                <li>
+                    <div class="discover_item grow_hover shadow">
+                        <a href="/item/info">
+                            <img src="<%= item.img %>" alt="<%= item.title %>">
+                            <h1><%= item.title %></h1>
+                        </a>
+                    </div>
+                    <button>Ask to Join</button>
+                </li>
+            <% }) %>
     
-    <!-- too see the invites to join privates rooms -->
-    <section class="invites">
-        <%= room.invites %>
-        <button id="accept_invite">accept invite</button>
-    <section>
+        </ul>
+      </article>
+    </div>
+
+    <div id="bottom">
+
+        <section class="invites">
+            <ul>
+                <% user.invites.forEach(invite => { %>
+                    <li class="room_invite">
+                        <h3 class="room_name"><%= invite.name %></h3>
+                        <button>Accept</button>
+                    </li>
+                <% }) %>
+            </ul>
+        <section>
+
+        <section id="create_room">
+            <div class="form-container">
+
+                <section id="title">
+                    <h1>Create New Room</h1>
+                    <h2>Make a space where you and like-minded users can share, discuss, and engage with each other.</h2>
+                </section>
+            
+                <!-- Fix form action -->
+                <form method="POST" id="loginForm" action="/login" enctype="multipart/form-data">
+                    <label for="username">
+                        <h3>Name</h3>
+                        <input type="text" name="name" required>
+                    </label>
+                    <label for="password">
+                        <h3>Description</h3>
+                        <input type="text" name="desc" required>
+                    </label>
+                    <label for="icon">
+                        <h3>Icon</h3>
+                        <input type="file" id="file" name="icon" accept="image/*">
+                    </label>
+                    <input class="grow_hover" type="submit" value="Create">
+                </form>
+            
+            </div>
+        </section>
+
+    </div>
+    
   
   </section>

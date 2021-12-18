@@ -154,6 +154,11 @@ div#signup.form-container > form > label > input {
     font-size: 16px;
 }
 
+.form-container label > input[type=file] {
+    height: fit-content;
+    box-shadow: none;
+}
+
 div#signup.form-container > form > label > h3 {
     margin: 0px;
     margin-bottom: 5px;
