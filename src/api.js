@@ -341,7 +341,6 @@ async function prettyTrackingSales (walletAddress, time) {
 async function getAllEventsSince (time, offset = 0) {
     const timestmp = Math.trunc(Date.now() / 1000)
     const occuredAfter = timestmp - time
-    // console.log(timestmp, occuredAfter)
     // limit represent the limit of the event that we can get in a single API request
     const limit = 300;
     const options = {
@@ -398,11 +397,11 @@ function startTracking () {
 async function getCollections () {
     // Returns a random integer from 1 to 100:
     const offset = Math.floor(Math.random() * 49700);
-    console.log(offset);
+    console.log('Offset to retrieve random collections: ', offset);
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/collections',
-        params: { offset: offset, limit: '1' }
+        params: { offset: offset, limit: '300' }
     };
 
     let response;
@@ -431,8 +430,6 @@ async function getCollections () {
             num_assets: collection.stats.count
         }
 
-        console.log(collection.slug)
-
         redis.hmset('get_' + collection.slug,
             'title', collectionsData.title,
             'slug', collectionsData.slug,
@@ -447,7 +444,7 @@ async function getCollections () {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log(reply);
+                    console.log('Collection ' + collection.slug + ' was added to cache');
                 }
             }
         );
@@ -455,45 +452,54 @@ async function getCollections () {
         allCollectionsData.push(collectionsData)
     })
 
-    console.log(allCollectionsData)
+    // console.log(allCollectionsData)
     return allCollectionsData
 }
 
-function returnGetSlugObjectFromCache (collectionSlug) {
-    redis.hget('get_' + collectionSlug, 'title').then(async res => {
-        if (res === null) {
-            console.log('Collection ' + collectionSlug + ' was not found in cache')
-            return null
-        } else {
-            const getSlug = 'get_' + collectionSlug
+async function returnGetSlugObjectFromCache (collectionSlug) {
+    const res = await checkInCache(collectionSlug)
+    if (res === false) {
+        console.log('Collection ' + collectionSlug + ' was not found in cache')
+        return null
+    } else {
+        const getSlug = 'get_' + collectionSlug
 
-            const title = await redis.hget(getSlug, 'title')
-            const slug = await redis.hget(getSlug, 'slug')
-            const img = await redis.hget(getSlug, 'slug')
-            const bannerImg = await redis.hget(getSlug, 'banner_img')
-            const link = await redis.hget(getSlug, 'link')
-            const OpenSeaLink = await redis.hget(getSlug, 'OpenSea_link')
-            const totalVolume = await redis.hget(getSlug, 'total_volume')
-            const numOwners = await redis.hget(getSlug, 'num_owners')
-            const numAssets = await redis.hget(getSlug, 'num_assets')
+        const title = await redis.hget(getSlug, 'title')
+        const slug = await redis.hget(getSlug, 'slug')
+        const img = await redis.hget(getSlug, 'slug')
+        const bannerImg = await redis.hget(getSlug, 'banner_img')
+        const link = await redis.hget(getSlug, 'link')
+        const OpenSeaLink = await redis.hget(getSlug, 'OpenSea_link')
+        const totalVolume = await redis.hget(getSlug, 'total_volume')
+        const numOwners = await redis.hget(getSlug, 'num_owners')
+        const numAssets = await redis.hget(getSlug, 'num_assets')
 
-            const data = {
-                title: title,
-                slug: slug,
-                img: img,
-                banner_img: bannerImg,
-                link: link,
-                OpenSea_link: OpenSeaLink,
-                total_volume: totalVolume,
-                num_owners: numOwners,
-                num_assets: numAssets
-            }
-
-            console.log(data)
-            return data
+        const data = {
+            title: title,
+            slug: slug,
+            img: img,
+            banner_img: bannerImg,
+            link: link,
+            OpenSea_link: OpenSeaLink,
+            total_volume: totalVolume,
+            num_owners: numOwners,
+            num_assets: numAssets
         }
-    })
+
+        console.log(data)
+        return data
+    }
 }
+
+async function checkInCache (slug) {
+    const inCache = await redis.hget('get_' + slug, 'title')
+    if (inCache === null) {
+        return false
+    } else {
+        return true
+    }
+}
+
 
 module.exports.dailySales = dailySales;
 module.exports.dailyVolume = dailyVolume;
@@ -503,4 +509,4 @@ module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
 module.exports.startTracking = startTracking;
 module.exports.getCollections = getCollections;
 module.exports.returnGetSlugObjectFromCache = returnGetSlugObjectFromCache;
-
+module.exports.checkInCache = checkInCache;
