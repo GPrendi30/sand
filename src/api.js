@@ -5,54 +5,6 @@ const redis = require('./redis').client;
 
 const apiKey = process.env.OPENSEA_API;
 
-// const object = {
-//     name: 'enrico',
-//     surname: 'di pietro'
-// }
-
-// redis.set('obj', object, function (err, reply) {
-//     console.log(err);
-//     console.log(reply);
-// });
-
-// const obj = redis.get('obj',
-//     function (err, reply) {
-//         console.log(err);
-//         console.log(reply);
-//     });
-
-// console.log('obj.name', obj.name)
-// console.log('obj.surname', obj.surname)
-
-// redis.hmset('slug', 'surrrname', 'enrico', 'surname', 'dipiee', function (err, reply) {
-//     if (err) {
-//         console.log(err);
-//     } else {
-//         console.log(reply);
-//     }
-// });
-
-// redis.hget('fewrfmjewfjm', 'surname', function (err, reply) {
-//     if (err) {
-//         console.log(err);
-//     } else {
-//         console.log(reply);
-//     }
-// });
-// if not in the cache response is null
-// redis.hget('shish', 'shishsh').then(res => { console.log(res) })
-
-// collectionData = {
-//     title: data.collection.name,
-//     slug: slug,
-//     img: data.collection.image_url,
-//     banner_img: data.collection.banner_image_url,
-//     OpenSea_link: 'https://opensea.io/collection/' + slug,
-//     total_volume: data.collection.stats.total_volume,
-//     num_owners: data.collection.stats.num_owners,
-//     num_assets: data.collection.stats.count
-// }
-
 /**
  * Function to get the general data of a collection passing as parameter a collection slug.
  * @param string slug, the collection slug
@@ -477,46 +429,70 @@ async function getCollections () {
             total_volume: collection.stats.total_volume,
             num_owners: collection.stats.num_owners,
             num_assets: collection.stats.count
-
         }
 
         console.log(collection.slug)
 
-        // redis.hmset('get_' + collection.slug,
-        //     'title', collectionsData.title,
-        //     'slug', collectionsData.slug,
-        //     'img', collectionsData.img,
-        //     'banner_img', collectionsData.banner_img,
-        //     'link', collectionsData.link,
-        //     'OpenSea_link', collectionsData.OpenSea_link,
-        //     'total_volume', collectionsData.total_volume,
-        //     'num_owners', collectionsData.num_owners,
-        //     'num_assets', collectionsData.num_assets,
-        //     function (err, reply) {
-        //         if (err) {
-        //             console.log(err);
-        //         } else {
-        //             console.log(reply);
-        //         }
-        //     }
-        // );
-
-        // collectionData = {
-        //     title: data.collection.name,
-        //     slug: slug,
-        //     img: data.collection.image_url,
-        //     banner_img: data.collection.banner_image_url,
-        //     OpenSea_link: 'https://opensea.io/collection/' + slug,
-        //     total_volume: data.collection.stats.total_volume,
-        //     num_owners: data.collection.stats.num_owners,
-        //     num_assets: data.collection.stats.count
-        // }
+        redis.hmset('get_' + collection.slug,
+            'title', collectionsData.title,
+            'slug', collectionsData.slug,
+            'img', collectionsData.img,
+            'banner_img', collectionsData.banner_img,
+            'link', collectionsData.link,
+            'OpenSea_link', collectionsData.OpenSea_link,
+            'total_volume', collectionsData.total_volume,
+            'num_owners', collectionsData.num_owners,
+            'num_assets', collectionsData.num_assets,
+            function (err, reply) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(reply);
+                }
+            }
+        );
 
         allCollectionsData.push(collectionsData)
     })
 
     console.log(allCollectionsData)
     return allCollectionsData
+}
+
+function returnGetSlugObjectFromCache (collectionSlug) {
+    redis.hget('get_' + collectionSlug, 'title').then(async res => {
+        if (res === null) {
+            console.log('Collection ' + collectionSlug + ' was not found in cache')
+            return null
+        } else {
+            const getSlug = 'get_' + collectionSlug
+
+            const title = await redis.hget(getSlug, 'title')
+            const slug = await redis.hget(getSlug, 'slug')
+            const img = await redis.hget(getSlug, 'slug')
+            const bannerImg = await redis.hget(getSlug, 'banner_img')
+            const link = await redis.hget(getSlug, 'link')
+            const OpenSeaLink = await redis.hget(getSlug, 'OpenSea_link')
+            const totalVolume = await redis.hget(getSlug, 'total_volume')
+            const numOwners = await redis.hget(getSlug, 'num_owners')
+            const numAssets = await redis.hget(getSlug, 'num_assets')
+
+            const data = {
+                title: title,
+                slug: slug,
+                img: img,
+                banner_img: bannerImg,
+                link: link,
+                OpenSea_link: OpenSeaLink,
+                total_volume: totalVolume,
+                num_owners: numOwners,
+                num_assets: numAssets
+            }
+
+            console.log(data)
+            return data
+        }
+    })
 }
 
 module.exports.dailySales = dailySales;
@@ -526,13 +502,5 @@ module.exports.getCollectionDataWithAddress = getCollectionDataWithAddress;
 module.exports.getCollectionDataWithSlug = getCollectionDataWithSlug;
 module.exports.startTracking = startTracking;
 module.exports.getCollections = getCollections;
+module.exports.returnGetSlugObjectFromCache = returnGetSlugObjectFromCache;
 
-getCollections()
-
-// redis.hget('get_', 'surname', function (err, reply) {
-//     if (err) {
-//         console.log(err);
-//     } else {
-//         console.log(reply);
-//     }
-// });
