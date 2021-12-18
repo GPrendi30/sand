@@ -1,4 +1,3 @@
-
 function linkClick(href) {
     const url = new URL(href); // parse link address
     console.log(url)
@@ -21,8 +20,8 @@ function linkClick(href) {
     } else { console.log('Unknown route'); }
 }
 
-
-function parsePath() {
+// TODO
+function parsePath(path) {
     const hash = window.location.hash
     if (hash) {
         if (hash === '#dashboard') {
@@ -161,7 +160,12 @@ function getLogin(lastLocation) {
         }).then(res => {
             if (res.url.includes('/login')) {
                 getLogin();
-            } else getHome();
+            } else { 
+                if (!socket.connected) {
+                    socket.connect();
+                }
+                getHome();
+            }
         });
     });
 
@@ -274,7 +278,17 @@ function getRoom(url) {
         .then(roomData => {
             window.location = '#' + url.pathname
             const main = document.querySelector('main');
+            console.log(roomData);
             main.innerHTML = ejs.src_views_single_room(roomData); // work in progress
+
+            document.getElementById('send').onclick = () => {
+                console.log('send');
+                const message = document.getElementById('messageInput')
+                console.log(message.value);
+                
+                socket.emit('room.event.send.message', { room: roomData.room._id, 'message': message.value });
+                message.value = '';
+            }
         })
         .catch(err => console.log(err))
 }
