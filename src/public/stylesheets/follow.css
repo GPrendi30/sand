@@ -1,12 +1,23 @@
+:root {
+    --deepblue: #3B54BA;
+    --blue: #5889C5;
+    --lightblue: #90C1DA;
+    --lightpink: #A79DDC;
+    --pink:#9A71C1;
+    --purple: #6859ba;
+    --white: #f0f0f0;
+    --black: #2d2d2d;
+}
+
 section.follow {
-    background-color: rgb(141, 137, 156);
+    background-color: var(--pink);
     border-radius: 15px;
     overflow: hidden;
     min-width: 350px;
     max-width: 900px;
     width: 75%;
     margin: 20px 15px 0px 15px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    box-shadow: rgba(104, 89, 186, 0.1) 0px 30px 35px, rgba(0, 0, 0, 0.1) 0px -10px 25px, rgba(0, 0, 0, 0.1) 0px 4px 6px, rgba(0, 0, 0, 0.1) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     display: grid;
     grid-template-columns: auto;
     grid-template-rows: auto 70px;
@@ -21,7 +32,7 @@ section#top {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "img info";
-    background-color: #f0f0f0;
+    background-color: var(--white);
     height: 100%;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 10px -10px;
 }

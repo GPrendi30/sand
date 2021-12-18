@@ -1,30 +1,29 @@
-<% let obj={"title": "You wouldn't right click an NFT" , "img" : "/images/irony.jpg" , "value" : 69420} %>
-    <section class="follow">
+<section class="follow">
 
-        <section id="top">
-            <section id="info">
-                <div>
-                    <h1>
-                        <%= obj.title %>
-                    </h1>
-                    <section id="desc">
-                        <h2>Info:</h2>
-                        <p>This NFT is classified as '<%= obj.title %>' NFT Art.
-                                It's current value in the market is <%= obj.value %> CHF.
-                                    Market value expected to increase.</p>
-                    </section>
-                </div>
-            </section>
-            <section id="img">
-                <div>
-                    <img src="<%= obj.img %>" alt="<%= obj.title %>">
-                </div>
-            </section>
+    <section id="top">
+        <section id="info">
+            <div>
+                <h1>
+                    <%= obj.title %>
+                </h1>
+                <section id="desc">
+                    <h2>Info:</h2>
+                    <p>This NFT is classified as '<%= obj.title %>' NFT Art.
+                            It's current value in the market is <%= obj.value %> CHF.
+                                Market value expected to increase.</p>
+                </section>
+            </div>
         </section>
-
-        <section id="buttons">
-            <button class="button">Add +</button>
-            <button class="button">Track</button>
-            <button class="button">Notify Me</button>
+        <section id="img">
+            <div>
+                <img src="<%= obj.img %>" alt="<%= obj.title %>">
+            </div>
         </section>
     </section>
+
+    <section id="buttons">
+        <button class="button">Add +</button>
+        <button class="button">Track</button>
+        <button class="button">Notify Me</button>
+    </section>
+</section>
