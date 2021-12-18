@@ -47,8 +47,14 @@ function getHome() {
 
     const main = document.querySelector('main');
 
-    main.innerHTML = ejs.src_views_index(
-        { friends: [{ name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }] });
+    main.innerHTML = ejs.src_views_settings({
+        result: {
+            _id: 0
+        }
+    });
+
+    // main.innerHTML = ejs.src_views_index(
+    //     { friends: [{ name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }] });
 
     /*
     NOTHING TO FETCH FOR THE MOMENT
