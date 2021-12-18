@@ -47,8 +47,35 @@ function getHome() {
 
     const main = document.querySelector('main');
 
-    main.innerHTML = ejs.src_views_index(
-        { friends: [{ name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }] });
+    const user = {
+        //_id: id,
+        username: 'Average_CTRL+C_Enjoyer',
+        email: 'nftlover99@gmail.com',
+        name: 'Joe',
+        surname: 'Mama',
+        ppic: 'images/user1.png',
+        bio: 'A looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bioA looooooooooooooooooooooooooooooooooooooooooooooooooong bio',
+        friendlist: [],
+        friendrequests: [],
+        blocked: [],
+        tracking: [],
+        recentlyviewed: []
+    }
+
+    const friend = { username: 'AverageNFTFan', ppic: 'images/user2.png' }
+
+    user.friendlist = [friend, friend, friend, friend, friend];
+    user.friendrequests = [friend, friend];
+
+    const collection = { name: 'CoolCats', img: 'images/user1.png' };
+
+    user.tracking = [collection, collection, collection, collection, collection];
+    user.blocked = [];
+    
+    main.innerHTML = ejs.src_views_profile({ user: user })
+
+    //main.innerHTML = ejs.src_views_index(
+        //{ friends: [{ name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }, { name: 'not-geri' }] });
 
     /*
     NOTHING TO FETCH FOR THE MOMENT

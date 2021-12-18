@@ -6,6 +6,7 @@
     --pink:#9A71C1;
     --purple: #6859BA;
     --white: #f0f0f0;
+    --black: #2d2d2d;
 }
 
 section#friendlist {
@@ -16,7 +17,7 @@ section#friendlist {
     display: grid;
     grid-template-columns: 5fr minmax(120px, 1fr);
     grid-template-rows: 1fr;
-    grid-template-areas: "pg bm"
+    grid-template-areas: "pg bm";
 }
 
 #page {

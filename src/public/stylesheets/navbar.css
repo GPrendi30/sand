@@ -6,8 +6,8 @@
     --pink:#9A71C1;
     --purple: #6859BA;
     --white: #f0f0f0;
+    --black: #2d2d2d;
 }
-
 #navbar {
     grid-area: nav;
     max-width: 250px;
@@ -113,7 +113,7 @@
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: black;
+    background-color: #252B5C;
     transform-origin: bottom center;
     transition: transform 0.25s ease-out;
 }

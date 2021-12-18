@@ -53,6 +53,7 @@ section#wallet {
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: center;
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(79deg) brightness(104%) contrast(104%);
 }
 
 .header-icon#wallet {
@@ -107,7 +108,6 @@ section#wallet {
     border-radius: 34px;
     -webkit-transition: .2s;
     transition: .2s;
-    border: 1px solid black;
 }
 
 .slider:before {

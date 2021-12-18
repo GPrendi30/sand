@@ -12,6 +12,11 @@
 body {
     padding: 0px !important;
     font-family: sans-serif;
+    color: var(--black);
+}
+
+a {
+    color: var(--black) !important;
 }
 
 :root {
@@ -22,6 +27,7 @@ body {
     --pink:#9A71C1;
     --purple: #6859BA;
     --white: #f0f0f0;
+    --black: #2d2d2d;
 }
 
 #header,
