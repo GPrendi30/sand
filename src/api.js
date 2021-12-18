@@ -466,7 +466,7 @@ async function returnGetSlugObjectFromCache (collectionSlug) {
 
         const title = await redis.hget(getSlug, 'title')
         const slug = await redis.hget(getSlug, 'slug')
-        const img = await redis.hget(getSlug, 'slug')
+        const img = await redis.hget(getSlug, 'img')
         const bannerImg = await redis.hget(getSlug, 'banner_img')
         const link = await redis.hget(getSlug, 'link')
         const OpenSeaLink = await redis.hget(getSlug, 'OpenSea_link')
@@ -499,7 +499,6 @@ async function checkInCache (slug) {
         return true
     }
 }
-
 
 module.exports.dailySales = dailySales;
 module.exports.dailyVolume = dailyVolume;
