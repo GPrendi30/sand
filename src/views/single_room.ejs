@@ -1,8 +1,8 @@
 <html>
 
 <head>
-    <link href="stylesheets/single_room.css" rel="stylesheet" />
-    <link href="stylesheets/general.css" rel="stylesheet" />
+    <link href="public/stylesheets/single_room.css" rel="stylesheet" />
+    <link href="public/stylesheets/general.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -35,37 +35,15 @@
         
             <!-- member list aside -->
             <section id="members">
-                <section id="admins">
-        
-                    <h2>Admins</h2>
-                    <ul class="member_list">
-                        <%- include('includes/room_member', {user:author, role:'author'}) %>
-                        <%- include('includes/room_member', {user:admins[1], role:'admin'}) %>
-                    </ul>
-        
-                    <!-- TODO: Implement this version instead -->
-                    <%- /* include('room_member', {user:room.author, role:'author'}) */ %>
-                    <% /* admins.forEach( admin => { */ %>
-                        <% /* if (!room.isAuthor(admin)) { */ %>
-                            <%- /* include('room_member', {user:admin, role:'admin'}) */ %>
-                        <% /* }; */%>
-                    <% /* }); */%>
-                </section>
                 <section id="normal_members">
         
                     <h2>Members</h2>
                     <ul class="member_list">
-                        <%- include('includes/room_member', {user:users[2], role:'user'}) %>
-                        <%- include('includes/room_member', {user:users[3], role:'user'}) %>
-                        <%- include('includes/room_member', {user:users[4], role:'user'}) %>
+                        <% users.forEach( user => { %>
+                            <%- include('includes/room_member', {user:user, role:'user'}) %>
+                        <% }); %>
                     </ul>
-        
-                    <!-- TODO: Implement this version instead -->
-                    <!-- <% users.forEach( user => { %>
-                        <% /* if (!room.isAdmin(user)) { */%>
-                            <%- /* include('room_member', {user:user, role:'user'}) */ %>
-                        <% /* }; */%>
-                    <% }); %> -->
+                    
                 </section>
             </section>
         </section>  
