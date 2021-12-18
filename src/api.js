@@ -476,7 +476,7 @@ async function returnGetSlugObjectFromCache (collectionSlug) {
 
         const data = {
             title: title,
-            slug: slug,
+           slug: slug,
             img: img,
             banner_img: bannerImg,
             link: link,
@@ -500,6 +500,25 @@ async function checkInCache (slug) {
     }
 }
 
+function storeVolumeArrayInCache (collectionSlug, volumeArray) {
+    const stringifiedArray = JSON.stringify(volumeArray) // JSON.parse(..) to go back
+
+    redis.set('vol_' + collectionSlug, stringifiedArray, function (err, reply) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Collection ' + collectionSlug + ' was added to cache');
+        }
+    });
+}
+
+async function getVolumeArrayFromCache (collectionSlug) {
+    const stringifiedArray = await redis.get('vol_' + collectionSlug)
+
+    console.log('Array got from cache ', JSON.parse(stringifiedArray))
+    return JSON.parse(stringifiedArray)
+}
+
 module.exports.dailySales = dailySales;
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
@@ -509,3 +528,14 @@ module.exports.startTracking = startTracking;
 module.exports.getCollections = getCollections;
 module.exports.returnGetSlugObjectFromCache = returnGetSlugObjectFromCache;
 module.exports.checkInCache = checkInCache;
+
+// storeVolumeArrayInCache('test', [5, 4, 3, 2, 1])
+
+// getVolumeArrayFromCache('test')
+
+// { latest: timestamp, data: [] }
+
+
+// method to get volume(3) -> [1,2,3,       4]
+//                          first day    from midnight to now
+// when we fetch data we want to save everything except last element array array.pop()
