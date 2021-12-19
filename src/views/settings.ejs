@@ -32,7 +32,23 @@
                 <h2 class="title" >Modify your profile information</h1>
 
                 <div>
-                    <form method="POST" action="user/settings/<%= result._id %>?req=settings" enctype="multipart/form-data">
+                    <form method="POST" action="user/settings/<%= result._id %>?req=name" enctype="multipart/form-data">
+                        <label for="name">
+                            <h3>Name</h3>
+                            <input class="input" type="text" name="name" required>
+                            <input class="button" type="submit" value="Change name">
+                        </label>
+                    </form>
+            
+                    <form method="POST" action="user/settings/<%= result._id %>?req=surname" enctype="multipart/form-data">
+                        <label for="surname">
+                            <h3>Surname</h3>
+                            <input class="input" type="text" name="surname">
+                            <input class="button" type="submit" value="Change surname">
+                        </label>
+                    </form>
+
+                    <form method="POST" action="user/settings/<%= result._id %>?req=email" enctype="multipart/form-data">
                         <label for="email">
                             <h3>Email address</h3>
                             <input class="input" type="text" name="email" required>

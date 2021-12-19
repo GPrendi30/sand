@@ -19,6 +19,11 @@ div#settings {
     gap: 25px;
 }
 
+div#settings .button {
+    background-color: var(--lightpink);
+    color: var(--black);
+}
+
 div#settings > section {
     width: 100%;
 }
@@ -52,6 +57,12 @@ section#profile_picture label {
     align-items: center;
 }
 
+#user_info label h3, #password label h3 {
+    color: var(--black);
+    font-weight: 900;
+    letter-spacing: 0.5px;
+}
+
 section#profile_picture > form > div {
     display: flex;
     flex-direction: row;
@@ -70,8 +81,11 @@ section.settings_section {
 
 section.settings_section > div {
     width: 100%;
+    padding: 0px 180px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-evenly;
+    gap: 25px;
 }
 
 section.settings_section h2 {
