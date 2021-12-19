@@ -18,8 +18,9 @@ const wrap = middleware => (socket, next) => middleware(socket.request, {}, next
 // authentication validator
 
 */
-
-//io.use(wrap(passport.initialize()))
+let users;
+(async () => { users = await User.find({}); })();
+// io.use(wrap(passport.initialize()))
 
 io.use(sharedsession(session, {
     autoSave: true
@@ -37,17 +38,16 @@ io.use(passportSocketIo.authorize({
 io.use((socket, next) => {
     // if request.user is an object (is not undefined)
     // the passport has authenticated a user
-    if (socket.request.user) {
+    if (socket.request.user.logged_in) {
         next();
-    } else { // no user authorization.
-        next(new Error('unauthorized'))
+    } else { // no user autherization
+        next('disconnect')
     }
 });
 
 function onAuthorizeSuccess(data, accept) {
     console.log('successful connection to socket.io');
    
-    
     // The accept-callback still allows us to decide whether to
     // accept the connection or not.
     accept(null, true);
@@ -82,6 +82,11 @@ function init(server) {
             delete authenticatedSockets[socket.id];
         })
 
+        
+       
+
+        // console.log('user connected id:', authenticatedSockets[socket.id]);
+
         // RECEIVE AND HANDLE PENDING FRIEND REQUESTS
         socket.on('friend.request.sent', async friendRequest => {
             /**
@@ -92,13 +97,13 @@ function init(server) {
             const user = authenticatedSockets[socket.id];
             if (user == null) return; // more checks better.
             try {
-                const friend = await User.find({ _id: friendRequest.receiver });
+                const friend = await User.findOne({ _id: friendRequest.receiver });
                 if (friend === null) throw new Error('Friend not found');
 
                 user.sendFriendRequest(friend);
-                socket.emit('friend.request.result', { message: 'Request sent', sent: true, user: friend.username })
+                socket.to(String(user._id)).emit('friend.request.sent.accepted', { message: 'Request sent', sent: true, user: friend.username })
             } catch (e) {
-                socket.emit('friend.request.result', { message: 'User not found', sent: false, user: null });
+                socket.to(String(user._id)).emit('friend.request.sent.rejected', { message: 'User not found', sent: false, user: null });
             }
         });
 
@@ -114,13 +119,13 @@ function init(server) {
             if (user == null) return; // more checks better.
 
             try {
-                const friend = await User.find({ _id: acceptResponse.receiver });
+                const friend = await User.findOne({ _id: acceptResponse.receiver });
                 if (friend === null) throw new Error('Friend not found');
 
                 user.acceptFriendRequest(friend);
-                socket.emit('friend.request.result', { message: 'Request Accepted', sent: true, user: friend.username })
+                socket.to(String(user._id)).emit('friend.request.accpted', { message: 'Request Accepted', sent: true, user: friend.username })
             } catch (e) {
-                socket.emit('friend.request.result', { message: 'User not found', sent: false, user: null });
+                socket.to(String(user._id)).emit('friend.request.rejected', { message: 'User not found', sent: false, user: null });
             }
         })
 
@@ -135,13 +140,13 @@ function init(server) {
             if (user == null) return; // more checks better.
 
             try {
-                const friend = await User.find({ _id: unfriendRequest.receiver });
+                const friend = await User.findOne({ _id: unfriendRequest.receiver });
                 if (friend === null) throw new Error('Friend not found');
 
                 user.unFriend(friend);
-                socket.emit('friend.request.result', { message: 'Friend unfriended', sent: true, user: friend.username })
+                socket.to(String(user._id)).emit('Unfriend.request.accepted', { message: 'Friend unfriended', sent: true, user: friend.username })
             } catch (e) {
-                socket.emit('friend.request.result', { message: 'User not found', sent: false, user: null });
+                socket.to(String(user._id)).emit('Unfriend.request.rejected', { message: 'User not found', sent: false, user: null });
             }
         });
 
@@ -155,13 +160,13 @@ function init(server) {
             if (user == null) return; // more checks better.
 
             try {
-                const friend = await User.find({ _id: blockRequest.receiver });
+                const friend = await User.findOne({ _id: blockRequest.receiver });
                 if (friend === null) throw new Error('Friend not found');
 
                 user.blockFriend(friend);
-                socket.emit('friend.request.result', { message: 'Friend blocked', sent: true, user: friend.username })
+                socket.to(String(user._id)).emit('friend.request.block.accepted', { message: 'Friend blocked', sent: true, user: friend.username })
             } catch (e) {
-                socket.emit('friend.request.result', { message: 'User not found', sent: false, user: null });
+                socket.to(String(user._id)).emit('friend.request.block.rejected', { message: 'User not found', sent: false, user: null });
             }
         })
 
@@ -175,135 +180,43 @@ function init(server) {
             if (user == null) return; // more checks better.
 
             try {
-                const friend = await User.find({ _id: unblockRequest.receiver });
+                const friend = await User.findOne({ _id: unblockRequest.receiver });
                 if (friend === null) throw new Error('Friend not found');
 
                 user.unblockFriend(friend);
-                socket.emit('friend.request.result', { message: 'Friend unblocked', sent: true, user: friend.username })
+                socket.to(String(user._id)).emit('friend.request.unblock.accepted', { message: 'Friend unblocked', sent: true, user: friend.username })
             } catch (e) {
-                socket.emit('friend.request.result', { message: 'User not found', sent: false, user: null });
+                socket.to(String(user._id)).emit('friend.request.unblock.rejected', { message: 'User not found', sent: false, user: null });
             }
-        })
-
-        // tracking
-
-        socket.on('track', async tracking => {
-            const asset = tracking.asset
-            const user = await User.find(tracking.user)
-            user.tracking.push(asset)
-            user.recentlyViewed.push(asset)
-            const filter = { username: user.username }
-            await User.replaceOne(filter, user, { upsert: true })
-            console.log('asset: ' + asset + ' added to ' + user.username + ' tracking list')
-            console.log('asset: ' + asset + ' added to ' + user.username + ' recentlyviewed')
-            socket.emit('asset.added', tracking);
-        })
-
-        socket.on('untrack', async untracking => {
-            const asset = untracking.asset
-            const user = await User.find(untracking.user)
-            const index = user.tracking.indexOf(asset)
-            user.tracking.splice(index, 1)
-            const filter = { username: user.username }
-            await User.replaceOne(filter, user, { upsert: true })
-            console.log('asset: ' + asset + ' added to ' + user.username + ' tracking list')
-            socket.emit('asset.removed', untracking);
-        })
-        // rooms
-        // admins
-        socket.on('add.admin', async add => {
-            const room = await Room.find(add.room)
-            room.addAdmin(add.author, add.user)
-            const filter = { _id: room.getRoomId() }
-            await Room.replaceOne(filter, room, { upsert: true })
-            console.log('admin' + add.user + 'added by ' + add.author + 'to' + room.getRoomId)
-            socket.emit('admin.added', add)
-        })
-
-        socket.on('remove.admin', async remove => {
-            const room = await Room.find(remove.room)
-            room.removeAdmin(remove.author, remove.user)
-            const filter = { _id: room.getRoomId() }
-            await Room.replaceOne(filter, room, { upsert: true })
-            socket.emit('admin.removed', remove)
-        })
-
-        // members
-        socket.on('add.member', async add => {
-            const room = await Room.find(add.room)
-            room.addMember(add.admin, add.user)
-            const filter = { _id: room.getRoomId() }
-            await Room.replaceOne(filter, room, { upsert: true })
-            console.log('member' + add.user + 'added by ' + add.admin + 'to' + room.getRoomId)
-            socket.emit('member.added', add)
-        })
-
-        socket.on('remove.member', async remove => {
-            const room = await Room.find(remove.room)
-            room.removeMember(remove.admin, remove.user)
-            const filter = { _id: room.getRoomId() }
-            await Room.replaceOne(filter, room, { upsert: true })
-            socket.emit('member.removed', remove)
-        })
-
-        socket.on('set.icon', async setting => {
-            const room = await Room.find(setting.room)
-            room.setIcon(setting.admin, setting.icon)
-            const filter = { _id: room.getRoomId() }
-            await Room.replaceOne(filter, room, { upsert: true })
-            console.log('icon added by ' + setting.admin + 'to' + room.getRoomId)
-            socket.emit('icon.setted', setting)
-        })
-
-        socket.on('set.name', async setting => {
-            const room = await Room.find(setting.room)
-            room.setName(setting.admin, setting.name)
-            const filter = { _id: room.getRoomId() }
-            await Room.replaceOne(filter, room, { upsert: true })
-            console.log('name added by ' + setting.admin + 'to' + room.getRoomId)
-            socket.emit('name.added', setting)
-        })
-
-        socket.on('set.desc', async setting => {
-            const room = await Room.find(setting.room)
-            room.setDesc(setting.admin, setting.desc)
-            const filter = { _id: room.getRoomId() }
-            await Room.replaceOne(filter, room, { upsert: true })
-            console.log('desc added by ' + setting.admin + 'to' + room.getRoomId)
-            socket.emit('desc.added', setting)
-        })
-        socket.on('room.message.sent', event => {
-            const sender = socket.request.session.user;
-            const message = new Message({ user: sender, message: event.message })
-        })
-
-        socket.on('send', async event => {
-            const chat = await Chat.find(event.chat)
-            const message = event.message
-            Chat.addMessage(message)
-            const filter = { _id: chat._id }
-            await Chat.replaceOne(filter, chat, { upsert: true })
-            socket.emit('message.sent', event)
-        })
-
-        socket.on('add.user', async event => {
-            const chat = await Chat.find(event.chat)
-            const user = event.user
-            chat.addUser(user)
-            const filter = { _id: chat._id }
-            await Chat.replaceOne(filter, chat, { upsert: true })
-            socket.emit('user.added', event)
         })
     })
 }
+
 eventBus.on('io', () => {
     console.log('io event')
 })
 
-eventBus.on('tracking_update', update => {
-    console.log('sending tracking update...')
-    io.emit('tracking_update', update)
-})
+
+
+// tracking update dispatcher
+eventBus.on('tracking_update', events => {
+    console.log('hello')
+    users.forEach(user => {
+        const socketset = io.sockets.adapter.rooms.get(String(user._id));
+        // if (socketset == null) return;
+        console.log('hello')
+        events.forEach(event => {
+            if (event.asset == null) return;
+            if (!user.isTracking(event.asset.name) ||
+                !user.isTracking(event.asset.symbol) ||
+                !user.isTracking(event.metadata.seller) ||
+                !user.isTracking(event.metadata.buyer)) {
+                    console.log('sending tracking update to ' + user.username)
+                    io.to(String(user._id)).emit('tracking_update', event)
+            }
+        });
+    })
+});
 
 module.exports.eventBus = eventBus;
 module.exports.init = init;
