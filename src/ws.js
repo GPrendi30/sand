@@ -268,6 +268,35 @@ function init(server) {
                     room: addMemberEvent.room
                 })
         })
+
+        socket.on('room.event.remove.member', async removeMemberEvent => {
+            const room = await Room.findOne({ _id: removeMemberEvent.room })
+
+            const user = authenticatedSockets[socket.id];
+            room.removeMember(user, removeMemberEvent.user)
+
+            socket.to(room._id).emit('member.removed', remove)
+        })
+
+        // not needed.
+        socket.on('room.event.set.icon', async setting => {
+            const room = await Room.findOne({ _id: setting.room })
+            room.setIcon(setting.admin, setting.icon)
+            const filter = { _id: room.getRoomId() }
+            await Room.replaceOne(filter, room, { upsert: true })
+            console.log('icon added by ' + setting.admin + 'to' + room.getRoomId)
+            socket.to(room._id).emit('icon.setted', setting)
+        })
+
+        socket.on('room.event.set.name', async setNameEvent => {
+            const room = await Room.findOne({ _id: setNameEvent.room })
+
+            const user = authenticatedSockets[socket.id];
+
+            room.setName(user, setNameEvent.name)
+
+            socket.to(room._id).emit('room.event.name.set', { message: 'Room name set', finalized: true, name: setNameEvent.name, room: setNameEvent.room })
+        })
     })
 }
 
