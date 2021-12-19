@@ -33,6 +33,10 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
+    rooms: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Room'
+    }],
     ppic: Buffer,
     bio: String,
     tracking: [String],
@@ -92,6 +96,10 @@ userSchema.methods.unFriend = function (friend) {
     this.friendlist.splice(idx, 1);
 }
 
+userSchema.methods.addRoom = function (room) {
+    if (this.rooms.includes(room._id)) return;
+    this.rooms.push(room._id);
+}
 
 /**
  asset can be either a wallet, a token address, or a collection slug.
@@ -108,9 +116,13 @@ userSchema.methods.untrack = function (asset) {
     this.tracking.splice(idx, 1);
 }
 
+userSchema.methods.isTracking = function (asset) {
+    return this.tracking.includes(asset);
+}
+
 userSchema.methods.blockFriend = function (friend) {
     if (this.blocked.includes(friend._id)) return;
-
+    friend.unFriend(this);
     this.blocked.push(friend._id);
 }
 
