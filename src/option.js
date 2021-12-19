@@ -79,8 +79,8 @@ async function getOptionForDailyVolume (contractSlug, timeInDays) {
  * @returns {array} object option that is used to draw the chart.
  */
 async function getOptionForScatterChart (collectionSlug, timeInDays) {
-    const startTimestamp = currentTimestamp - 86400 * timeInDays;
-    const endTimestamp = currentTimestamp;
+    const startTimestamp = (Date.now() / 1000) - 86400 * timeInDays;
+    const endTimestamp = (Date.now() / 1000);
 
     let timePriceArray;
     let option;
@@ -152,7 +152,7 @@ async function getOptionForDailySales (collectionSlug, timeInDays) {
     let option;
     let title;
     try {
-        dailySalesArray = await dailySales(collectionSlug, timeInDays) // HERE
+        dailySalesArray = await dailySales(collectionSlug, timeInDays)
         title = (await getCollectionDataWithSlug(collectionSlug)).collection.name;
 
         option = {

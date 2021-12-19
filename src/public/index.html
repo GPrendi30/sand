@@ -111,7 +111,7 @@
         function getBarGraph() {
             document.getElementById("graph").style.backgroundImage = "url(/images/loading.gif)";
 
-            fetch('/graph/data?chart=dailySales&slug=doodles-official&time=5')
+            fetch('/graph/data?chart=dailyVolume&slug=doodles-official&time=7')
                 .then(res => res.json())
                 .then(option => {
                     document.getElementById("graph").style.backgroundImage = 'none';
