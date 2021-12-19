@@ -11,7 +11,7 @@ const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
 
 /**
  * Function to generate the options for a daily volume bar chart.
- * @param string contractAddress, the contract address of the collection.
+ * @param string collectionSlug, the slug of the collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object option that is used to draw the chart.
  */
@@ -74,7 +74,7 @@ async function getOptionForDailyVolume (contractSlug, timeInDays) {
 
 /**
  * Function to generate the options for a scatter chart.
- * @param string contractAddress, the contract address of the collection.
+ * @param string collectionSlug, the slug of the collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object option that is used to draw the chart.
  */
@@ -131,11 +131,11 @@ async function getOptionForScatterChart (collectionSlug, timeInDays) {
 
 /**
  * Function to generate the options for a daily sales bar chart.
- * @param string contractAddress, the contract address of the collection.
+ * @param string collectionSlug, the slug of the collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object option that is used to draw the chart.
  */
-async function getOptionForDailySales (contractAddress, timeInDays) {
+async function getOptionForDailySales (collectionSlug, timeInDays) {
     const dateArray = []
     for (let i = timeInDays; i > 0; i--) {
         const date = new Date((lastMidnightTimestamp - (86400 * i)) * 1000)
@@ -152,8 +152,8 @@ async function getOptionForDailySales (contractAddress, timeInDays) {
     let option;
     let title;
     try {
-        dailySalesArray = await dailySales(contractAddress, timeInDays)
-        title = (await getCollectionDataWithAddress(contractAddress)).collection.name;
+        dailySalesArray = await dailySales(collectionSlug, timeInDays) // HERE
+        title = (await getCollectionDataWithSlug(collectionSlug)).collection.name;
 
         option = {
             title: {

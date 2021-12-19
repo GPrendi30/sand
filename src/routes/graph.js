@@ -23,20 +23,19 @@ router.get('/types', function (req, res, next) {
 /* GET the graph data types. */
 router.get('/data', async function (req, res, next) {
     const chartType = req.query.chart
-    const contractAddress = req.query.address
+    const contractSlug = req.query.slug
     const time = req.query.time
-    // console.log(`${chartType} ${contractAddress} ${time}`)
+
     if (req.accepts('json')) {
         if (chartType === 'dailyVolume') {
-            const option = await getOptionForDailyVolume(contractAddress, time);
-            console.log('in dailyVolume from graph.js: ', option.series);
+            const option = await getOptionForDailyVolume(contractSlug, time);
             res.status(200).send(option);
         } else if (chartType === 'dailySales') {
-            const option = await getOptionForDailySales(contractAddress, time);
+            const option = await getOptionForDailySales(contractSlug, time);
             console.log(option);
             res.status(200).send(option);
         } else if (chartType === 'scatter') {
-            const option = await getOptionForScatterChart(contractAddress, time)
+            const option = await getOptionForScatterChart(contractSlug, time)
             res.status(200).send(option);
         } else {
             res.status(404).end()

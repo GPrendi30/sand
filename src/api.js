@@ -92,11 +92,11 @@ async function getSalesFromStartToEndWithCollectionSlug (collectionSlug, startTi
 
 /**
  * Function to get the number of sell events occurred between the two timestamps.
- * @param string contractAddress, the contract address of the collection.
+ * @param string collectionSlug, the contract address of the collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object with data representing the daily volume.
  */
-async function dailySales (contractAddress, timeInDays) {
+async function dailySales (collectionSlug, timeInDays) {
     const dailySalesArray = [];
     const lastMidnight = new Date(new Date().setHours(0, 0, 0, 0));
     const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
@@ -105,7 +105,7 @@ async function dailySales (contractAddress, timeInDays) {
         const startTimestamp = lastMidnightTimestamp - 86400 * i;
         const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
         try {
-            const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+            const response =  await getSalesFromStartToEndWithCollectionSlug(collectionSlug, startTimestamp, endTimestamp)
             dailySalesArray.push(response.asset_events.length);
         } catch (error) { console.error(error); }
     }
@@ -114,7 +114,7 @@ async function dailySales (contractAddress, timeInDays) {
     const startTimestamp = lastMidnightTimestamp;
     const endTimestamp = Math.trunc(Date.now() / 1000);
     try {
-        const response =  await getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp)
+        const response =  await getSalesFromStartToEndWithCollectionSlug(collectionSlug, startTimestamp, endTimestamp)
         dailySalesArray.push(response.asset_events.length);
     } catch (error) { console.error(error); }
 
