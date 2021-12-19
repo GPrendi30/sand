@@ -113,6 +113,28 @@ button {
     background-position-y: center;
 }
 
+.button {
+    background-color: var(--white);
+    border-style: none;
+    font-weight: bolder;
+    min-width: 80px;
+    width: fit-content;
+    border-radius: 15px;
+    padding: 0px 20px;
+    height: 35px;
+    box-shadow: rgba(0, 0, 0, 0.03) 0px 5px 10px, rgba(0, 0, 0, 0.03) 0px 6px 6px;
+    transition: all .1s ease-out !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.button:hover {
+    transform: scale(1.07) !important;
+    cursor: pointer;
+}
+
 
 /* Float on Hover */
 

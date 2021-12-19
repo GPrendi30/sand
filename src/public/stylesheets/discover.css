@@ -72,17 +72,32 @@ ul.discover_lineup {
 /* ===== Rooms Lineup ===== */
 
 #rooms .discover_lineup li {
-    height: 200px;
-    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#rooms .discover_lineup .room_btn {
+    margin-top: 10px;
 }
 
 #rooms .discover_item {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
+    height: fit-content;
+    width: 200px;
+    text-decoration: none;
+    background-color: var(--white);
 }
 
 #rooms .discover_item img {
+    padding: 20px;
+    height: 200px;
     object-fit: scale-down;
+}
+
+#rooms .discover_item .room_title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0px 10px 10px 10px;
 }
