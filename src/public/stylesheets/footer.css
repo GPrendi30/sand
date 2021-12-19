@@ -1,14 +1,3 @@
-:root {
-    --deepblue: #3B54BA;
-    --blue: #5889C5;
-    --lightblue: #90C1DA;
-    --lightpink: #A79DDC;
-    --pink:#9A71C1;
-    --purple: #6859BA;
-    --white: #f0f0f0;
-    --black: #2d2d2d;
-}
-
 #chat {
     width: 60px;
     height: 60px;
