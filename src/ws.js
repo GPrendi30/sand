@@ -82,7 +82,23 @@ function init(server) {
             delete authenticatedSockets[socket.id];
         })
 
+
+        // userId 
+        const userId = String(socket.request.user._id);
+
+
+        // optimized user fetching from the database
+        // only fetch the user when the first socket connects
+        const socketset = io.sockets.adapter.rooms.get(userId);
+        if (!socketset) {
+            authenticatedSockets[socket.id] = await User.findOne({ _id: socket.request.user._id });
+        } else {
+            const socketWithSameUser = Array.from(socketset)[0];
+            authenticatedSockets[socket.id] = authenticatedSockets[socketWithSameUser];
+        }
         
+         // join user room
+        socket.join(userId)
        
 
         // console.log('user connected id:', authenticatedSockets[socket.id]);
@@ -189,6 +205,8 @@ function init(server) {
                 socket.to(String(user._id)).emit('friend.request.unblock.rejected', { message: 'User not found', sent: false, user: null });
             }
         })
+
+
     })
 }
 
@@ -197,26 +215,6 @@ eventBus.on('io', () => {
 })
 
 
-
-// tracking update dispatcher
-eventBus.on('tracking_update', events => {
-    console.log('hello')
-    users.forEach(user => {
-        const socketset = io.sockets.adapter.rooms.get(String(user._id));
-        // if (socketset == null) return;
-        console.log('hello')
-        events.forEach(event => {
-            if (event.asset == null) return;
-            if (!user.isTracking(event.asset.name) ||
-                !user.isTracking(event.asset.symbol) ||
-                !user.isTracking(event.metadata.seller) ||
-                !user.isTracking(event.metadata.buyer)) {
-                    console.log('sending tracking update to ' + user.username)
-                    io.to(String(user._id)).emit('tracking_update', event)
-            }
-        });
-    })
-});
 
 module.exports.eventBus = eventBus;
 module.exports.init = init;
