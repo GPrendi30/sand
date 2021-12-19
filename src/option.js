@@ -4,6 +4,8 @@ const createArrayWithPricesFromSlug = require('./api.js').createArrayWithPricesF
 const getCollectionDataWithAddress = require('./api.js').getCollectionDataWithAddress;
 const getCollectionDataWithSlug = require('./api.js').getCollectionDataWithSlug;
 const getVolumeFromCache = require('./api.js').getVolumeFromCache;
+const getAllSalesFromStart = require('./api.js').getAllSalesFromStart
+const getSalesFromCache = require('./api.js').getSalesFromCache
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
 const lastMidnight = new Date(currentDate.setHours(0, 0, 0, 0));
@@ -79,21 +81,22 @@ async function getOptionForDailyVolume (contractSlug, timeInDays) {
  * @returns {array} object option that is used to draw the chart.
  */
 async function getOptionForScatterChart (collectionSlug, timeInDays) {
-    const startTimestamp = (Date.now() / 1000) - 86400 * timeInDays;
-    const endTimestamp = (Date.now() / 1000);
+    // const startTimestamp = (Date.now() / 1000) - 86400 * timeInDays;
+    // const endTimestamp = (Date.now() / 1000);
 
     let timePriceArray;
     let option;
     let title;
 
     try {
-        timePriceArray = await createArrayWithPricesFromSlug(collectionSlug, startTimestamp, endTimestamp)
+        timePriceArray = await getSalesFromCache(collectionSlug, timeInDays)
+        console.log('timePriceArray: ', timePriceArray)
         title = (await getCollectionDataWithSlug(collectionSlug)).collection.name;
 
         const plottedTimePriceArray = [];
         timePriceArray.forEach(data => {
             plottedTimePriceArray.push(
-                [data.timestamp, data.price]
+                [data.t, data.p]
             )
         })
 
@@ -191,6 +194,69 @@ async function getOptionForDailySales (collectionSlug, timeInDays) {
 
     return option
 }
+
+/**
+ * Function to generate the options for a daily sales bar chart.
+ * @param string collectionSlug, the slug of the collection.
+ * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
+ * @returns {array} object option that is used to draw the chart.
+ */
+// async function getOptionForLineAverageDailyPrice (collectionSlug, timeInDays) {
+//     const dateArray = []
+//     for (let i = timeInDays; i > 0; i--) {
+//         const date = new Date((lastMidnightTimestamp - (86400 * i)) * 1000)
+//         const month = date.getMonth() + 1
+//         const day = date.getDate()
+//         dateArray.push(month + '/' + day)
+//     }
+//     const date = new Date((lastMidnightTimestamp * 1000))
+//     const month = date.getMonth() + 1
+//     const day = date.getDate()
+//     dateArray.push(month + '/' + day)
+
+//     let dailyAverageArray;
+//     let option;
+//     let title;
+//     try {
+//         dailyAverageArray = await dailySales(collectionSlug, timeInDays)
+//         title = (await getCollectionDataWithSlug(collectionSlug)).collection.name;
+
+//         option = {
+//             title: {
+//                 show: true,
+//                 text: title,
+//                 left: 'center',
+//                 top: 10
+//             },
+//             tooltip: {
+//                 formatter: function (args) {
+//                     return 'Date + ' + args[0].name + ': ' + args[0].value
+//                 }
+//             },
+//             xAxis: {
+//                 type: 'category',
+//                 data: dateArray,
+//                 name: 'Dates'
+//             },
+//             yAxis: {
+//                 name: 'Number of sales',
+//                 type: 'value'
+//             },
+//             series: [
+//                 {
+//                     data: dailyAverageArray,
+//                     type: 'bar',
+//                     showBackground: true,
+//                     backgroundStyle: {
+//                         color: 'rgba(180, 180, 180, 0.2)'
+//                     }
+//                 }
+//             ]
+//         }
+//     } catch (error) { console.error(error); }
+
+//     return option
+// }
 
 module.exports.getOptionForDailyVolume = getOptionForDailyVolume;
 module.exports.getOptionForScatterChart = getOptionForScatterChart;

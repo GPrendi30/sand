@@ -719,6 +719,217 @@ async function getVolumeFromCache (collectionSlug, days) {
     }
 }
 
+// cache: sales_coolcats:
+//
+//     [{}, {}, ..]
+//
+
+async function getSalesFromCache (collectionSlug, days) {
+    // let dailyVolumeArray
+    const salesArray = JSON.parse(await redis.get('sales_' + collectionSlug))
+    console.log('collectionSlug: ', collectionSlug, '| days: ', days)
+
+    if (salesArray !== null) {
+        console.log('Is in here (salesArray !== null)')
+        // salesArray = salesArray[0]
+        // const elapsedSeconds = (Date.now()) / 1000 - salesArray.data[0]
+        const oldestCacheTimestamp = new Date(salesArray[0].t)
+        const newestCacheTimestamp = new Date(salesArray[salesArray.length - 1].t)
+        const oldestSearchedValue = new Date(Date.now() - 86400 * days)
+        console.log('\noldestCacheTimestamp: ', oldestCacheTimestamp)
+        console.log('newestCacheTimestamp: ', newestCacheTimestamp)
+        console.log('oldestSearchedValue: ', oldestSearchedValue)
+        const newSalesArray = []
+
+        if (oldestSearchedValue < oldestCacheTimestamp) {
+            const beforeCache = await getAllSalesFromStartToEnd(collectionSlug, oldestSearchedValue, oldestCacheTimestamp - 1)
+            const afterCache = await getAllSalesFromStart(newestCacheTimestamp)
+            newSalesArray.concat(beforeCache, salesArray, afterCache)
+            // store in cache newSalesArray
+            console.log('1newSalesArray: ', newSalesArray)
+            await redis.set('sales_' + collectionSlug, JSON.stringify(newSalesArray))
+            return newSalesArray
+        } else if (oldestCacheTimestamp < oldestSearchedValue) {
+            let i = salesArray.length
+            while (salesArray[i].t < oldestSearchedValue) { --i }
+            console.log('i: ', i)
+            for (let j = salesArray.length - i; j < salesArray.length; ++j) {
+                newSalesArray.push(salesArray[j])
+            }
+            const afterCache = await getAllSalesFromStart(newestCacheTimestamp)
+            console.log('2afterCache: ', afterCache)
+            newSalesArray.concat(afterCache)
+            // store in cache newSalesArray
+            console.log('2newSalesArray: ', newSalesArray)
+            await redis.set('sales_' + collectionSlug, JSON.stringify(newSalesArray))
+            return newSalesArray
+        } else if (newestCacheTimestamp < oldestSearchedValue) {
+            // after the cache but before the oldest searched value
+            const afterCache = await getAllSalesFromStart(collectionSlug, newestCacheTimestamp + 1)
+            newSalesArray.concat(salesArray, afterCache)
+            console.log('fuicjjc')
+            // store in cache newSalesArray
+            await redis.set('sales_' + collectionSlug, JSON.stringify(newSalesArray))
+            return afterCache
+        } else if (oldestSearchedValue < newestCacheTimestamp) {
+            let i = 0
+            while (salesArray[i].t < oldestSearchedValue) { ++i }
+            for (let j = salesArray.length - i; j < salesArray.length; ++j) { newSalesArray.push(salesArray[j]) }
+            const afterCache = await getAllSalesFromStart(collectionSlug, newestCacheTimestamp + 1)
+            newSalesArray.concat(afterCache)
+            // store in cache newSalesArray
+            console.log('3newSalesArray: ', newSalesArray)
+            await redis.set('sales_' + collectionSlug, JSON.stringify(newSalesArray))
+            return newSalesArray
+        }
+        console.log('out of everything')
+    } else {
+        console.log('You guessed right')
+        console.log('timestamp: ', days)
+
+        const newSalesArray = await getAllSalesFromStart(collectionSlug, (Date.now() / 1000) - (86400 * days))
+        // store in cache newSalesArray
+        await redis.set('sales_' + collectionSlug, JSON.stringify(newSalesArray))
+        return newSalesArray
+    }
+}
+
+/**
+ * Function to get the sell events occurred from a timestamp to now with collection slug.
+ * @param string collectionSlug, the contract address of the collection.
+ * @param int startTimestamp, show events listed after this timestamp.
+ * @param int endTimestamp, show events listed before this timestamp.
+ * @returns {object} object with all the data.
+ */
+async function getAllSalesFromStart (collectionSlug, startTimestamp) {
+    let offset = 0
+    const limit = 300
+    const salesArray = []
+
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/events',
+        params: {
+            collection_slug: collectionSlug,
+            event_type: 'successful',
+            only_opensea: 'false',
+            offset: offset,
+            limit: limit,
+            //   occurred_before: endTimestamp,
+            occurred_after: startTimestamp
+        },
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
+    }
+
+    try {
+        const divide = 1000000000000000000
+        let response = await axios.request(options);
+
+        while (response.data.asset_events.length > 0) {
+            console.log('event number fetched: ', response.data.asset_events.length)
+            response.data.asset_events.forEach(el => {
+                salesArray.push({
+                    t: el.transaction.timestamp,
+                    p: (el.total_price / divide)
+                })
+            })
+            offset += 300
+            options.params.offset = offset
+            response = await axios.request(options)
+        }
+    } catch (error) { console.error(error); }
+
+    // console.log(salesArray)
+    return salesArray;
+}
+
+/**
+ * Function to get the sell events occurred from a timestamp to another timestamp with collection slug.
+ * @param string collectionSlug, the contract address of the collection.
+ * @param int startTimestamp, show events listed after this timestamp.
+ * @param int endTimestamp, show events listed before this timestamp.
+ * @returns {object} object with all the data.
+ */
+async function getAllSalesFromStartToEnd (collectionSlug, startTimestamp, endTimestamp) {
+    const offset = 0
+    const limit = 300
+    const salesArray = []
+
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/events',
+        params: {
+            collection_slug: collectionSlug,
+            event_type: 'successful',
+            only_opensea: 'false',
+            offset: offset,
+            limit: limit,
+            occurred_before: endTimestamp,
+            occurred_after: startTimestamp
+        },
+        headers: { Accept: 'application/json', 'X-API-KEY': apiKey }
+    }
+
+    try {
+        const divide = 1000000000000000000
+        let response = await axios.request(options);
+        console.log('response: ', response.data.asset_events)
+
+        while (response.data.asset_events.length > 0) {
+            console.log('event number fetched: ', response.data.asset_events.length)
+            response.data.asset_events.forEach(el => {
+                salesArray.push({
+                    t: el.transaction.timestamp,
+                    p: (el.total_price / divide)
+                })
+            })
+
+            options.params.startTimestamp = response.data.asset_events[response.data.asset_events.length - 1].transaction.timestamp
+            response = await axios.request(options)
+        }
+    } catch (error) { console.error(error); }
+
+    console.log(salesArray)
+    return salesArray;
+}
+
+
+async function dailySalesWithSlug (collectionSlug, timeInDays) {
+    // +++ create the data also for the daily sales scatter chart +++
+    const dailySalesArray = [];
+    const lastMidnight = new Date(new Date().setHours(0, 0, 0, 0));
+    const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
+
+    // adding every needed day's volume getting volume day by day and pushing it into dailyVolumeArray
+    for (let i = timeInDays; i > 0; --i) {
+        let response;
+
+        const startTimestamp = lastMidnightTimestamp - 86400 * i;
+        const endTimestamp = lastMidnightTimestamp - 86400 * (i - 1);
+        try {
+            // +++ create the data also for the daily sales scatter chart +++
+            response =  await getSalesFromStartToEndWithCollectionSlug(collectionSlug, startTimestamp, endTimestamp)
+            const dailySalesScatter = (await createArrayWithPricesForCache(response)).reverse()
+            dailySalesScatter.forEach(el => { dailySalesArray.push(el) })
+        } catch (error) { console.error(error); }
+    }
+
+    // adding today's volume separately because it's a shorter amount of time (from last midnight to now)
+    const startTimestamp = lastMidnightTimestamp;
+    const endTimestamp = Math.trunc(Date.now() / 1000);
+    try {
+        const response =  await getSalesFromStartToEndWithCollectionSlug(collectionSlug, startTimestamp, endTimestamp)
+        const dailySalesScatter = (await createArrayWithPricesForCache(response)).reverse()
+        dailySalesScatter.forEach(el => { dailySalesArray.push(el) })
+    } catch (error) { console.error(error); }
+
+    // +++ create the data also for the daily sales scatter chart +++
+    // TODO: store in cache
+    console.log(dailySalesArray)
+    return dailySalesArray;
+}
+
+
 module.exports.dailySales = dailySales;
 module.exports.dailyVolume = dailyVolume;
 module.exports.createArrayWithPrices = createArrayWithPrices;
@@ -730,82 +941,89 @@ module.exports.returnGetSlugObjectFromCache = returnGetSlugObjectFromCache;
 module.exports.checkInCache = checkInCache;
 module.exports.getVolumeFromCache = getVolumeFromCache;
 module.exports.createArrayWithPricesFromSlug = createArrayWithPricesFromSlug;
+module.exports.getAllSalesFromStart = getAllSalesFromStart
+module.exports.getSalesFromCache = getSalesFromCache
 
-/**
- * @deprecated
- * Implementation to store also the scatter graph in the cache
- */
-async function storeInCache (collectionSlug, volumeArrayOriginal, salesArrayOriginal) {
-    // remove last element from array -> today's volume is not complete
-    const volumeArray = JSON.parse(JSON.stringify(volumeArrayOriginal));
-    volumeArray.pop()
-    const salesArray = JSON.parse(JSON.stringify(salesArrayOriginal));
+// /**
+//  * @deprecated
+//  * Implementation to store also the scatter graph in the cache
+//  */
+// async function storeInCache (collectionSlug, salesArrayOriginal) {
+//     // remove last element from array -> today's volume is not complete
+//     // const volumeArray = JSON.parse(JSON.stringify(volumeArrayOriginal));
+//     // volumeArray.pop()
+//     const salesArray = JSON.parse(JSON.stringify(salesArrayOriginal));
 
-    const dataObject = {
-        // last midnight date
-        latest: new Date(new Date().setHours(0, 0, 0, 0)),
-        volume: volumeArray,
-        sales: salesArray
-    }
+//     const dataObject = {
+//         // last midnight date
+//         latest: Date.now() / 1000,
+//         // volume: volumeArray,
+//         sales: salesArray // [{t: 'p' }, {}, {}, ..]
+//     }
 
-    const stringifiedObject = JSON.stringify(dataObject) // JSON.parse(..) to go back
+//     const stringifiedObject = JSON.stringify(dataObject) // JSON.parse(..) to go back
 
-    const dataInCache = JSON.parse(await redis.get('vol_' + collectionSlug))
-    if (dataInCache === null) { // no data in cache
-        await redis.set('vol_' + collectionSlug, stringifiedObject)
-        console.log('Collection ' + collectionSlug + ' was added to cache')
-    } else {
-        // keep the data in cache
-        const elapsedDays = Math.trunc(((new Date(dataObject.latest) - new Date(dataInCache.latest)) / 1000) / 86400)
-        if (elapsedDays === 0) {
-            if (dataObject.volume.length > dataInCache.volume.length) {
-                await redis.set('vol_' + collectionSlug, stringifiedObject)
-                console.log('Collection ' + collectionSlug + ' cache was updated')
-            }
-        } else if (elapsedDays > 30) {
-            await redis.set('vol_' + collectionSlug, stringifiedObject)
-            console.log('Collection ' + collectionSlug + ' cache was updated')
-        } else if (elapsedDays > 0) {
-            if (dataObject.volume.length < elapsedDays) {
-                await redis.set('vol_' + collectionSlug, stringifiedObject)
-                console.log('Collection ' + collectionSlug + ' cache was updated')
-            } else if (dataObject.volume.length === elapsedDays && dataObject.volume.length < 30) {
-                // concatenate days (max 30) and push
-                const len = dataObject.volume.length
-                if (30 - len > dataInCache.volume.length) {
-                    const newData = dataInCache.volume.concat(dataObject.volume)
-                    dataObject.volume = newData
-                    await redis.set('vol_' + collectionSlug, JSON.stringify(dataObject))
-                } else if (30 - len < dataInCache.volume.length) {
-                    // slice + concatenate + push
-                    const cacheArray = dataInCache.volume.slice(len - (30 - len), len)
-                    const newData = cacheArray.concat(dataObject.volume)
-                    dataObject.volume = newData
-                    await redis.set('vol_' + collectionSlug, JSON.stringify(dataObject))
-                }
-                console.log('Collection ' + collectionSlug + ' cache was updated')
-            } else if (dataObject.volume.length > elapsedDays) {
-                // discard overlap
-                const len = dataObject.volume.length
-                const dataArray = dataObject.volume.slice(len - elapsedDays, len)
-                // concatenate days (max 30) and push
-                if (len + dataInCache.volume.length < 30) {
-                    const cacheArray = dataInCache.volume.slice(len - (30 - len), len)
-                    const newData = cacheArray.concat(dataArray)
-                    dataObject.volume = newData
-                    await redis.set('vol_' + collectionSlug, JSON.stringify(dataObject))
-                } else {
-                    const cacheArray = dataInCache.volume.slice(len - (30 - len), len)
-                    const newData = cacheArray.concat(dataArray)
-                    dataObject.volume = newData
-                    await redis.set('vol_' + collectionSlug, JSON.stringify(dataObject))
-                }
-            } else {
-                console.log('Error: cannot store in the cache')
-            }
-        }
-    }
-}
+//     const dataInCache = JSON.parse(await redis.get('sales_' + collectionSlug))
+
+//     if (dataInCache === null) { // no data in cache
+//         await redis.set('sales_' + collectionSlug, stringifiedObject)
+//         console.log('Collection ' + collectionSlug + ' was added to cache')
+//     } else { // keep the data in cache
+//         const elapsedSeconds = (new Date(dataObject.latest * 1000) - new Date(dataInCache.latest * 1000)) / 1000
+
+//         if (elapsedSeconds === 0) {
+//             if (dataObject.sales.length > dataInCache.sales.length) {
+//                 await redis.set('sales_' + collectionSlug, stringifiedObject)
+//                 console.log('Collection ' + collectionSlug + ' cache was updated')
+//             }
+//         } else if (elapsedSeconds > 30 * 86400) {
+//             await redis.set('sales_' + collectionSlug, stringifiedObject)
+//             console.log('Collection ' + collectionSlug + ' cache was updated')
+//         } else if (elapsedSeconds > 0) {
+
+
+//             //         --------| new
+//             // ----------      | cache
+//             if (dataObject.sales.length < elapsedSeconds) {
+//                 await redis.set('vol_' + collectionSlug, stringifiedObject)
+//                 console.log('Collection ' + collectionSlug + ' cache was updated')
+//             } else if (dataObject.sales.length === elapsedSeconds && dataObject.sales.length < 30) {
+//                 // concatenate days (max 30) and push
+//                 const len = dataObject.sales.length
+//                 if (30 - len > dataInCache.sales.length) {
+//                     const newData = dataInCache.sales.concat(dataObject.sales)
+//                     dataObject.sales = newData
+//                     await redis.set('vol_' + collectionSlug, JSON.stringify(dataObject))
+//                 } else if (30 - len < dataInCache.sales.length) {
+//                     // slice + concatenate + push
+//                     const cacheArray = dataInCache.sales.slice(len - (30 - len), len)
+//                     const newData = cacheArray.concat(dataObject.sales)
+//                     dataObject.sales = newData
+//                     await redis.set('vol_' + collectionSlug, JSON.stringify(dataObject))
+//                 }
+//                 console.log('Collection ' + collectionSlug + ' cache was updated')
+//             } else if (dataObject.sales.length > elapsedSeconds) {
+//                 // discard overlap
+//                 const len = dataObject.sales.length
+//                 const dataArray = dataObject.sales.slice(len - elapsedSeconds, len)
+//                 // concatenate days (max 30) and push
+//                 if (len + dataInCache.sales.length < 30) {
+//                     const cacheArray = dataInCache.sales.slice(len - (30 - len), len)
+//                     const newData = cacheArray.concat(dataArray)
+//                     dataObject.sales = newData
+//                     await redis.set('vol_' + collectionSlug, JSON.stringify(dataObject))
+//                 } else {
+//                     const cacheArray = dataInCache.sales.slice(len - (30 - len), len)
+//                     const newData = cacheArray.concat(dataArray)
+//                     dataObject.sales = newData
+//                     await redis.set('vol_' + collectionSlug, JSON.stringify(dataObject))
+//                 }
+//             } else {
+//                 console.log('Error: cannot store in the cache')
+//             }
+//         }
+//     }
+// }
 
 // console.log('timestamp: ', Math.trunc(Date.now() / 1000))
 // console.log('correct w; ', Math.trunc(new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000))
@@ -813,3 +1031,8 @@ async function storeInCache (collectionSlug, volumeArrayOriginal, salesArrayOrig
 // dailySales('doodles-official', 3)
 // createArrayWithPricesFromSlug('doodles-official', 1639868400, Math.trunc(Date.now() / 1000))
 // dailyVolumeWithSlug('doodles-official', 3)
+
+// dailySalesWithSlug('cool-cats-nft', 3)
+console.log(Math.trunc((Date.now() - 86400000 * 10) / 1000))
+getAllSalesFromStartToEnd('doodles-official', Math.trunc((Date.now() - 86400000 * 10) / 1000), Math.trunc((Date.now() - 86400000 * 0) / 1000))
+// getAllSalesFromStart('doodles-official', Math.trunc((Date.now() - 86400000 * 10) / 1000))
