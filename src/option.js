@@ -42,7 +42,7 @@ async function getOptionForBarChart (contractAddress, timeInDays) {
             },
             tooltip: {
                 formatter: function (args) {
-                    return "Date + " + args[0].name + ": " + args[0].value
+                    return 'Date + ' + args[0].name + ': ' + args[0].value
                 }
             },
             xAxis: {
