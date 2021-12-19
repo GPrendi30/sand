@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
+    <link rel="stylesheet" href="/stylesheets/iziToast.min.css">
 </head>
 
 <body onload="init()">
@@ -34,6 +34,10 @@
     <footer>
 
     </footer>
+
+    
+    <script src="/js/iziToast.min.js" type="text/javascript"></script>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/client.js"></script>
     <script src="/js/ejs.min.js"></script>
@@ -62,7 +66,7 @@
         let footer = document.querySelector('footer');
         footer.innerHTML += ejs.src_views_includes_footer();
 
-
+        
     </script>
     <script>
         let web3;
@@ -104,6 +108,10 @@
                     linkClick(event.currentTarget.href);
                 })
             })
+
+            document.querySelector('#user.header-icon').onclick = function () {
+                getProfile();
+            }
 
             //getBarGraph()
         }
