@@ -231,6 +231,43 @@ function init(server) {
             socket.to(String(user._id)).emit('asset.event.removed', { message: 'Asset removed from tracking list', finalized: true, asset: asset });
         })
 
+
+        socket.on('room.event.add.admin', async addAdminEvent => {
+            const room = await Room.findOne({ _id: addAdminEvent.room })
+
+            const user = authenticatedSockets[socket.id];
+            room.addAdmin(user, addAdminEvent.user)
+
+            // TODO remove
+            // console.log('admin' + add.user + 'added by ' + add.user + 'to' + room.getRoomId)
+            socket.to(room._id).emit('room.event.admin.added', { message: 'Admin added to room', finalized: true, user: addAdminEvent.user, room: addAdminEvent.room })
+        })
+
+        socket.on('room.event.remove.admin', async removeAdminEvent => {
+            const room = await Room.findOne({ _id: removeAdminEvent.room })
+
+            const user = authenticatedSockets[socket.id];
+            room.removeAdmin(user, removeAdminEvent.user)
+
+            socket.to(room._id).emit('room.event.admin.removed', { message: 'Admin removed from room', finalized: true, user: removeAdminEvent.user, room: removeAdminEvent.room })
+        })
+
+        // members
+        socket.on('room.event.add.member', async addMemberEvent => {
+            const room = await Room.findOne({ _id: addMemberEvent.room })
+
+            const user = authenticatedSockets[socket.id];
+            room.addMember(user, addMemberEvent.user)
+
+            // console.log('member' + add.user + 'added by ' + add.admin + 'to' + room.getRoomId)
+            socket.to(String(user._id)).emit('room.event.member.added',
+                {
+                    message: 'Member added to room',
+                    finalized: true,
+                    user: addMemberEvent.user,
+                    room: addMemberEvent.room
+                })
+        })
     })
 }
 
@@ -238,7 +275,25 @@ eventBus.on('io', () => {
     console.log('io event')
 })
 
-
+// tracking update dispatcher
+eventBus.on('tracking_update', events => {
+    console.log('hello')
+    users.forEach(user => {
+        const socketset = io.sockets.adapter.rooms.get(String(user._id));
+        // if (socketset == null) return;
+        console.log('hello')
+        events.forEach(event => {
+            if (event.asset == null) return;
+            if (!user.isTracking(event.asset.name) ||
+                !user.isTracking(event.asset.symbol) ||
+                !user.isTracking(event.metadata.seller) ||
+                !user.isTracking(event.metadata.buyer)) {
+                    console.log('sending tracking update to ' + user.username)
+                    io.to(String(user._id)).emit('tracking_update', event)
+            }
+        });
+    })
+});
 
 module.exports.eventBus = eventBus;
 module.exports.init = init;
