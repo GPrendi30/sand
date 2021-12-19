@@ -1,6 +1,56 @@
 <section class="single_collection">
+
+    <section>
+        <img src="<%= collection.link %>" alt="the image of the collection">
+        <button id="track">
+            Track
+        </button>
+    </section>
+
+
+    <section id="collection_info">
+        <h1 id="collection_title"><%= collection.title %></h1> 
+        <p id="collection_desc"><%= collection.description %></p>
+        <p> Link to OpenSea: <a href="<%= data.OpenSea_link %>" </a> </p>
+    </section>
+
+    <section id="collection_stats">
+        <div>
+            <h5>Total Volume: <%= collection.total_volume %> </h5>
+        </div>
+        <div>
+            <h5>Floor Price: <%= collection.floor_price %> </h5>
+        </div>
+        <div>
+            <h5>Asset Count : <%= collection.asset_count %> </h5>
+        </div>
+        <div>
+            <h5>Average Price: <%= collection.average_price %> </h5>
+        </div>
+        <div>
+            <h5>Created At: <%= collection.created_date %> </h5>
+        </div>
+
+        <div>
+            <h5><%= collection.num_owners %> own at least one.</h5>
+        </div>
+
+        <div>
+            <h5>Total Supply: <%= collection.num_assets %></h5>
+        </div>
+
+        <div>
+            <h5>Total Sales: <%= collection.total_sales %></h5>
+        </div>
+
+    </section>
+
+    <section id="collection_graphs">
+        
+    </section>
+
     <!-- central part -->
-    <title> <%= data.title %> </title>
+    <!-- <title> <%= data.title %> </title>
     <section class="collection_images">
         <img src="<%= data.img %>" id="collection_img">
         <img src="<%= data.banner_img %>" id="collection_banner_img">
@@ -11,5 +61,5 @@
         <p> Owners: <b><%= data.num_owners %></b> </p>
         <p> Total volume: <b><%= data.total_volume %></b> </p>
         <p> Link to OpenSea: <a href="https://opensea.io/collection/<%= data.slug %>"> <%= data.title %> </a> </p>
-    </section>
+    </section> -->
 </section>  

@@ -1,8 +1,8 @@
 aside {
 
-    position: absolute;
-    bottom: 100px;
-    right: 30px;
+    position: fixed;
+    bottom: 120px;
+    right: 50px;
     display: flex;
     flex-direction: column;
 
