@@ -18,19 +18,19 @@ const generateIdenticon = require('../identicon').generateIdenticon;
  */
 
 // TO DO Update removesensitive data to remove friendslist and blocked + UPDATE TESTING
-function removeSensitiveData (user) {
+function removeSensitiveData(user) {
     if (user._id) {
         delete user._id
     }
     if (user.password) {
         delete user.password
     }
-    if (user.name) {
-        delete user.name
-    }
-    if (user.surname) {
-        delete user.surname
-    }
+    // if (user.name) {
+    //     delete user.name
+    // }
+    // if (user.surname) {
+    //     delete user.surname
+    // }
     if (user.settings) {
         delete user.settings
     }
@@ -70,7 +70,7 @@ function removeSensitiveData (user) {
 
 // TODO Write Documentation
 
-function createUser (req) {
+function createUser(req) {
     const user = {
         username: req.body.username,
         password: req.body.password,
@@ -93,9 +93,34 @@ function createUser (req) {
     return user
 }
 
+
+/* Get single user */
+router.get('/me', isLoggedIn, function (req, res, next) {
+    if (req.accepts('application/json')) {
+        let filter
+        try {
+            filter = { _id: new ObjectId(req.passport.user._id) }
+        } catch (e) { res.status(404) }
+        User.findOne(filter)
+            .then(result => {
+                const user = result
+                if (user === null) {
+                    res.status(404).end();
+                } else {
+                    // removeSensitiveData(user)
+                    res.json(user)
+                }
+            })
+            .catch(err => { console.log(err) })
+    } else {
+        res.status(406).end()
+    }
+})
+
+
 /* GET user page. */
-router.get('/', function (req, res, next) {
-    User.find().toArray().then(result => {
+router.get('/all', function (req, res, next) {
+    User.find().then(result => {
         result.forEach(element => {
             removeSensitiveData(element)
         });
@@ -113,7 +138,7 @@ router.get('/', function (req, res, next) {
 
 
 /* Get single user */
-router.get('/profile/:_id', isLoggedInSpecialized, function (req, res, next) {
+router.get('/profile', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
@@ -381,26 +406,6 @@ router.delete('/:_id', isLoggedInSpecialized, function (req, res) {
     });
 });
 
-/* Get single user */
-router.get('/:_id', function (req, res, next) {
-    if (req.accepts('application/json')) {
-        let filter
-        try {
-            filter = { _id: new ObjectId(req.params._id) }
-        } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result => {
-            const user = result
-            if (user === null) {
-                res.status(404).end()
-            } else {
-                removeSensitiveData(user)
-                res.json(user)
-            }
-        })
-    } else {
-        res.status(406).end()
-    }
-})
 
 
 router.get('/identicon/:username', function (req, res) {

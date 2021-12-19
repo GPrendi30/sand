@@ -11,12 +11,7 @@ router.get('/', isLoggedOut, (req, res) => {
     res.render('login', response);
 });
 
-router.post('/', isLoggedOut, (req, res, next) => { 
-    console.log('user logged in route /login');
-    eventBus.emit('user.login')
-    next();
-},
-passport.authenticate('local', {
+router.post('/', isLoggedOut, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login?error=true'
 }));

@@ -61,12 +61,12 @@
                 <section class="profile_data" id="recentlyviewed">
                     <h1>Recently Viewed</h1>
                     <ul class="tracking_list">
-                        <% if (user.recentlyviewed.length == 0) { %>
+                        <% if (user.recentlyViewed.length == 0) { %>
                             <div class="no_collections">It appears you don't have any</div>
                         <% } else { %>
                             <% for(let i = 0; i < 3; i++) { %>
-                                <% if (user.recentlyviewed[i] != undefined) { %>
-                                    <% let col = user.recentlyviewed[i] %>
+                                <% if (user.recentlyViewed[i] != undefined) { %>
+                                    <% let col = user.recentlyViewed[i] %>
                                     <li>
                                         <img src="<%=col.img%>" alt="<%=col.name%>">
                                         <h4 class="name"><%=col.name%></h4>
@@ -105,12 +105,12 @@
             <section id="friendrequests">
                 <h3>Friend Requests</h3>
                 <ul class="list">
-                    <% if (user.friendrequests.length == 0) { %>
+                    <% if (user.friendRequest.length == 0) { %>
                         <div class="no_friends">It appears you don't have any</div>
                     <% } else { %>
                         <% for(let i = 0; i < 3; i++) { %>
-                            <% if (user.friendrequests[i] != undefined) { %>
-                                <% let friend = user.friendrequests[i] %>
+                            <% if (user.friendRequest[i] != undefined) { %>
+                                <% let friend = user.friendRequest[i] %>
                                 <li class="friend">
                                     <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
                                     <h4 class="name"><%=friend.username%></h4>
@@ -119,7 +119,7 @@
                         <% }; %>
                     <% }; %>
                 </ul>
-                <% if (user.friendrequests.length > 0) { %>
+                <% if (user.friendRequest.length > 0) { %>
                     <button class="button" >See More</button>
                 <% } %>
             </section>
