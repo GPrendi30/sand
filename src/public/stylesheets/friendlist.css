@@ -132,14 +132,14 @@ section.page ul {
     flex-direction: column;
 }
 
-li.friend {
+#friendlist li.friend {
     margin: 20px 10px;
     list-style-type: none;
     display: grid;
     grid-template-columns: 3fr 2fr;
 }
 
-li.friend #info {
+#friendlist li.friend #info {
     display: flex;
     background-color: #B3B998;
     align-items: center;
