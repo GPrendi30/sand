@@ -1,6 +1,6 @@
 const dailyVolume = require('./api.js').dailyVolume;
 const dailySales = require('./api.js').dailySales;
-const createArrayWithPrices = require('./api.js').createArrayWithPrices;
+const createArrayWithPricesFromSlug = require('./api.js').createArrayWithPricesFromSlug;
 const getCollectionDataWithAddress = require('./api.js').getCollectionDataWithAddress;
 const getCollectionDataWithSlug = require('./api.js').getCollectionDataWithSlug;
 const getVolumeFromCache = require('./api.js').getVolumeFromCache;
@@ -78,7 +78,7 @@ async function getOptionForDailyVolume (contractSlug, timeInDays) {
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object option that is used to draw the chart.
  */
-async function getOptionForScatterChart (contractAddress, timeInDays) {
+async function getOptionForScatterChart (collectionSlug, timeInDays) {
     const startTimestamp = currentTimestamp - 86400 * timeInDays;
     const endTimestamp = currentTimestamp;
 
@@ -87,8 +87,8 @@ async function getOptionForScatterChart (contractAddress, timeInDays) {
     let title;
 
     try {
-        timePriceArray = await createArrayWithPrices(contractAddress, startTimestamp, endTimestamp)
-        title = (await getCollectionDataWithAddress(contractAddress)).collection.name;
+        timePriceArray = await createArrayWithPricesFromSlug(collectionSlug, startTimestamp, endTimestamp)
+        title = (await getCollectionDataWithSlug(collectionSlug)).collection.name;
 
         const plottedTimePriceArray = [];
         timePriceArray.forEach(data => {

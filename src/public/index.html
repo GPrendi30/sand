@@ -111,7 +111,7 @@
         function getBarGraph() {
             document.getElementById("graph").style.backgroundImage = "url(/images/loading.gif)";
 
-            fetch('/graph/data?chart=dailyVolume&address=cool-cats-nft&time=30')
+            fetch('/graph/data?chart=scatter&address=0x8a90cab2b38dba80c64b7734e58ee1db38b8992e&time=10')
                 .then(res => res.json())
                 .then(option => {
                     document.getElementById("graph").style.backgroundImage = 'none';

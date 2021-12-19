@@ -143,6 +143,33 @@ async function createArrayWithPrices (contractAddress, startTimestamp, endTimest
         })
     } catch (error) { console.error(error); }
 
+    console.log(data)
+    return data;
+}
+
+/**
+ * Function to get the sell events occurred between the two timestamps in the form of an object [{ time: 'time', price: 'price'}].
+ * @param string collectionSlug, the contract address of the collection.
+ * @param int startTimestamp, show events listed after this timestamp.
+ * @param int endTimestamp, show events listed before this timestamp.
+ * @returns {object} object with data of time and sell price [{ time: 'time', price: 'price'}, ...].
+ */
+async function createArrayWithPricesFromSlug (collectionSlug, startTimestamp, endTimestamp) {
+    const data = [];
+    let res;
+    try {
+        res = await getSalesFromStartToEndWithCollectionSlug(collectionSlug, startTimestamp, endTimestamp)
+        res.asset_events.forEach(el => {
+            // let date = new Date(el.transaction.timestamp);
+            // date = Math.floor(date / 1000);
+            data.push({
+                timestamp: el.transaction.timestamp,
+                price: (el.total_price / 1000000000000000000)
+            });
+        })
+    } catch (error) { console.error(error); }
+
+    console.log(data)
     return data;
 }
 
@@ -672,3 +699,4 @@ module.exports.getCollections = getCollections;
 module.exports.returnGetSlugObjectFromCache = returnGetSlugObjectFromCache;
 module.exports.checkInCache = checkInCache;
 module.exports.getVolumeFromCache = getVolumeFromCache;
+module.exports.createArrayWithPricesFromSlug = createArrayWithPricesFromSlug;
