@@ -71,9 +71,6 @@ app.use(function (req, res, next) {
     next(createError(404))
 })
 
-
-//startTracking();
-
 // error handler
 /**
  * Middleware that handles the errors.
@@ -96,3 +93,5 @@ startTracking()
 
 module.exports.app = app
 module.exports.session = mySession
+module.exports.cookieParser = cookieParser;
+module.exports.passport = passport

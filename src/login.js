@@ -9,17 +9,19 @@ const ObjectID = require('mongodb').ObjectID;
  * Serializes a user object to a session.
  */
 passport.serializeUser((user, done) => {
-    done(null, user._id);
+    done(null, user);
 })
 
 /**
  * Deserialize user from a session to a user object.
  */
-passport.deserializeUser((id, done) => {
-    const filter = { _id: new ObjectID(id) };
+passport.deserializeUser((user, done) => {
+    done(null, user);
+    /*
+    const filter = { _id: new ObjectID(user._id) };
     User.findOne(filter, (err, res) => {
         done(err, res);
-    });
+    });*/
 })
 
 /**
