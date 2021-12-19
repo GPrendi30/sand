@@ -309,6 +309,23 @@ function init(server) {
             room.save();
             socket.to(room._id).emit('room.event.message.sent', { message: 'Message sent', finalized: true, sentMessage: sendMessageEvent.message, room: sendMessageEvent.room })
         })
+
+        socket.on('chat.event.send.message', async event => {
+            const chat = await Chat.findOne({ _id: event.chat })
+            const message = event.message
+            const user = authenticatedSockets[socket.id];
+            chat.sendMessage(user, message)
+
+            socket.to(String(user._id)).emit('chat.event.message.sent', { message: 'Message sent', finalized: true, sentMessage: event.message })
+        })
+
+        socket.on('chat.event.add.user', async event => {
+            const chat = await Chat.findOne({ _id: event.chat })
+            const user = await User.findOne({ _id: event.user })
+            chat.addUser(user);
+
+            socket.to(String(user._id)).emit('chat.event.user.added', { message: 'User added to chat', finalized: true, user: event.user })
+        })
     })
 }
 
