@@ -121,3 +121,6 @@ documentation/docs/
 
 ## ignore db
 db/
+
+## its automatically generated everytime you run the server
+views.min.js 

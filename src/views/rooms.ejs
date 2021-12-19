@@ -8,39 +8,43 @@
                 <p>Every room you have joined, or created.</p>
             </div>
             <ul class="discover_lineup">
-                
-                <% my_rooms.forEach( item => { %>
+
+                <% my_rooms.forEach( item=> { %>
                     <li>
                         <a class="discover_item grow_hover shadow" href="/item/info">
                             <img src="<%= item.img %>" alt="<%= item.title %>">
-                            <h1 class="room_title"><%= item.title %></h1>
+                            <h1 class="room_title">
+                                <%= item.title %>
+                            </h1>
                         </a>
                         <button class="button room_btn">Leave</button>
                     </li>
-                <% }) %>
-        
+                    <% }) %>
+
             </ul>
         </article>
-  
-      <!-- other rooms -->
+
+        <!-- other rooms -->
         <article class="rooms_area" id="other_rooms">
             <div class="room_lineup_info">
                 <h1>Explore rooms</h1>
                 <p>Meet others with the same interests as you, and keep up to date on recent news.</p>
             </div>
             <ul class="discover_lineup">
-              
-                <% other_rooms.forEach( item => { %>
+
+                <% other_rooms.forEach( item=> { %>
                     <li>
                         <div class="discover_item grow_hover shadow">
                             <a href="/item/info">
                                 <img src="<%= item.img %>" alt="<%= item.title %>">
-                                <h1><%= item.title %></h1>
+                                <h1>
+                                    <%= item.title %>
+                                </h1>
                             </a>
                         </div>
                         <button class="button room_btn">Ask to Join</button>
                     </li>
-                <% }) %>  
+                    <% }) %>
             </ul>
         </article>
     </div>
@@ -49,20 +53,22 @@
 
         <section id="user_invites">
             <h2>Your Room Invites</h3>
-            <% if (user.invites == undefined || user.invites.length == 0) { %>
-                <div class="no_invites">It appears you don't have any</div>
-            <% } else { %>
-                <ul>
-                    <% user.invites.forEach(invite => { %>
-                        <li class="room_invite">
-                            <img src="<%= invite.img %>" alt="">
-                            <h3 class="room_name"><%= invite.title %></h3>
-                            <button class="button">Accept</button>
-                        </li>
-                    <% }) %>
-                </ul>
-            <% } %>
-            
+                <% if (user.invites==undefined || user.invites.length==0) { %>
+                    <div class="no_invites">It appears you don't have any</div>
+                    <% } else { %>
+                        <ul>
+                            <% user.invites.forEach(invite=> { %>
+                                <li class="room_invite">
+                                    <img src="<%= invite.img %>" alt="">
+                                    <h3 class="room_name">
+                                        <%= invite.title %>
+                                    </h3>
+                                    <button class="button">Accept</button>
+                                </li>
+                                <% }) %>
+                        </ul>
+                        <% } %>
+
         </section>
 
         <section id="create_room">
@@ -70,9 +76,10 @@
 
                 <section id="title">
                     <h1>Create New Room</h1>
-                    <h2>Make a space where you and like-minded users can share, discuss, and engage with each other.</h2>
+                    <h2>Make a space where you and like-minded users can share, discuss, and engage with each other.
+                    </h2>
                 </section>
-            
+
                 <!-- TODO: Fix form info -->
                 <form method="POST" id="new_room_form" action="/login" enctype="multipart/form-data">
                     <label for="username">
@@ -104,11 +111,16 @@
                     </div>
                     <input class="grow_hover" type="submit" value="Create">
                 </form>
-            
+
             </div>
         </section>
 
     </div>
-    
-  
-  </section>
+
+    <<<<<<< HEAD=======<!-- too see the invites to join privates rooms -->
+        <section class="invites">
+            <button id="accept_invite">accept invite</button>
+            <section>
+                >>>>>>> main
+
+            </section>
