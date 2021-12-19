@@ -6,44 +6,47 @@
 
     <div id="top">
         <!-- my rooms -->
-    <article class="rooms_area" id="my_rooms">
-        <h1>Your Rooms</h1>
-        <p>Every room you have joined, or created.</p>
-        <ul class="discover_lineup">
-              
-            <% my_rooms.forEach( item => { %>
-                <li>
-                    <a class="discover_item grow_hover shadow" href="/item/info">
-                        <img src="<%= item.img %>" alt="<%= item.title %>">
-                        <h1 class="room_title"><%= item.title %></h1>
-                    </a>
-                    <button class="button room_btn">Leave</button>
-                </li>
-            <% }) %>
-    
-        </ul>
-      </article>
+        <article class="rooms_area" id="my_rooms">
+            <div class="room_lineup_info">
+                <h1>Your Rooms</h1>
+                <p>Every room you have joined, or created.</p>
+            </div>
+            <ul class="discover_lineup">
+                
+                <% my_rooms.forEach( item => { %>
+                    <li>
+                        <a class="discover_item grow_hover shadow" href="/item/info">
+                            <img src="<%= item.img %>" alt="<%= item.title %>">
+                            <h1 class="room_title"><%= item.title %></h1>
+                        </a>
+                        <button class="button room_btn">Leave</button>
+                    </li>
+                <% }) %>
+        
+            </ul>
+        </article>
   
       <!-- other rooms -->
-      <article class="rooms_area" id="other_rooms">
-          <h1>Explore Rooms</h1>
-          <p>Meet others with the same interests as you, and keep up to date on recent news.</p>
-          <ul class="discover_lineup">
+        <article class="rooms_area" id="other_rooms">
+            <div class="room_lineup_info">
+                <h1>Explore rooms</h1>
+                <p>Meet others with the same interests as you, and keep up to date on recent news.</p>
+            </div>
+            <ul class="discover_lineup">
               
-            <% other_rooms.forEach( item => { %>
-                <li>
-                    <div class="discover_item grow_hover shadow">
-                        <a href="/item/info">
-                            <img src="<%= item.img %>" alt="<%= item.title %>">
-                            <h1><%= item.title %></h1>
-                        </a>
-                    </div>
-                    <button class="button room_btn">Ask to Join</button>
-                </li>
-            <% }) %>
-    
-        </ul>
-      </article>
+                <% other_rooms.forEach( item => { %>
+                    <li>
+                        <div class="discover_item grow_hover shadow">
+                            <a href="/item/info">
+                                <img src="<%= item.img %>" alt="<%= item.title %>">
+                                <h1><%= item.title %></h1>
+                            </a>
+                        </div>
+                        <button class="button room_btn">Ask to Join</button>
+                    </li>
+                <% }) %>  
+            </ul>
+        </article>
     </div>
 
     <div id="bottom">
