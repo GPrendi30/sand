@@ -48,7 +48,6 @@
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: black;
     transform: scaleX(1);
     transform-origin: bottom center;
 }
@@ -65,7 +64,7 @@
     align-items: center;
     text-decoration: none;
     padding: 10px;
-    color: #252B5C;
+    color: var(--black);
 }
 
 #navbar a h1 {
@@ -81,7 +80,7 @@
     background-position-y: center;
     background-position-x: center;
     background-size: 100%;
-    filter: invert(14%) sepia(36%) saturate(1734%) hue-rotate(205deg) brightness(102%) contrast(94%);
+    filter: invert(11%) sepia(1%) saturate(0%) hue-rotate(343deg) brightness(105%) contrast(85%);
 }
 
 #nav_buttons>#options {
@@ -113,7 +112,7 @@
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: #252B5C;
+    background-color: var(--black);
     transform-origin: bottom center;
     transition: transform 0.25s ease-out;
 }

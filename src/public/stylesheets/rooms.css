@@ -1,0 +1,176 @@
+#rooms #top {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.rooms_area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px;
+}
+
+.rooms_area .room_lineup_info {
+    letter-spacing: 0.5px;
+}
+
+.room_lineup_info h1 {
+    font-size: 24px;
+}
+
+.room_lineup_info p {
+    font-size: 18px;
+}
+
+#rooms .discover_lineup {
+    width: 100%;
+    height: 330px;
+    overflow-y: scroll;
+}
+
+#rooms .discover_lineup li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#rooms .discover_lineup .room_btn {
+    margin-top: 15px;
+}
+
+#rooms .discover_item {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: 200px;
+    text-decoration: none;
+    background-color: var(--white);
+}
+
+#rooms .discover_item img {
+    padding: 20px;
+    height: 200px;
+    object-fit: scale-down;
+}
+
+#rooms .discover_item .room_title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0px 10px 10px 10px;
+}
+
+/* Bottom Area */
+#rooms #bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#rooms #user_invites {
+    min-width: 400px;
+    max-height: 650px;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 25px 0px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#rooms #user_invites .no_invites {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+#user_invites ul {
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+#user_invites .room_invite {
+    background-color: rgb(240, 240, 240);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 65px;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+}
+
+#user_invites .room_invite .room_name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#user_invites .room_invite button {
+    background-color: var(--lightpink);
+    color: var(--black);
+    margin-left: auto;
+}
+
+#user_invites .room_invite img {
+    height: 100%;
+}
+
+/* ===== New Room Form ===== */
+
+#new_room_form #searchbar {
+    height: 50px;
+}
+
+#new_room_form #added_users {
+    max-height: 300px;
+    width: 455px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#added_users ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 20px;
+    margin: 10px 0px;
+}
+
+#new_room_form #added_users .added_user {
+    background-color: rgb(240, 240, 240);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 65px;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+}
+
+#new_room_form .added_user .username {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+#new_room_form .added_user img {
+    height: 100%;
+}
+
+#new_room_form .added_user .rmv_btn {
+    margin-left: auto;
+    background-color: #cb6695;
+    width: 30px;
+    height: 30px;
+    color: var(--white);
+    font-weight: 900;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+}

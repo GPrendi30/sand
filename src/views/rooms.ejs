@@ -1,9 +1,3 @@
-<% let my_rooms = [{"title": "Room11111111111111111111111111111111111111111111111111" , "img" : "/images/chat.png" }, {"title": "Room2" , "img" : "/images/chat.png" }, {"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room1" , "img" : "/images/chat.png" }, {"title": "Room2" , "img" : "/images/chat.png" }, {"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room1" , "img" : "/images/chat.png" }, {"title": "Room2" , "img" : "/images/chat.png" }, {"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },{"title": "Room3" , "img" : "/images/chat.png" },] %>
-<% let other_rooms = [{"title": "Chat 1" , "img" : "/images/chat.png" }, {"title": "Chat 2" , "img" : "/images/chat.png" }, {"title": "Chat 3" , "img" : "/images/chat.png" }] %>
-<% user = { invites: other_rooms } %>
-<% user1 = { invites: [] } %>
-<% user1 = { invites: my_rooms } %>
-
 <section id="rooms">
 
     <div id="top">
@@ -79,8 +73,8 @@
                     <h2>Make a space where you and like-minded users can share, discuss, and engage with each other.</h2>
                 </section>
             
-                <!-- Fix form action -->
-                <form method="POST" id="loginForm" action="/login" enctype="multipart/form-data">
+                <!-- TODO: Fix form info -->
+                <form method="POST" id="new_room_form" action="/login" enctype="multipart/form-data">
                     <label for="username">
                         <h3>Name</h3>
                         <input type="text" name="name" required>
@@ -93,6 +87,21 @@
                         <h3>Icon</h3>
                         <input type="file" id="file" name="icon" accept="image/*">
                     </label>
+                    <label for="users">
+                        <h3>Members</h3>
+                        <input id="searchbar" type="text" name="user" placeholder="Enter a username">
+                    </label>
+                    <div id="added_users">
+                        <ul>
+                            <!-- Added users should have the following structure:
+                                <li class="added_user">
+                                    <img src="" alt="" class="user_pic">
+                                    <h3 class="username"></h3>
+                                    <button class="rmv_btn">X</button>
+                                </li>
+                            -->
+                        </ul>
+                    </div>
                     <input class="grow_hover" type="submit" value="Create">
                 </form>
             
