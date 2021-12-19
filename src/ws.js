@@ -207,6 +207,30 @@ function init(server) {
         })
 
 
+        socket.on('asset.event.track', async trackingEvent => {
+            const asset = trackingEvent.asset
+            const user = authenticatedSockets[socket.id];
+            if (user == null) return; // more checks better.
+
+            user.track(asset) // track asset
+            user.recentlyViewed.push(asset) // add to recently viewed
+
+            // TODO remove
+            console.log('asset: ' + asset + ' added to ' + user.username + ' tracking list')
+            console.log('asset: ' + asset + ' added to ' + user.username + ' recentlyviewed')
+            socket.to(String(user._id)).emit('asset.event.added', { message: 'Asset added to tracking list', finalized: true, asset: asset });
+        })
+
+        socket.on('asset.event.untrack', async untrackingEvent => {
+            const asset = untrackingEvent.asset
+            const user = authenticatedSockets[socket.id];
+            if (user == null) return; // more checks better.
+
+            user.untrack(asset) // track asset
+            console.log('asset: ' + asset + ' added to ' + user.username + ' tracking list')
+            socket.to(String(user._id)).emit('asset.event.removed', { message: 'Asset removed from tracking list', finalized: true, asset: asset });
+        })
+
     })
 }
 
