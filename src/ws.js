@@ -278,16 +278,6 @@ function init(server) {
             socket.to(room._id).emit('member.removed', remove)
         })
 
-        // not needed.
-        socket.on('room.event.set.icon', async setting => {
-            const room = await Room.findOne({ _id: setting.room })
-            room.setIcon(setting.admin, setting.icon)
-            const filter = { _id: room.getRoomId() }
-            await Room.replaceOne(filter, room, { upsert: true })
-            console.log('icon added by ' + setting.admin + 'to' + room.getRoomId)
-            socket.to(room._id).emit('icon.setted', setting)
-        })
-
         socket.on('room.event.set.name', async setNameEvent => {
             const room = await Room.findOne({ _id: setNameEvent.room })
 
@@ -296,6 +286,28 @@ function init(server) {
             room.setName(user, setNameEvent.name)
 
             socket.to(room._id).emit('room.event.name.set', { message: 'Room name set', finalized: true, name: setNameEvent.name, room: setNameEvent.room })
+        })
+
+
+        socket.on('room.event.set.desc', async setDescEvent => {
+            const room = await Room.findOne({ _id: setDescEvent.room })
+
+            const user = authenticatedSockets[socket.id];
+
+            room.setName(user, setDescEvent.name)
+
+            socket.to(room._id).emit('room.event.desc.set', { message: 'Room description set', finalized: true, desc: setDescEvent.desc, room: setNameEvent.room })
+        })
+
+        socket.on('room.event.send.message', async sendMessageEvent => {
+            const room = await Room.findOne({ _id: sendMessageEvent.room })
+            const user = authenticatedSockets[socket.id];
+            
+            console.log('message arrived', sendMessageEvent.message)
+            room.sendMessage(user, sendMessageEvent.message);
+
+            room.save();
+            socket.to(room._id).emit('room.event.message.sent', { message: 'Message sent', finalized: true, sentMessage: sendMessageEvent.message, room: sendMessageEvent.room })
         })
     })
 }
