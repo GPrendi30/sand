@@ -56,22 +56,22 @@ function getHome() {
         ppic: 'images/user1.png',
         bio: 'A looooooooooooooooooooooooooooooooooooooooooooooooooong bio',
         friendlist: [],
-        friendrequests: [],
+        friendRequest: [],
         blocked: [],
         tracking: [],
-        recentlyviewed: []
+        recentlyViewed: []
     }
 
     const friend = { username: 'AverageNFTFan', ppic: 'images/user2.png' }
 
     user.friendlist = [friend, friend, friend, friend, friend];
-    user.friendrequests = [friend, friend];
+    user.friendRequest = [friend, friend];
 
     const collection = { name: 'CoolCats', img: 'images/user1.png' };
 
     user.tracking = [collection, collection, collection, collection, collection];
     user.blocked = [];
-    
+
     main.innerHTML = ejs.src_views_profile({ user: user })
 
     //main.innerHTML = ejs.src_views_index({ friends: [{ name: 'not-geri' }] });
@@ -187,7 +187,7 @@ function getLogin(lastLocation) {
         }).then(res => {
             if (res.url.includes('/login')) {
                 getLogin();
-            } else { 
+            } else {
                 if (!socket.connected) {
                     socket.connect();
                 }
@@ -312,7 +312,7 @@ function getRoom(url) {
                 console.log('send');
                 const message = document.getElementById('messageInput')
                 console.log(message.value);
-                
+
                 socket.emit('room.event.send.message', { room: roomData.room._id, 'message': message.value });
                 message.value = '';
             }
@@ -397,6 +397,22 @@ function getSettings() {
             }
         })
         .catch(err => { console.error(err); });
+}
+
+function getProfile() {
+
+    fetch('/user/me',
+        {
+            method: 'GET',
+            headers: { Accept: 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            window.location = '#profile';
+            const main = document.querySelector('main');
+            main.innerHTML = ejs.src_views_profile({ user: data });
+        })
+
 }
 
 // function getDiscoverSingleCollection() {
