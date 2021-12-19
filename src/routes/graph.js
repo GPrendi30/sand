@@ -29,7 +29,7 @@ router.get('/data', async function (req, res, next) {
     if (req.accepts('json')) {
         if (chartType === 'dailyVolume') {
             const option = await getOptionForDailyVolume(contractAddress, time);
-            console.log(option);
+            console.log('in dailyVolume from graph.js: ', option);
             res.status(200).send(option);
         } else if (chartType === 'dailySales') {
             const option = await getOptionForDailySales(contractAddress, time);

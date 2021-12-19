@@ -3,6 +3,7 @@ const dailySales = require('./api.js').dailySales;
 const createArrayWithPrices = require('./api.js').createArrayWithPrices;
 const getCollectionDataWithAddress = require('./api.js').getCollectionDataWithAddress;
 const getCollectionDataWithSlug = require('./api.js').getCollectionDataWithSlug;
+const getVolumeArrayFromCache = require('./api.js').getVolumeArrayFromCache;
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
 const lastMidnight = new Date(currentDate.setHours(0, 0, 0, 0));
@@ -31,7 +32,7 @@ async function getOptionForDailyVolume (contractAddress, timeInDays) {
     let option;
     let title;
     try {
-        dailyVolumeArray = await dailyVolume(contractAddress, timeInDays)
+        dailyVolumeArray = await getVolumeArrayFromCache(contractAddress, timeInDays)
         title = (await getCollectionDataWithAddress(contractAddress)).collection.name;
 
         option = {

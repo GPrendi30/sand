@@ -592,9 +592,26 @@ async function getVolumeArrayFromCache (collectionSlug) {
     return JSON.parse(stringifiedArray)
 }
 
-function checkTimeDifference (date1, date2) {
-    const days = Math.trunc((date2 - date1) / 86400)
+async function getVolumeFromCache (collectionSlug, days) {
+    // if collection in cache do this:
+    const volumeObject = JSON.parse(await redis.get('vol_' + collectionSlug))
+    if (volumeObject !== null) {
+        const elapsedDays = Math.trunc(((new Date() - new Date(volumeObject.latest)) / 1000) / 86400)
+        const requiredDays = days - elapsedDays
 
+        const fetchedVolume = await dailyVolumeWithSlug(collectionSlug, requiredDays)
+
+        let volumeArrayFromCache = []
+        if ((days - elapsedDays) > 0) {
+            volumeArrayFromCache = volumeObject.data.slice(-(days - elapsedDays))
+        }
+
+        if (volumeArrayFromCache.length > 0) {
+            return volumeArrayFromCache.concat(fetchedVolume)
+        } else {
+            return fetchedVolume
+        }
+    }
 }
 
 module.exports.dailySales = dailySales;
@@ -606,6 +623,8 @@ module.exports.startTracking = startTracking;
 module.exports.getCollections = getCollections;
 module.exports.returnGetSlugObjectFromCache = returnGetSlugObjectFromCache;
 module.exports.checkInCache = checkInCache;
+module.exports.getVolumeFromCache = getVolumeFromCache;
+
 
 // storeVolumeArrayInCache('test', [5, 4, 3, 2, 1])
 
@@ -624,25 +643,10 @@ module.exports.checkInCache = checkInCache;
 
 // { latest: '2021-12-17T23:00:00.000Z', data: [ 5, 4, 3, 2 ] }
 // check data in cache -> time difference saved timestamp / now -> call function only on required days (note: dailyVolume(0) returns array with only volume from last midnight to now)
-
-async function getVolumeFromCache (collectionSlug, days) {
-    // if collection in cache do this:
-    const volumeObject = JSON.parse(await redis.get('vol_' + collectionSlug))
-    if (volumeObject !== null) {
-        console.log('volumeObject.latest: ', volumeObject.latest)
-        const elapsedDays = Math.trunc(((new Date() - new Date(volumeObject.latest)) / 1000) / 86400)
-
-        const requiredDays = days - elapsedDays
-        // passing now collectionSlug -> to correct in method dailyVolume
-        const fetchedVolume = await dailyVolumeWithSlug(collectionSlug, requiredDays)
-    }
-
-    // do the fetch only of the required days
-
-    // return option of the data in the cache + the fetched data
-
-    // dailyVolume(collectionAddress, elapsedDays)
-}
+                // x         = y   -   z
+                // z = y - x
+// days: 7 | elapsed_days: days - required days already in cache | requiredDays: elapsed_days - days -> days to fetch
+// 
 
 // const stringifiedObject = JSON.stringify({
 //     latest: '2021-12-08T23:00:00.000Z',
