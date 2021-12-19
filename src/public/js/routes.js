@@ -1,3 +1,4 @@
+const { MinKey } = require("mongodb");
 
 function linkClick (href) {
     const url = new URL(href); // parse link address

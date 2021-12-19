@@ -1,21 +1,27 @@
 <section id="discover">
   <!-- This setup can be expanded with more discover areas
              Eg: hot, new, popular, for you, etc -->
-  <article class="discover_section" id="general">
-    <h1>Discover collections</h1>
-    <ul class="discover_lineup">
-      <!-- TODO: Make card generation dynamic
-                     Eg: collections.forEach( include('discover_item')) -->
 
-        <!-- <% let collection = [{"title": "Animal Pattern" , "img" : "/images/animal_pattern.jpg" }, {"title": "Abstract Art" , "img" : "/images/abstract_art.jpg" },{"title": "Dark" , "img" : "/images/dark_art.jpg" }] %> -->
+  <article class="discover_section" id="general">
+    
+    <% if (data == undefined || data.length == 0) { %>
+
+      <div id="no_collections">No collections were found. Try again.</div>
+
+    <% } else { %>
+
+      <h1>Discover collections</h1>
+      <ul class="discover_lineup">
         <% data.forEach( item => { %>
           <li class="discover_item grow_hover shadow"><a href="<%= item.link %>">
               <img src="<%= item.img %>" alt="<%= item.title %>">
               <h1><%= item.title %></h1>
           </a></li>
         <% }) %>
+      </ul>
 
-    </ul>
+    <% } %>  
+
   </article>
 
 </section>

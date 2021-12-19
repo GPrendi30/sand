@@ -5,8 +5,12 @@ article.discover_section {
     align-items: center;
 }
 
+.discover_section #no_collections {
+    font-size: 25px;
+}
+
 article.discover_section > h1 {
-    font-size: 2.2em;
+    font-size: 2.5em;
     letter-spacing: 3px;
     margin-bottom: 10px;
     width: fit-content;
@@ -14,7 +18,7 @@ article.discover_section > h1 {
 
 ul.discover_lineup {
     list-style-type: none;
-    background-color:rgba(0, 0, 0, 0.25);
+    background: linear-gradient(45deg, var(--deepblue) 0%, var(--pink) 30%, var(--lightblue));
     border-radius: 15px;
     display: flex;
     flex-wrap: wrap;
@@ -23,7 +27,7 @@ ul.discover_lineup {
     padding: 20px;
 }
 
-li.discover_item {
+.discover_item {
     background-color: #f0f0f0;
     border-radius: 5px;
     width: 200px;
@@ -31,17 +35,17 @@ li.discover_item {
     overflow: hidden;
 }
 
-li.discover_item a {
+.discover_item a {
     text-decoration: none;
 }
 
-li.discover_item img {
+.discover_item img {
     width: 100%;
     height: 250px;
     object-fit: cover;
 }
 
-li.discover_item h1 {
+.discover_item h1 {
     font-size: 1.4em;
     text-align: center;
     margin: 5px 0px;
@@ -49,7 +53,7 @@ li.discover_item h1 {
 
 /* On Hover */
 
-li.discover_item:hover {
-    transform: scale(1.09) !important;
+.discover_item:hover {
+    transform: scale(1.05) !important;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 15px 45px;
 }

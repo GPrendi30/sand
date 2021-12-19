@@ -6,13 +6,29 @@
 * {
     margin: 0px;
     padding: 0px;
-    color: rgb(39, 39, 39);
     box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
     padding: 0px !important;
     font-family: sans-serif;
+    color: var(--black);
+}
+
+a {
+    color: var(--black) !important;
+}
+
+:root {
+    --deepblue: #3B54BA;
+    --blue: #5889C5;
+    --lightblue: #90C1DA;
+    --lightpink: #A79DDC;
+    --pink:#9A71C1;
+    --purple: #6859BA;
+    --white: #f0f0f0;
+    --black: #2d2d2d;
 }
 
 #header,
@@ -45,7 +61,7 @@ body {
 /* Page Layout */
 
 body {
-    background-color: #f0f0f0;
+    background-color: #CFCCD6;
     display: grid;
     grid-template-columns: auto 1fr 185px;
     grid-template-rows: 75px 1fr 70px;
@@ -60,20 +76,17 @@ body {
 TODO: Delete/modify once all views have been properly implemented
 */
 
-#aside {
+aside {
     grid-area: aside;
-    background-color: blue;
 }
 
-#footer {
+footer {
     grid-area: footer;
-    background-color: magenta;
     width: 100%;
 }
 
 main {
     grid-area: content;
-    box-shadow: rgba(50, 50, 93, 0.2) 0px 10px 30px -12px inset, rgba(0, 0, 0, 0.2) 0px 10px 25px -18px inset;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,6 +111,28 @@ button {
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: center;
+}
+
+.button {
+    background-color: var(--white);
+    border-style: none;
+    font-weight: bolder;
+    min-width: 80px;
+    width: fit-content;
+    border-radius: 15px;
+    padding: 0px 20px;
+    height: 35px;
+    box-shadow: rgba(0, 0, 0, 0.03) 0px 5px 10px, rgba(0, 0, 0, 0.03) 0px 6px 6px;
+    transition: all .1s ease-out !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.button:hover {
+    transform: scale(1.07) !important;
+    cursor: pointer;
 }
 
 
