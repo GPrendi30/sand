@@ -65,6 +65,15 @@ section#friendlist {
     color: #f0f0f0 !important;
 }
 
+#page.search {
+    background-color: var(--deepblue) !important;
+}
+
+#page.search  li.friend #info {
+    background-color: var(--lightblue);
+    color: #f0f0f0 !important;
+}
+
 section#bookmarks {
     grid-area: bm;
     display: grid;
@@ -112,8 +121,17 @@ section#bookmarks>*::before {
 
 /* Bookmark Colors */
 
+section#bookmarks .current {
+    z-index: 5 !important;
+    width: 100% !important;
+}
+
 section#bookmarks :nth-child(1) {
     background-color: var(--deepblue);
+}
+
+section#bookmarks :nth-child(1)::before {
+    content: "Find Users";
 }
 
 section#bookmarks :nth-child(2) {
@@ -134,8 +152,6 @@ section#bookmarks :nth-child(4) {
 
 section#bookmarks :nth-child(5) {
     background-color: var(--pink);
-    z-index: 5 !important;
-    width: 100% !important;
 }
 
 section#bookmarks :nth-child(5)::before {
@@ -165,7 +181,7 @@ section#bookmarks :nth-child(9) {
 
 /* Friend items */
 
-#page > #list {
+#page > .list {
     height: 100%;
 }
 
@@ -215,4 +231,40 @@ section#bookmarks :nth-child(9) {
 .friend #buttons button {
     padding: 0px 15px !important;
     font-size: 13px;
+}
+
+/* Search for users */
+
+#page.search .list {
+    height: 90%;
+}
+
+#page.search #searchbar {
+    display: flex !important;
+}
+
+#page.search #searchbar form {
+    margin: 10px 0px 10px 20px;
+} 
+
+#friendlist #searchbar input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+    width: 910px;
+    border-radius: 10px;
+    background-color: var(--white);
+}
+
+#friendlist #searchbar button {
+    float: right;
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: var(--white);
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
 }
