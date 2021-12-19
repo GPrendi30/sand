@@ -5,7 +5,24 @@
     <section class="friends" id="page">
         <div id="list">
           <ul>
-              <% friends.forEach( friend => { %>
+              
+
+                <!-- To add to friendlist, insert element with this structure: 
+                
+                <li class="friend">
+                    <section class="shadow" id="info">
+                        <img id="avatar" src="images/user1.png" alt="<%= friend.name %>">
+                        <h1 id="name"><%= friend.name %></h1>
+                    </section>
+                    <div id="buttons">
+                        <button class="button" id="profile">See Profile</button>
+                        <button class="button" id="message">Message</button>
+                        <button class="button" id="unfriend">Unfriend</button>
+                    </div>
+                </li>
+                
+                -->
+            <% friends.forEach( friend => { %>
                 <li class="friend">
                     <section class="shadow" id="info">
                         <img id="avatar" src="images/user1.png" alt="<%= friend.name %>">
@@ -18,7 +35,7 @@
                     </div>
                 </li>
 
-              <% }); %>
+            <% }); %>
           </ul>
         </div>
         

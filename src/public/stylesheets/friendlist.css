@@ -176,14 +176,14 @@ section#bookmarks :nth-child(9) {
     overflow-y: scroll;
 }
 
-li.friend {
+.friend {
     margin: 20px 10px;
     list-style-type: none;
     display: grid;
     grid-template-columns: 3fr 2fr;
 }
 
-li.friend #info {
+.friend #info {
     display: flex;
     background-color: black;
     align-items: center;
@@ -193,11 +193,11 @@ li.friend #info {
     margin-left: 15px;
 }
 
-li.friend #info h1 {
+.friend #info h1 {
     font-size: 1.5em;
 }
 
-li.friend #info #avatar {
+.friend #info #avatar {
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: center;
@@ -205,8 +205,14 @@ li.friend #info #avatar {
     width: 65px;
 }
 
-li.friend #buttons {
+.friend #buttons {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    margin-left: 10px;
+}
+
+.friend #buttons button {
+    padding: 0px 15px !important;
+    font-size: 13px;
 }
