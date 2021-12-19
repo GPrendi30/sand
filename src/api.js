@@ -209,6 +209,7 @@ async function dailyVolume (contractAddress, timeInDays) {
         dailyVolumeArray.push(todayVolume);
     } catch (error) { console.error(error); }
 
+    console.log('dailyVolumeArray expected: ', dailyVolumeArray)
     return dailyVolumeArray;
 }
 
@@ -251,6 +252,8 @@ async function dailyVolumeWithSlug (collectionSlug, timeInDays) {
         dailyVolumeArray.push(todayVolume);
     } catch (error) { console.error(error); }
 
+    await storeVolumeArrayInCache(collectionSlug, dailyVolumeArray)
+    console.log('dailyVolumeArray: ', dailyVolumeArray)
     return dailyVolumeArray;
 }
 
@@ -564,8 +567,9 @@ async function checkInCache (slug) {
     }
 }
 
-function storeVolumeArrayInCache (collectionSlug, volumeArray) {
+async function storeVolumeArrayInCache (collectionSlug, volumeArrayOriginal) {
     // remove last element from array -> today's volume is not complete
+    const volumeArray = JSON.parse(JSON.stringify(volumeArrayOriginal));
     volumeArray.pop()
 
     const volumeObject = {
@@ -576,41 +580,85 @@ function storeVolumeArrayInCache (collectionSlug, volumeArray) {
 
     const stringifiedObject = JSON.stringify(volumeObject) // JSON.parse(..) to go back
 
-    redis.set('vol_' + collectionSlug, stringifiedObject, function (err, reply) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Collection ' + collectionSlug + ' was added to cache');
+    const dataInCache = JSON.parse(await redis.get('vol_' + collectionSlug))
+    if (dataInCache === null) { // no data in cache
+        await redis.set('vol_' + collectionSlug, stringifiedObject)
+        console.log('Collection ' + collectionSlug + ' was added to cache')
+    } else {
+        // keep the data in cache
+        const elapsedDays = Math.trunc(((new Date(volumeObject.latest) - new Date(dataInCache.latest)) / 1000) / 86400)
+        if (elapsedDays === 0) {
+            if (volumeObject.data.length > dataInCache.data.length) {
+                await redis.set('vol_' + collectionSlug, stringifiedObject)
+                console.log('Collection ' + collectionSlug + ' cache was updated')
+            }
+        } else if (elapsedDays > 30) {
+            await redis.set('vol_' + collectionSlug, stringifiedObject)
+            console.log('Collection ' + collectionSlug + ' cache was updated')
+        } else if (elapsedDays > 0) {
+            if (volumeObject.data.length < elapsedDays) {
+                await redis.set('vol_' + collectionSlug, stringifiedObject)
+                console.log('Collection ' + collectionSlug + ' cache was updated')
+            } else if (volumeObject.data.length === elapsedDays && volumeObject.data.length < 30) {
+                // concatenate days (max 30) and push
+                const len = volumeObject.data.length
+                if (30 - len > dataInCache.data.length) {
+                    const newData = dataInCache.data.concat(volumeObject.data)
+                    volumeObject.data = newData
+                    await redis.set('vol_' + collectionSlug, JSON.stringify(volumeObject))
+                } else if (30 - len < dataInCache.data.length) {
+                    // slice + concatenate + push
+                    const cacheArray = dataInCache.data.slice(len - (30 - len), len)
+                    const newData = cacheArray.concat(volumeObject.data)
+                    volumeObject.data = newData
+                    await redis.set('vol_' + collectionSlug, JSON.stringify(volumeObject))
+                }
+                console.log('Collection ' + collectionSlug + ' cache was updated')
+            } else if (volumeObject.data.length > elapsedDays) {
+                // discard overlap
+                const len = volumeObject.data.length
+                const dataArray = volumeObject.data.slice(len - elapsedDays, len)
+                // concatenate days (max 30) and push
+                if (len + dataInCache.data.length < 30) {
+                    const newData = cacheArray.concat(dataArray)
+                    volumeObject.data = newData
+                    await redis.set('vol_' + collectionSlug, JSON.stringify(volumeObject))
+                } else {
+                    const cacheArray = dataInCache.data.slice(len - (30 - len), len)
+                    const newData = cacheArray.concat(dataArray)
+                    volumeObject.data = newData
+                    await redis.set('vol_' + collectionSlug, JSON.stringify(volumeObject))
+                }
+            } else {
+                console.log('Error: cannot store in the cache')
+            }
         }
-    });
-}
-
-async function getVolumeArrayFromCache (collectionSlug) {
-    const stringifiedArray = await redis.get('vol_' + collectionSlug)
-
-    console.log('Array got from cache ', JSON.parse(stringifiedArray))
-    return JSON.parse(stringifiedArray)
+    }
 }
 
 async function getVolumeFromCache (collectionSlug, days) {
-    // if collection in cache do this:
+    // let dailyVolumeArray
     const volumeObject = JSON.parse(await redis.get('vol_' + collectionSlug))
     if (volumeObject !== null) {
         const elapsedDays = Math.trunc(((new Date() - new Date(volumeObject.latest)) / 1000) / 86400)
-        const requiredDays = days - elapsedDays
-
-        const fetchedVolume = await dailyVolumeWithSlug(collectionSlug, requiredDays)
 
         let volumeArrayFromCache = []
-        if ((days - elapsedDays) > 0) {
-            volumeArrayFromCache = volumeObject.data.slice(-(days - elapsedDays))
+        const numbOfDaysInCache = days - elapsedDays
+
+        if (numbOfDaysInCache > 0) {
+            const len = volumeObject.data.length
+            volumeArrayFromCache = volumeObject.data.slice(len - numbOfDaysInCache, len)
+            console.log('volumeArrayFromCache: ', volumeArrayFromCache)
         }
 
-        if (volumeArrayFromCache.length > 0) {
-            return volumeArrayFromCache.concat(fetchedVolume)
-        } else {
-            return fetchedVolume
-        }
+        const requiredDays = days - numbOfDaysInCache
+        const fetchedVolume = await dailyVolumeWithSlug(collectionSlug, requiredDays)
+        console.log('fetchedVolume: ', fetchedVolume)
+        console.log('concatenated array ready to plot: ', volumeArrayFromCache.concat(fetchedVolume))
+        return volumeArrayFromCache.concat(fetchedVolume)
+    } else {
+        const dailyVolumeArray = dailyVolumeWithSlug(collectionSlug, days)
+        return dailyVolumeArray
     }
 }
 
@@ -624,43 +672,3 @@ module.exports.getCollections = getCollections;
 module.exports.returnGetSlugObjectFromCache = returnGetSlugObjectFromCache;
 module.exports.checkInCache = checkInCache;
 module.exports.getVolumeFromCache = getVolumeFromCache;
-
-
-// storeVolumeArrayInCache('test', [5, 4, 3, 2, 1])
-
-// getVolumeArrayFromCache('test')
-
-// { latest: timestamp, data: [] }
-
-
-// method to get volume(3) -> [1,2,3,       4]
-//                          first day    from midnight to now
-// when we fetch data we want to save everything except last element array array.pop()
-
-// console.log(new Date())
-// // '2021-12-18T21:28:50.279Z'
-// console.log(new Date() - new Date('2021-12-18T21:28:33.460Z'))
-
-// { latest: '2021-12-17T23:00:00.000Z', data: [ 5, 4, 3, 2 ] }
-// check data in cache -> time difference saved timestamp / now -> call function only on required days (note: dailyVolume(0) returns array with only volume from last midnight to now)
-                // x         = y   -   z
-                // z = y - x
-// days: 7 | elapsed_days: days - required days already in cache | requiredDays: elapsed_days - days -> days to fetch
-// 
-
-// const stringifiedObject = JSON.stringify({
-//     latest: '2021-12-08T23:00:00.000Z',
-//     data: [5, 4, 3, 2, 1]
-// }) // JSON.parse(..) to go back
-
-// redis.set('vol_test2', stringifiedObject, function (err, reply) {
-//     if (err) {
-//         console.log(err);
-//     } else {
-//         console.log('Collection ' + 'test2' + ' was added to cache');
-//     }
-// });
-
-// getVolumeFromCache('test2')
-
-// dailyVolumeWithSlug('cool-cats-nft', 3)

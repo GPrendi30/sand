@@ -25,11 +25,11 @@ router.get('/data', async function (req, res, next) {
     const chartType = req.query.chart
     const contractAddress = req.query.address
     const time = req.query.time
-    console.log(`${chartType} ${contractAddress} ${time}`)
+    // console.log(`${chartType} ${contractAddress} ${time}`)
     if (req.accepts('json')) {
         if (chartType === 'dailyVolume') {
             const option = await getOptionForDailyVolume(contractAddress, time);
-            console.log('in dailyVolume from graph.js: ', option);
+            console.log('in dailyVolume from graph.js: ', option.series);
             res.status(200).send(option);
         } else if (chartType === 'dailySales') {
             const option = await getOptionForDailySales(contractAddress, time);

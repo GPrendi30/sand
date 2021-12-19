@@ -3,7 +3,7 @@ const dailySales = require('./api.js').dailySales;
 const createArrayWithPrices = require('./api.js').createArrayWithPrices;
 const getCollectionDataWithAddress = require('./api.js').getCollectionDataWithAddress;
 const getCollectionDataWithSlug = require('./api.js').getCollectionDataWithSlug;
-const getVolumeArrayFromCache = require('./api.js').getVolumeArrayFromCache;
+const getVolumeFromCache = require('./api.js').getVolumeFromCache;
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
 const lastMidnight = new Date(currentDate.setHours(0, 0, 0, 0));
@@ -15,7 +15,7 @@ const lastMidnightTimestamp = Math.trunc(lastMidnight.getTime() / 1000);
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object option that is used to draw the chart.
  */
-async function getOptionForDailyVolume (contractAddress, timeInDays) {
+async function getOptionForDailyVolume (contractSlug, timeInDays) {
     const dateArray = []
     for (let i = timeInDays; i > 0; i--) {
         const date = new Date((lastMidnightTimestamp - (86400 * i)) * 1000)
@@ -32,8 +32,8 @@ async function getOptionForDailyVolume (contractAddress, timeInDays) {
     let option;
     let title;
     try {
-        dailyVolumeArray = await getVolumeArrayFromCache(contractAddress, timeInDays)
-        title = (await getCollectionDataWithAddress(contractAddress)).collection.name;
+        title = (await getCollectionDataWithSlug(contractSlug)).collection.name;
+        dailyVolumeArray = await getVolumeFromCache(contractSlug, timeInDays)
 
         option = {
             title: {
@@ -67,9 +67,9 @@ async function getOptionForDailyVolume (contractAddress, timeInDays) {
                 }
             ]
         }
-    } catch (error) { console.error(error); }
 
-    return option
+        return option
+    } catch (error) { console.error(error); }
 }
 
 /**
