@@ -15,6 +15,7 @@ socket.on('tracking_update', update => {
     console.log(update)
     console.log('update received')
     iziToast.show({
+        theme: 'dark',
         title: 'Tracking Update',
         message: `${update.metadata.seller} sold ${update.asset.name} to ${update.metadata.buyer} \n for ${update.metadata.price} ${update.metadata.currency}`,
         position: 'topRight'

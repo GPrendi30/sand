@@ -35,16 +35,24 @@ router.get('/:slug', async function (req, res, next) {
         if (data) {
             collectionData = {
                 title: data.collection.name,
+                description: data.collection.description,
                 slug: slug,
                 img: data.collection.image_url,
                 banner_img: data.collection.banner_image_url,
                 OpenSea_link: 'https://opensea.io/collection/' + slug,
                 total_volume: data.collection.stats.total_volume,
                 num_owners: data.collection.stats.num_owners,
-                num_assets: data.collection.stats.count
+                num_assets: data.collection.stats.count,
+                average_price: data.collection.stats.average_price,
+                floor_price: data.collection.stats.floor_price,
+                created_date: data.collection.created_date,
+                total_sales: data.collection.stats.total_sales
             }
+            res.render('single_collection', { collection: collectionData })
         }
-        res.render('single_collection', { data: collectionData })
+        else {
+            res.status(404).end();
+        }
     } else {
         res.status(406).end();
     }
