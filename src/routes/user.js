@@ -163,7 +163,7 @@ router.get('/settings/', isLoggedIn, function (req, res, next) {
         let filter
         console.log(req.session.passport.user)
         try {
-            filter = { _id: new ObjectId(req.session.passport.user) }
+            filter = { _id: new ObjectId(req.session.passport.user._id) }
         } catch (e) { res.status(404) }
         User.findOne(filter).then(result => {
             const user = result

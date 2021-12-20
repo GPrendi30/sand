@@ -8,7 +8,8 @@ const router = express.Router()
 router.get('/', isLoggedIn, function (req, res, next) {
     if (req.accepts('html')) {
         res.status(200);
-        res.render('follow');
+        obj = { title: 'fuck', value: 'you' }
+        res.render('follow', { obj: obj });
     } else {
         req.send(406);
     }
