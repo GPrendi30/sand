@@ -341,15 +341,17 @@ eventBus.on('tracking_update', events => {
         const socketset = io.sockets.adapter.rooms.get(String(user._id));
         // if (socketset == null) return;
         console.log('hello')
+        
         events.forEach(event => {
-            if (event.asset == null) return;
-            if (!user.isTracking(event.asset.name) ||
-                !user.isTracking(event.asset.symbol) ||
-                !user.isTracking(event.metadata.seller) ||
-                !user.isTracking(event.metadata.buyer)) {
-                    console.log('sending tracking update to ' + user.username)
-                    io.to(String(user._id)).emit('tracking_update', event)
-            }
+            io.to(String(user._id)).emit('tracking_update', event)
+            // if (event.asset == null) return;
+            // if (!user.isTracking(event.asset.name) ||
+            //     !user.isTracking(event.asset.symbol) ||
+            //     !user.isTracking(event.metadata.seller) ||
+            //     !user.isTracking(event.metadata.buyer)) {
+            //         console.log('sending tracking update to ' + user.username)
+            //         io.to(String(user._id)).emit('tracking_update', event)
+            // }
         });
     })
 });
