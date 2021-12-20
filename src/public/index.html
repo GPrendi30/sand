@@ -6,17 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
+    <link rel="stylesheet" href="/stylesheets/iziToast.min.css">
 </head>
 
 <body onload="init()">
 
     <header id="header">
-
     </header>
 
     <nav id="navbar">
-
     </nav>
 
     <main id="content">
@@ -28,12 +26,14 @@
     </main>
 
     <aside>
-
     </aside>
 
     <footer>
-
     </footer>
+
+    
+    <script src="/js/iziToast.min.js" type="text/javascript"></script>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/client.js"></script>
     <script src="/js/ejs.min.js"></script>
@@ -62,14 +62,14 @@
         let footer = document.querySelector('footer');
         footer.innerHTML += ejs.src_views_includes_footer();
 
-
+        
     </script>
     <script>
         let web3;
         const graphContainer = document.getElementById('graph')
         const myChart = echarts.init(graphContainer);
         function init() {
-
+           
             // to modify to get data from form in html page
             
             document.querySelector('button#settings').onclick = () => {
@@ -105,13 +105,52 @@
                 })
             })
 
-            getBarGraph()
+            document.querySelector('#user.header-icon').onclick = function () {
+                getProfile();
+            }
+
+            document.querySelector('#news_button').onclick = function () {
+                document.getElementById('history').style.display = 'block';
+            }
+
+            let toggled = false;
+            let state = 'none'
+            document.querySelector('#news_button').onclick = function () {
+                document.getElementById('emb_chat').style.display = 'none';
+
+                if (toggled) {
+                    document.getElementById('history').style.display = 'none';
+                    toggled = false;
+                } else {
+                    document.getElementById('history').style.display = 'block';
+                    toggled = true;
+                    state = 'news'
+                }
+                
+            }
+
+            document.querySelector('#chat_button').onclick = function () {
+                document.getElementById('history').style.display  = 'none';
+
+
+                if (toggled) {
+                    document.getElementById('emb_chat').style.display = 'none'
+                    toggled = false;
+                } else {
+                    document.getElementById('emb_chat').style.display = 'block';
+                    toggled = true;
+                }
+                    
+                    
+            }
+
+            //getBarGraph()
         }
 
         function getBarGraph() {
             document.getElementById("graph").style.backgroundImage = "url(/images/loading.gif)";
 
-            fetch('/graph/data?chart=bar&address=0x1a92f7381b9f03921564a437210bb9396471050c&time=3')
+            fetch('/graph/data?chart=scatter&slug=cool-cats-nft&time=30')
                 .then(res => res.json())
                 .then(option => {
                     document.getElementById("graph").style.backgroundImage = 'none';
@@ -122,7 +161,7 @@
                 .catch(err => { console.log(err) });
         }
 
-
+        getHome();
 
     </script>
 

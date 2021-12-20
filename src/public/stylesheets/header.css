@@ -1,4 +1,6 @@
 #header {
+    background: rgb(59,84,186);
+    background: linear-gradient(90deg, rgba(59,84,186,1) 0%, rgba(154,113,193,1) 100%);
     width: 100%;
     grid-area: header;
     display: flex;
@@ -6,7 +8,6 @@
     position: sticky;
     top: 0px;
     z-index: 15 !important;
-    background-color: white;
 }
 
 #header>section {
@@ -18,7 +19,14 @@
     gap: 15px;
 }
 
+#header #title img {
+    transform: scale(2);
+    filter: invert(72%) sepia(20%) saturate(1853%) hue-rotate(279deg) brightness(87%) contrast(94%);
+    margin-left: 20px;
+}
+
 #header #title h1 {
+    color: #f0f0f0;
     font-size: 4em;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -51,6 +59,7 @@ section#wallet {
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: center;
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(79deg) brightness(104%) contrast(104%);
 }
 
 .header-icon#wallet {
@@ -105,7 +114,6 @@ section#wallet {
     border-radius: 34px;
     -webkit-transition: .2s;
     transition: .2s;
-    border: 1px solid black;
 }
 
 .slider:before {

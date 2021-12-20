@@ -1,7 +1,7 @@
 #room_container {
+    height: 100%;
+    width: 100%;
     background-color: #87878a;
-    height: 100vh;
-    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,7 +11,7 @@
     height: 100%;
     width: 100%;
     min-width: 700px;
-    max-width: 1400px;
+    max-width: 1400px; 
     display: grid;
     grid-template-columns: 1fr 300px;
     grid-template-rows: 1fr 75px;
@@ -25,7 +25,7 @@
 
 .room > #chat {
     position: relative;
-    background-color: white;
+    background-color: var(--white);
     grid-area: chat;
     height: 100%;
     padding: 0px 85px;
@@ -55,10 +55,12 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     letter-spacing: 0.5px;
     font-size: 18px;
+    color: var(--black);
 }
 
 .message > #msg {
-    background-color: #e9e9ec;
+    background-color: var(--blue);
+    color: var(--white);
     border-radius: 10px;
     min-width: 100px;
     max-width: 1100px;
@@ -74,6 +76,10 @@
     align-self: flex-end;
 }
 
+.message.mine > #msg {
+    background-color: var(--pink);
+}
+
 /* If multiple messages are sent back to back by the same user, hide username */
 .message.stream {
     margin-top: 7px !important;
@@ -85,7 +91,7 @@
 
 /* === Members Aside ===== */
 .room > #members {
-    background-color: #f0f0f0;
+    background-color: var(--deepblue);
     padding-top: 20px;
     grid-area: members;
     height: 100%;
@@ -104,6 +110,9 @@
     margin-left: 15px;
     letter-spacing: 1px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+    font-size: 30px;
+    color: var(--white);
 }
 
 .member_list > .room_member {
@@ -123,7 +132,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
-    color: rgb(97, 91, 91);
+    color: #172244;
 }
 
 .room_member > img {
@@ -133,19 +142,19 @@
 }
 
 .room_member:hover {
-    background-color: rgb(189, 189, 192);
+    background-color: var(--blue);
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 5px 10px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
 }
 
 .room_member:hover > #username {
-    color: rgb(39, 39, 39) !important;
+    color: var(--white) !important;
 }
 
 
 /* === Input Bar ===== */
 .room > #input {
-    background-color: rgb(189, 189, 192);
+    background-color: var(--purple);
     grid-area: input;
     display: flex;
     justify-content: space-between;
@@ -164,15 +173,21 @@
     width: 750px;
     height: 35px;
     word-wrap: normal;
+    background-color: var(--white);
 }
 
 .room > #input button {
-    background-color: #f0f0f0;
+    background-color: var(--white);
     font-weight: bolder;
     min-width: 80px;
     padding: 0px 20px;
     height: 35px;
     box-shadow: rgba(0, 0, 0, 0.03) 0px 5px 10px, rgba(0, 0, 0, 0.03) 0px 6px 6px;
+}
+
+.room > #input button#send {
+    background-color: var(--pink);
+    color: var(--white);
 }
 
 .room > #input button:hover {

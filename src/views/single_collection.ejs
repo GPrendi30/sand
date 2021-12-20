@@ -1,15 +1,151 @@
-<section class="single_collection">
-    <!-- central part -->
-    <title> <%= data.title %> </title>
-    <section class="collection_images">
-        <img src="<%= data.img %>" id="collection_img">
-        <img src="<%= data.banner_img %>" id="collection_banner_img">
-    </section>
+<html>
 
-    <section class="collection_data">
-        <p> Items: <b><%= data.num_assets %></b> </p>
-        <p> Owners: <b><%= data.num_owners %></b> </p>
-        <p> Total volume: <b><%= data.total_volume %></b> </p>
-        <p> Link to OpenSea: <a href="https://opensea.io/collection/<%= data.slug %>"> <%= data.title %> </a> </p>
+    <head>
+        <link rel='stylesheet' href='/stylesheets/general.css' />
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <link rel='stylesheet' href='/stylesheets/header.css' />
+        <link rel='stylesheet' href='/stylesheets/navbar.css' />
+        <link rel='stylesheet' href='/stylesheets/navbar_min.css' />
+        <link rel='stylesheet' href='/stylesheets/discover.css' />
+        <link rel='stylesheet' href='/stylesheets/follow.css' />
+        <link rel='stylesheet' href='/stylesheets/friendlist.css' />
+        <link rel='stylesheet' href='/stylesheets/footer.css' />
+        <link rel='stylesheet' href='/stylesheets/aside.css' />
+        <link rel='stylesheet' href='/stylesheets/login_signup.css'  />
+        <link rel='stylesheet' href='/stylesheets/rooms.css'  />
+        <!-- <link rel='stylesheet' href='/stylesheets/profile.css'  /> -->
+        <!-- <link rel='stylesheet' href='stylesheets/settings.css'  /> -->
+        <!-- <link rel='stylesheet' href='stylesheets/notif_list.css'  /> -->
+        <!-- <link rel='stylesheet' href='stylesheets/single_room.css'  /> -->
+    </head>
+<body>
+    <section class="single_collection">
+
+        <div id="top">
+
+            <div id="right">
+                <section id="img">
+                    <img src="<%= collection.img %>" alt="the image of the collection">
+                    <button class="button" id="track">
+                        Track
+                    </button>
+                </section>
+            
+                <section id="collection_info">
+                    <h1 id="collection_title">
+                        <%= collection.title %>
+                    </h1>
+                    <p id="collection_desc">
+                        <%= collection.description %>
+                    </p>
+                    <a href="<%= collection.OpenSea_link %>"> Link to OpenSea </a>
+                </section>
+            </div>
+        
+            <section id="collection_stats">
+        
+                <ul>
+                    <h5>Total Volume:</h5>
+                    <p><%= collection.total_volume %></p>
+                </ul>
+                <!-- <div>
+                    <h5>Floor Price:</h5>
+                    <p><%= collection.floor_price %></p>
+                </div> -->
+                <div>
+                    <h5>Average Price:</h5>
+                    <p><%= collection.average_price %></p>
+                </div>
+                <div>
+                    <h5>Created At:</h5>
+                    <p><%= collection.created_date %></p>
+                </div>
+        
+                <div>
+                    <h5>
+                        <% let own = 0 %>
+                        <% if (collection.num_owners != undefined) { own += collection.num_owners} %>
+                        <%= own %> people own at least one.
+                    </h5>
+                </div>
+        
+                <div>
+                    <h5>Total Supply:</h5>
+                    <p><%= collection.num_assets %></p>
+                </div>
+        
+                <div>
+                    <h5>Total Sales:</h5>
+                    <% let sales = 0 %>
+                    <% if (collection.total_sales != undefined) { sales += collection.total_sales} %>
+                    <p><%- sales %></p>
+                </div>
+                </ul>
+            </section>
+
+        </div>
+
+        <main id="content">
+
+            <select id="graphType">
+                <!-- <option value="graphType">Select a graph type</option> -->
+                <option value="volumeWithAverageLine">Volume and average price</option>
+                <option value="dailyVolume">Daily volume</option>
+                <option value="dailySales">Daily sales</option>
+                <option value="scatter">Scatter</option>
+                <option value="averageLine">Average price</option>
+            </select>
+
+            <select id="graphTime">
+                <option value="30">30</option>
+                <option value="3">3</option>
+                <option value="7">7</option>
+                <option value="14">14</option>
+            </select>
+            <button type="button" id="sendButton" value="<%= collection.slug %>">&#215;</button>
+
+            <img id="loading">
+
+            <section id="graph" style="width: 50vw; height: 70vh">
+            </section>
+        </main>
+
     </section>
-</section>  
+    <script src="/js/echarts.min.js"></script>
+    <script> 
+    const graphContainer = document.getElementById("graph")
+    const myChart = echarts.init(graphContainer);
+
+    let button = document.getElementById("sendButton")
+    button.addEventListener('click', (event) => {
+        event.preventDefault();
+        let graphType = document.getElementById("graphType").value
+        let graphTime = document.getElementById("graphTime").value
+        let slug = button.value
+
+        // graphContainer.innerHTML = ''
+
+        getBarGraph(graphType, slug, graphTime);
+    })
+    
+
+    function getBarGraph(chart, slug, time) {
+            document.getElementById("graph").style.backgroundImage = "url(/images/loading.gif)";
+            console.log('link in graph: ', '/graph/data?chart=' + chart + '&slug='+ slug +'&time=' + time)
+
+            fetch('/graph/data?chart=' + chart + '&slug=' + slug +'&time=' + time)
+                .then(res => res.json())
+                .then(option => {
+                    document.getElementById("graph").style.backgroundImage = 'none';
+                    if (option && typeof option === 'object') {
+                        myChart.setOption(option);
+                    }
+                })
+                .catch(err => { console.log(err) });
+    }
+    let buttonSlug = document.getElementById("sendButton").value
+    getBarGraph('scatter', buttonSlug, 30);
+</script>
+</body>
+
+</html>

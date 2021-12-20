@@ -1,14 +1,195 @@
+<div id="profile_container">
+    <div id="profile">
+        <h1>Your Profile</h1>
 
-    <section> <%= user.username %> </section>
-    <section id="name"><%= user.name %> </section>
-    <section id="surname"><%= user.surname%> </section>
-    <img id="ppic" src=<%= user.ppic %>>
-    <section> <%= user.email %></section>
-    <button type = "button" id="settings" name="settings"> Settings </button>
-    <section id="bio"><%= user.bio %> </section>
-    <section id="friendlist"><%= user.friendlist%> </section>
-    <section id="friendrequests"><%= user.friendrequests %> </section>
-    <section id="blocked"><%= user.blocked%> </section>
-    <section id="tracking"><%= user.tracking %> </section>
-    <section id="recentlyviewed"><%= user.recentlyviewed %> </section>
-    <section id="collection"><%= user.collection%> </section>
+        <div id="top_section">
+
+            <section id="user_info_area">
+
+                <div id="pic_and_username">
+                    <img id="ppic" src="<%= pngUrl(user.ppic) %>">
+                    <h1>
+                        <%= user.username %>
+                    </h1>
+                </div>
+
+                <div id="info">
+                    <div id="name">
+                        <div>
+                            <h2>Name:</h2>
+                            <p>
+                                <%=user.name%>
+                            </p>
+                        </div>
+                        <div>
+                            <h2>Surname:</h2>
+                            <p>
+                                <%=user.surname%>
+                            </p>
+                        </div>
+                    </div>
+                    <div id="email">
+                        <h2>Email:</h2>
+                        <p>
+                            <%=user.email%>
+                        </p>
+                    </div>
+                </div>
+
+                <div id="bio">
+                    <p>
+                        <%= user.bio %>
+                    </p>
+                </div>
+
+                <button class="button" type="button" id="settings" name="settings"> Settings </button>
+
+            </section>
+
+            <section id="data">
+                <section class="profile_data" id="tracking">
+                    <h1>Tracking</h1>
+                    <ul class="tracking_list">
+                        <% if (user.tracking == undefined || user.tracking.length == 0) { %>
+                            <div class="no_collections">It appears you don't have any</div>
+                            <% } else { %>
+                                <% for(let i=0; i < 3; i++) { %>
+                                    <% if (user.tracking[i] != undefined) { %>
+                                        <% let col=user.tracking[i] %>
+                                            <li>
+                                                <img src="<%=col.img%>" alt="<%=col.name%>">
+                                                <h4 class="name">
+                                                    <%=col.name%>
+                                                </h4>
+                                            </li>
+                                            <% } %>
+                                                <% }; %>
+                                                    <% }; %>
+                    </ul>
+                    <% if (user.tracking != undefined && user.tracking.length> 0) { %>
+                        <button class="button">See More</button>
+                        <% } %>
+                </section>
+
+                <section class="profile_data" id="tracking">
+                    <h1>Assets</h1>
+                    <ul class="tracking_list">
+                        <% if (user.assets == undefined || user.assets.length == 0) { %>
+                            <div class="no_collections">It appears you don't have any. <br /> Connect wallet to add more assets.</div>
+                            <% } else { %>
+                                <% for(let i=0; i < 3; i++) { %>
+                                    <% if (user.assets[i] != undefined) { %>
+                                        <% let col=user.assets[i] %>
+                                            <li>
+                                                <img src="<%=col.img%>" alt="<%= col.name %>">
+                                                <h4 class="name">
+                                                    <%=col.name%>
+                                                </h4>
+                                            </li>
+                                            <% } %>
+                                                <% }; %>
+                                                    <% }; %>
+                    </ul>
+                    <% if (user.assets != undefined && user.assets.length> 0) { %>
+                        <button class="button">See More</button>
+                        <% } %>
+                </section>
+
+                <section class="profile_data" id="recentlyviewed">
+                    <h1>Recently Viewed</h1>
+                    <ul class="tracking_list">
+                        <% if (user.recentlyViewed.length == 0) { %>
+                            <div class="no_collections">It appears you don't have any</div>
+                        <% } else { %>
+                            <% for(let i = 0; i < 3; i++) { %>
+                                <% if (user.recentlyViewed[i] != undefined) { %>
+                                    <% let col = user.recentlyViewed[i] %>
+                                    <li>
+                                        <img src="<%=col.img%>" alt="<%=col.name%>">
+                                        <h4 class="name"><%=col.name%></h4>
+                                    </li>
+                                <% } %>
+                            <% }; %>
+                        <% }; %>
+                    </ul>
+                </section>
+            </section>
+
+        </div>
+
+    <section id="friends">
+        <section id="friends_list">
+            <h3>Your Friends</h3>
+            <ul class="list">
+                <% if (user.friendlist.length==0) { %>
+                    <div class="no_friends">It appears you don't have any</div>
+                    <% } else { %>
+                        <% for(let i=0; i < 3; i++) { %>
+                            <% if (user.friendlist[i] !=undefined) { %>
+                                <% let friend=user.friendlist[i] %>
+                                    <li class="friend">
+                                        <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
+                                        <h4 class="name">
+                                            <%=friend.username%>
+                                        </h4>
+                                    </li>
+                                    <% } %>
+                                        <% }; %>
+                                            <% }; %>
+            </ul>
+            <% if (user.friendlist.length> 0) { %>
+                <button class="button">See More</button>
+                <% } %>
+        </section>
+
+
+        <section id="friendrequests">
+            <h3>Friend Requests</h3>
+            <ul class="list">
+                <% if (user.friendRequest.length==0) { %>
+                    <div class="no_friends">It appears you don't have any</div>
+                    <% } else { %>
+                        <% for(let i=0; i < 3; i++) { %>
+                            <% if (user.friendRequest[i] !=undefined) { %>
+                                <% let friend=user.friendRequest[i] %>
+                                    <li class="friend">
+                                        <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
+                                        <h4 class="name">
+                                            <%=friend.username%>
+                                        </h4>
+                                    </li>
+                                    <% } %>
+                                        <% }; %>
+                                            <% }; %>
+            </ul>
+            <% if (user.friendRequest.length> 0) { %>
+                <button class="button">See More</button>
+                <% } %>
+        </section>
+        <section id="blocked">
+            <h3>Blocked Users</h3>
+            <ul class="list">
+                <% if (user.blocked.length==0) { %>
+                    <div class="no_friends">It appears you don't have any</div>
+                    <% } else { %>
+                        <% for(let i=0; i < 3; i++) { %>
+                            <% if (user.blocked[i] !=undefined) { %>
+                                <% let friend= user.blocked[i] %>
+                                    <li class="friend">
+                                        <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
+                                        <h4 class="name">
+                                            <%=friend.username%>
+                                        </h4>
+                                    </li>
+                                    <% } %>
+                                        <% }; %>
+                                            <% }; %>
+            </ul>
+            <% if (user.blocked.length> 0) { %>
+                <button class="button">See More</button>
+                <% } %>
+        </section>
+    </section>
+
+</div>
+</div>

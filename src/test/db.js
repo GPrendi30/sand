@@ -1,5 +1,5 @@
 
-const models = require('../models').model
+const connection = require('../models');
 
 const testCollection = 'test'
 const testObject = {
@@ -14,7 +14,7 @@ describe('Connecting to database', function () {
     let attempts = 0
 
     async function check () {
-      if (models.db && models.users) {
+      if (connection) {
         done()
       } else {
         console.log('Trying to connect')
@@ -31,7 +31,7 @@ describe('Connecting to database', function () {
   })
 
   it('database should create a new collection', function (done) {
-    models.db.createCollection(testCollection, function (err) {
+    connection.db.createCollection(testCollection, function (err) {
       if (err) {
         throw err
       }
@@ -40,7 +40,7 @@ describe('Connecting to database', function () {
   })
 
   it('database should add an entry to the database', function (done) {
-    models.db.collection(testCollection).insertOne(testObject, function (err) {
+    connection.db.collection(testCollection).insertOne(testObject, function (err) {
       if (err) {
         throw err
       }
@@ -49,7 +49,7 @@ describe('Connecting to database', function () {
   })
 
   it('database should find the entry based on id', function (done) {
-    models.db.collection(testCollection).findOne({ _id: '3333' }, function (err, result) {
+    connection.db.collection(testCollection).findOne({ _id: '3333' }, function (err, result) {
       if (err) {
         throw err
       }
@@ -62,13 +62,13 @@ describe('Connecting to database', function () {
   })
 
   it('database should delete the entry based on id', function (done) {
-    models.db.collection(testCollection).deleteOne({ _id: '3333' }, function (err) {
+    connection.db.collection(testCollection).deleteOne({ _id: '3333' }, function (err) {
       if (err) {
         throw err
       }
     })
 
-    models.db.collection(testCollection).findOne({ _id: '3333' }, function (err, result) {
+    connection.db.collection(testCollection).findOne({ _id: '3333' }, function (err, result) {
       if (err) {
         throw err
       }
@@ -81,7 +81,7 @@ describe('Connecting to database', function () {
   })
 
   after(function (done) {
-    models.db.collection(testCollection).drop().then(() => {
+    connection.db.collection(testCollection).drop().then(() => {
       console.log('finished')
       done();
     }).catch((err) => { throw err });

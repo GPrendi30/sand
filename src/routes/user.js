@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
 // Imports for database
-const models = require('../models').model
 const ObjectId = require('mongodb').ObjectId
 const { isLoggedIn, isLoggedInSpecialized } = require('../login');
+const connection = require('../models')
+const User = require('../models/user');
 const generateIdenticon = require('../identicon').generateIdenticon;
 // HELPER FUNCTIONS
 
@@ -17,19 +18,19 @@ const generateIdenticon = require('../identicon').generateIdenticon;
  */
 
 // TO DO Update removesensitive data to remove friendslist and blocked + UPDATE TESTING
-function removeSensitiveData (user) {
+function removeSensitiveData(user) {
     if (user._id) {
         delete user._id
     }
     if (user.password) {
         delete user.password
     }
-    if (user.name) {
-        delete user.name
-    }
-    if (user.surname) {
-        delete user.surname
-    }
+    // if (user.name) {
+    //     delete user.name
+    // }
+    // if (user.surname) {
+    //     delete user.surname
+    // }
     if (user.settings) {
         delete user.settings
     }
@@ -69,7 +70,7 @@ function removeSensitiveData (user) {
 
 // TODO Write Documentation
 
-function createUser (req) {
+function createUser(req) {
     const user = {
         username: req.body.username,
         password: req.body.password,
@@ -92,12 +93,35 @@ function createUser (req) {
     return user
 }
 
+
+/* Get single user */
+router.get('/me', isLoggedIn, function (req, res, next) {
+    if (req.accepts('application/json')) {
+        let filter
+        try {
+            filter = { _id: new ObjectId(req.passport.user._id) }
+        } catch (e) { res.status(404) }
+        User.findOne(filter)
+            .then(result => {
+                const user = result
+                if (user === null) {
+                    res.status(404).end();
+                } else {
+                    // removeSensitiveData(user)
+                    res.json(user)
+                }
+            })
+            .catch(err => { console.log(err) })
+    } else {
+        res.status(406).end()
+    }
+})
+
+
 /* GET user page. */
-router.get('/', function (req, res, next) {
-    models.users.find().toArray().then(result => {
-        result.forEach(element => {
-            removeSensitiveData(element)
-        });
+router.get('/all', function (req, res, next) {
+    User.find().then(result => {
+        result = result.map(element => removeSensitiveData(element));
         const user = result;
         if (user === null) {
             res.status(404).end();
@@ -112,13 +136,13 @@ router.get('/', function (req, res, next) {
 
 
 /* Get single user */
-router.get('/profile/:_id', isLoggedInSpecialized, function (req, res, next) {
+router.get('/profile', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
             filter = { _id: new ObjectId(req.params._id) }
         } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result => {
+        User.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end()
@@ -137,9 +161,9 @@ router.get('/settings/', isLoggedIn, function (req, res, next) {
         let filter
         console.log(req.session.passport.user)
         try {
-            filter = { _id: new ObjectId(req.session.passport.user) }
+            filter = { _id: new ObjectId(req.session.passport.user._id) }
         } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result => {
+        User.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end();
@@ -156,16 +180,14 @@ router.get('/settings/', isLoggedIn, function (req, res, next) {
 router.put('/settings/', isLoggedIn, function (req, res, next) {
 
 
-    const filter = { _id: new ObjectId(req.passport.user) };
+    const filter = { _id: new ObjectId(req.session.passport.user._id) };
 
     const modify = {}
     modify[req.query.req] = req.body[req.query.req];
-    console.log(modify)
-    models.users.findOneAndUpdate(filter, { $set: modify }, { upsert: true }) // update + insert = upsert
-        .then(result => {
-            const found = (result.upsertedCount === 0);
-            res.status(found ? 200 : 201).json(result);
-        });
+    
+    User.findOneAndUpdate(filter, { $set: modify }, { upsert: true }).then(result => {
+        res.status(result !== undefined ? 200 : 201).json(result);
+    });
 })
 
 /* GET user assets page. */
@@ -175,12 +197,12 @@ router.get('/assets/:_id', isLoggedIn, function (req, res, next) {
         try {
             filter = { _id: new ObjectId(req.params._id) }
         } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result => {
+        User.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end();
             } else {
-                res.json(user.collection)
+                res.json(user.assets)
             }
         }).catch(err => { console.log(err) })
     } else {
@@ -189,13 +211,13 @@ router.get('/assets/:_id', isLoggedIn, function (req, res, next) {
 })
 
 /* GET user friends page. */
-router.get('/friends/:_id', isLoggedIn, function (req, res, next) {
+router.get('/friends/', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
-            filter = { _id: new ObjectId(req.params._id) }
+            filter = { _id: new ObjectId(req.session.passport.user._id) }
         } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result => {
+        User.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end();
@@ -208,6 +230,45 @@ router.get('/friends/:_id', isLoggedIn, function (req, res, next) {
     }
 })
 
+/* GET user pending friend request. */
+router.get('/friendrequest', isLoggedIn, function (req, res, next) {
+    let filter
+    try {
+        filter = { _id: new ObjectId(req.session.passport.user._id) }
+    } catch (e) { res.status(404) }
+    User.findOne(filter).then(async result => {
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            const friendRequests = await User.find({ _id: { $in: user.friendRequest } })
+            res.json(friendRequests)
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+
+/* GET user pending friend request. */
+router.get('/friendrequestsent', isLoggedIn, function (req, res, next) {
+    let filter
+    try {
+        filter = { _id: new ObjectId(req.session.passport.user._id) }
+    } catch (e) { res.status(404) }
+    User.findOne(filter).then(result => {
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            res.json(user.friendRequestSent)
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+
+
+
 /* GET user recently viewed assets page. */
 router.get('/recentlyviewed/:_id', isLoggedInSpecialized, function (req, res, next) {
     if (req.accepts('application/json')) {
@@ -217,7 +278,8 @@ router.get('/recentlyviewed/:_id', isLoggedInSpecialized, function (req, res, ne
         } catch (e) {
             return res.status(404);
         }
-        models.users.findOne(filter).then(result => {
+
+        User.findOne(filter).then(result => {
             const user = result
             if (user === null) {
                 res.status(404).end();
@@ -236,7 +298,7 @@ router.get('/following/:_id', isLoggedIn, function (req, res, next) {
     try {
         filter = { _id: new ObjectId(req.params._id) }
     } catch (e) { res.status(404) }
-    models.users.findOne(filter).then(result => {
+    User.findOne(filter).then(result => {
         const user = result
         if (user === null) {
             res.status(404).end();
@@ -254,7 +316,7 @@ router.get('/edit/:_id', isLoggedInSpecialized, function (req, res, next) {
     try {
         filter = { _id: new ObjectId(req.params._id) }
     } catch (e) { res.status(404) }
-    models.users.findOne(filter).then(result => {
+    User.findOne(filter).then(result => {
         const user = result
         if (user === null) {
             res.status(404).end();
@@ -268,23 +330,7 @@ router.get('/edit/:_id', isLoggedInSpecialized, function (req, res, next) {
     })
 })
 // to do add tests
-/* GET user pending friend request. */
-router.get('/friendrequests/:_id', isLoggedInSpecialized, function (req, res, next) {
-    let filter
-    try {
-        filter = { _id: new ObjectId(req.params._id) }
-    } catch (e) { res.status(404) }
-    models.users.findOne(filter).then(result => {
-        const user = result
-        if (user === null) {
-            res.status(404).end();
-        } else if (req.accepts('application/json')) {
-            res.json(user.friendrequests)
-        } else {
-            res.status(406).end()
-        }
-    })
-})
+
 // to do add tests
 /* GET user blocked friend. */
 router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {
@@ -292,7 +338,7 @@ router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {
     try {
         filter = { _id: new ObjectId(req.params._id) }
     } catch (e) { res.status(404) }
-    models.users.findOne(filter).then(result => {
+    User.findOne(filter).then(result => {
         const user = result
         if (user === null) {
             res.status(404).end();
@@ -340,7 +386,7 @@ router.post('/', function (req, res, next) {
     console.log(req);
     const user = createUser(req)
     console.log(req.body);
-    models.users.insertOne(user).then(result => {
+    User.insertOne(user).then(result => {
         removeSensitiveData(user)
         res.status('201').json(user)
     })
@@ -350,8 +396,9 @@ router.post('/', function (req, res, next) {
 /* Put(edit) User , requires form. */
 router.put('/:_id', isLoggedInSpecialized, function (req, res, next) {
     const user = createUser(req)
+    const usr = new User(user);
     const filter = { _id: new ObjectId(req.params._id) };
-    models.users.replaceOne(filter, user, { upsert: true }) // update + insert = upsert
+    User.replaceOne(filter, usr, { upsert: true }) // update + insert = upsert
         .then(result => {
             const found = (result.upsertedCount === 0);
             removeSensitiveData(user)
@@ -363,7 +410,7 @@ router.put('/:_id', isLoggedInSpecialized, function (req, res, next) {
 /* Delete Uses */
 router.delete('/:_id', isLoggedInSpecialized, function (req, res) {
     const filter = { _id: new ObjectId(req.params._id) };
-    models.users.findOneAndDelete(filter).then(result => {
+    User.findOneAndDelete(filter).then(result => {
         if (result.value == null) {
             res.status(404).end();
         } else {
@@ -378,26 +425,6 @@ router.delete('/:_id', isLoggedInSpecialized, function (req, res) {
     });
 });
 
-/* Get single user */
-router.get('/:_id', function (req, res, next) {
-    if (req.accepts('application/json')) {
-        let filter
-        try {
-            filter = { _id: new ObjectId(req.params._id) }
-        } catch (e) { res.status(404) }
-        models.users.findOne(filter).then(result => {
-            const user = result
-            if (user === null) {
-                res.status(404).end()
-            } else {
-                removeSensitiveData(user)
-                res.json(user)
-            }
-        })
-    } else {
-        res.status(406).end()
-    }
-})
 
 
 router.get('/identicon/:username', function (req, res) {

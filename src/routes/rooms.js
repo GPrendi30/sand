@@ -1,6 +1,10 @@
 const express = require('express');
 const { isLoggedIn } = require('../login');
-const router = express.Router()
+const router = express.Router();
+const Room = require('../models/rooms');
+const User = require('../models/user');
+const ObjectId = require('mongodb').ObjectId
+const { generateIdenticon } = require('../identicon');
 
 const message1 = {
     user: 'gery',
@@ -62,7 +66,7 @@ const rooms = [room1, room2, room3]
 // messages = messages.concat(messages);
 // messages = messages.concat(messages);
 // const room = {
-//     author: author,
+//     author: author,in
 //     admins: [author, user1],
 //     users: [author, user1, user2, user3, user4],
 //     messages: messages
@@ -81,10 +85,12 @@ const rooms = [room1, room2, room3]
 
 router.get('/', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
-        if (!rooms) {
-            res.status(404).end()
-        }
-        res.json(rooms)
+        Room.find({}).then(result => {
+            if (!result) {
+                res.status(404).end()
+            }
+            res.json(result)
+        })
     } else {
         res.status(406).end()
     }
@@ -93,14 +99,68 @@ router.get('/', isLoggedIn, function (req, res, next) {
 // room id not user id
 router.get('/:_id', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
-        if (id === undefined) {
-            res.status(404).end()
-        }
-        res.json(rooms)
+        Room.findOne({ _id: new ObjectId(req.params._id) })
+            .then(async result => {
+                if (!result) res.status(404).end();
+                const users = await User.find({ _id: { $in: result.members } })
+                const admins = await User.find({ _id: { $in: result.admins } })
+                const author = await User.find({ _id: result.author })
+                //res.json(result)
+
+                res.json(
+                    {
+                        messages: result.chat.getMessages(),
+                        room: result,
+                        author: author,
+                        users: users,
+                        admins: admins
+                    }
+                )
+            })
     } else {
         res.status(406).end()
     }
 })
+
+router.post('/new', isLoggedIn, async function (req, res, next) {
+    const author = await User.findOne({ _id: req.session.passport.user._id });
+    const newRoom = new Room({
+        author,
+        name: req.body.name,
+        description: req.body.description,
+        icon: generateIdenticon(req.body.name, Date.now())
+    });
+    newRoom.addInitialAdmin(author, author);
+    newRoom.addMember(author, author); //adding author to members
+
+    // open rooms, add all users as members
+
+    const users = await User.find({});
+
+    users.forEach(user => {
+        newRoom.addMember(author, user);
+    })
+
+    newRoom.save()
+        .then(result => {
+            if (result) res.json(newRoom);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).end();
+        })
+})
+
+
+router.post('/:_id', isLoggedIn, function (req, res, next) {
+    // modify room
+
+})
+
+
+
+
+
 // router.get('/', function (req, res, next) {
 /* TODO: Delete room variable used for testing */
 /* Uncomment below (and recompile views) to test out single_room view */
@@ -128,4 +188,6 @@ router.get('/:_id', isLoggedIn, function (req, res, next) {
 
 //     res.render('wip');
 // })
+
+
 module.exports = router

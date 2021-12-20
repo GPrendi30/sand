@@ -2,7 +2,7 @@
     grid-area: nav;
     max-width: 250px;
     height: 100%;
-    background-color: white;
+    background-color: var(--white);
 }
 
 #nav_buttons {
@@ -38,7 +38,6 @@
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: black;
     transform: scaleX(1);
     transform-origin: bottom center;
 }
@@ -55,6 +54,7 @@
     align-items: center;
     text-decoration: none;
     padding: 10px;
+    color: var(--black);
 }
 
 #navbar a h1 {
@@ -70,6 +70,7 @@
     background-position-y: center;
     background-position-x: center;
     background-size: 100%;
+    filter: invert(11%) sepia(1%) saturate(0%) hue-rotate(343deg) brightness(105%) contrast(85%);
 }
 
 #nav_buttons>#options {
@@ -101,7 +102,7 @@
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: black;
+    background-color: var(--black);
     transform-origin: bottom center;
     transition: transform 0.25s ease-out;
 }
@@ -122,7 +123,7 @@
     background-image: url("/images/exchange.svg");
 }
 
-.nav-icon#followed {
+.nav-icon#follow {
     background-image: url("/images/followed.svg");
 }
 

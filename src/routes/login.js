@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { passport, isLoggedOut } = require('../login');
+const eventBus = require('../eventBus');
 
 router.get('/', isLoggedOut, (req, res) => {
     const response = {

@@ -6,13 +6,29 @@
 * {
     margin: 0px;
     padding: 0px;
-    color: rgb(39, 39, 39);
     box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
     padding: 0px !important;
     font-family: sans-serif;
+    color: var(--black);
+}
+
+a {
+    color: var(--black) !important;
+}
+
+:root {
+    --deepblue: #3B54BA;
+    --blue: #5889C5;
+    --lightblue: #90C1DA;
+    --lightpink: #A79DDC;
+    --pink:#9A71C1;
+    --purple: #6859BA;
+    --white: #f0f0f0;
+    --black: #2d2d2d;
 }
 
 #header,
@@ -45,7 +61,7 @@ body {
 /* Page Layout */
 
 body {
-    background-color: #f0f0f0;
+    background-color: #CFCCD6;
     display: grid;
     grid-template-columns: auto 1fr 185px;
     grid-template-rows: 75px 1fr 70px;
@@ -60,20 +76,17 @@ body {
 TODO: Delete/modify once all views have been properly implemented
 */
 
-#aside {
+aside {
     grid-area: aside;
-    background-color: blue;
 }
 
-#footer {
+footer {
     grid-area: footer;
-    background-color: magenta;
     width: 100%;
 }
 
 main {
     grid-area: content;
-    box-shadow: rgba(50, 50, 93, 0.2) 0px 10px 30px -12px inset, rgba(0, 0, 0, 0.2) 0px 10px 25px -18px inset;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,6 +113,28 @@ button {
     background-position-y: center;
 }
 
+.button {
+    background-color: var(--white);
+    border-style: none;
+    font-weight: bolder;
+    min-width: 80px;
+    width: fit-content;
+    border-radius: 15px;
+    padding: 0px 20px;
+    height: 35px;
+    box-shadow: rgba(0, 0, 0, 0.03) 0px 5px 10px, rgba(0, 0, 0, 0.03) 0px 6px 6px;
+    transition: all .1s ease-out !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.button:hover {
+    transform: scale(1.07) !important;
+    cursor: pointer;
+}
+
 
 /* Float on Hover */
 
@@ -116,4 +151,226 @@ button {
 
 .shadow {
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+
+
+/*
+===== Single collection =====
+*/
+
+.single_collection {
+    width: 100%;
+    display: flex;
+    flex-direction: column
+}
+
+.single_collection #top {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    width: 100%;
+    height: 850px;
+}
+
+/* left */
+
+.single_collection #collection_stats {
+    width: fit-content;
+    max-width: 700px;
+    min-height: 700px;
+    margin: 0px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.single_collection #collection_stats > * {
+    background-color: var(--blue);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    width: 250px;
+    min-height: 80px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+}
+
+#collection_stats h5 {
+    font-size: 16px;
+}
+
+/* right */
+
+.single_collection #right {
+    margin-right: auto;
+    padding: 10px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+}
+
+.single_collection #right #img {
+    background-color: var(--purple);
+    width: fit-content;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+}
+
+#right #img img {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 10px 20px, rgba(0, 0, 0, 0.05) 0px 6px 6px;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin: 10px;
+    width: 350px;
+}
+
+#right #img #track {
+    margin: 0px auto 10px auto;
+}
+
+.single_collection #right #collection_info {
+    background-color: var(--lightpink);
+    border-radius: 10px;
+    width: 600px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#collection_info > * {
+    word-wrap: break-word;
+}
+
+#right #collection_info #collection_title {
+    width: 100%;
+    font-size: 22px;
+    align-self: center;
+    word-wrap: break-word;
+}
+
+#right #collection_info #collection_desc {
+    background-color: var(--white);
+    margin: 10px;
+    padding: 15px;
+    overflow-y: scroll;
+    max-height: 235px;
+    font-size: 16px;
+}
+
+#right #collection_info a {
+    text-decoration: none;
+    align-self: center;
+    font-weight: 900;
+    margin-bottom: 5px;
+}
+
+#dashboard {
+    align-self: flex-start;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(45deg, var(--deepblue) 0%, var(--pink) 30%, var(--lightblue));
+}
+
+#dashboard #welcome {
+    margin-top: 50px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#dashboard #welcome h1 {
+    font-size: 80px;
+    letter-spacing: 2px;
+    color: var(--white) !important;
+}
+
+#dashboard .dash_sec {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(12, 15, 31, 0.473);
+    padding: 35px 50px;
+    margin: 0px 50px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.dash_sec h2, .dash_sec p {
+    color: #ececec !important;
+}
+
+.dash_sec h2 {
+    align-self: center;
+    margin-bottom: 20px;
+    font-size: 34px;
+    letter-spacing: 1.2px;
+}
+
+.dash_sec p {
+    font-size: 18px;
+}
+
+.dash_sec#discover {
+    width: fit-content;
+    margin: 50px 0px;
+}
+
+.dash_sec#devteam {
+    margin-bottom: 100px;
+}
+
+/* Dev Team */
+
+#devteam #devteam_list {
+    list-style-type: none;
+    align-self: center;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    display: flex;
+    margin-top: 30px;
+}
+
+#devteam_list a {
+    text-decoration: none;
+}
+
+#devteam_list .dev {
+    transition: all .12s ease-out;
+}
+
+#devteam_list .dev:hover {
+    transform: scale(1.075);
+}
+
+
+
+#devteam_list .dev img {
+    width: 200px;
+    border-radius: 10px;
+}
+
+#devteam_list .dev .dev_name {
+    margin: 10px 0px;
+    letter-spacing: 1px;
+    font-size: 19px;
+    color: #ececec !important;
 }
