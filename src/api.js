@@ -70,7 +70,7 @@ async function getCollectionDataWithAddress(address) {
  * @param int endTimestamp, show events listed before this timestamp.
  * @returns {object} object with all the data.
  */
-async function getSalesFromStartToEnd(contractAddress, startTimestamp, endTimestamp) {
+async function getSalesFromStartToEnd (contractAddress, startTimestamp, endTimestamp) {
     const options = {
         method: 'GET',
         url: 'https://api.opensea.io/api/v1/events?asset_contract_address=' + contractAddress + '&event_type=successful&only_opensea=false&offset=0&occurred_after=' + startTimestamp + '&occurred_before=' + endTimestamp + '&limit=300',
@@ -706,13 +706,13 @@ async function setInCache (collectionSlug) {
         'banner_img', data.collection.banner_image_url,
         'link', '/discover/' + data.collection.slug,
         'OpenSea_link', 'https://opensea.io/collection/' + data.collection.slug,
-        'total_volume', data.collection.total_volume,
-        'num_owners', data.collection.num_owners,
-        'num_assets', data.collection.count,
-        'average_price', data.collection.average_price,
-        'floor_price', data.collection.floor_price,
+        'total_volume', data.collection.stats.total_volume,
+        'num_owners', data.collection.stats.num_owners,
+        'num_assets', data.collection.stats.count,
+        'average_price', data.collection.stats.average_price,
+        'floor_price', data.collection.stats.floor_price,
         'created_date', data.collection.created_date,
-        'total_sales', data.collection.total_sales,
+        'total_sales', data.collection.stats.total_sales,
         function (err, reply) {
             if (err) {
                 console.log(err);
@@ -1082,7 +1082,7 @@ async function getSalesFromCache (collectionSlug, timeStamp) {
  * @param int startTimestamp, show events listed after this timestamp.
  * @returns {object} object with all the data.
  */
-async function getAllSalesFromStart (collectionSlug, startTimestamp) {
+ async function getAllSalesFromStart (collectionSlug, startTimestamp) {
     console.log('oldest searched timestamp: ', new Date(startTimestamp * 1000))
     let offset = 0
     const limit = 300
@@ -1301,6 +1301,3 @@ module.exports.plotVolumeBarData = plotVolumeBarData
 module.exports.plotVolumeNumSalesData = plotVolumeNumSalesData
 module.exports.plotAveragePriceData = plotAveragePriceData
 module.exports.getCollectionsWithOwnerAddress = getCollectionsWithOwnerAddress
-
-
-getCollectionDataWithSlug('doodles-official')
