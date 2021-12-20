@@ -90,8 +90,7 @@ async function getOptionForScatterChart (collectionSlug, timeInDays) {
 
     try {
         timePriceArray = await getSalesFromCache(collectionSlug, timeInDays)
-        console.log('timePriceArray: ', timePriceArray)
-        title = (await getCollectionDataWithSlug(collectionSlug)).collection.name;
+        title = (await getCollectionDataWithSlug(collectionSlug)).collection.name
 
         const plottedTimePriceArray = [];
         timePriceArray.forEach(data => {
