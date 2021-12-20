@@ -50,11 +50,11 @@
                 <section class="profile_data" id="tracking">
                     <h1>Tracking</h1>
                     <ul class="tracking_list">
-                        <% if (user.tracking==undefined || user.tracking.length==0) { %>
+                        <% if (user.tracking == undefined || user.tracking.length == 0) { %>
                             <div class="no_collections">It appears you don't have any</div>
                             <% } else { %>
                                 <% for(let i=0; i < 3; i++) { %>
-                                    <% if (user.tracking[i] !=undefined) { %>
+                                    <% if (user.tracking[i] != undefined) { %>
                                         <% let col=user.tracking[i] %>
                                             <li>
                                                 <img src="<%=col.img%>" alt="<%=col.name%>">
@@ -66,14 +66,38 @@
                                                 <% }; %>
                                                     <% }; %>
                     </ul>
-                    <% if (user.tracking !=undefined && user.tracking.length> 0) { %>
+                    <% if (user.tracking != undefined && user.tracking.length> 0) { %>
                         <button class="button">See More</button>
                         <% } %>
                 </section>
+
+                <section class="profile_data" id="tracking">
+                    <h1>Assets</h1>
+                    <ul class="tracking_list">
+                        <% if (user.assets == undefined || user.assets.length == 0) { %>
+                            <div class="no_collections">It appears you don't have any. <br /> Connect wallet to add more assets.</div>
+                            <% } else { %>
+                                <% for(let i=0; i < 3; i++) { %>
+                                    <% if (user.assets[i] != undefined) { %>
+                                        <% let col=user.assets[i] %>
+                                            <li>
+                                                <img src="<%=col.img%>" alt="<%= col.name %>">
+                                                <h4 class="name">
+                                                    <%=col.name%>
+                                                </h4>
+                                            </li>
+                                            <% } %>
+                                                <% }; %>
+                                                    <% }; %>
+                    </ul>
+                    <% if (user.assets != undefined && user.assets.length> 0) { %>
+                        <button class="button">See More</button>
+                        <% } %>
+                </section>
+
                 <section class="profile_data" id="recentlyviewed">
                     <h1>Recently Viewed</h1>
                     <ul class="tracking_list">
-<<<<<<< HEAD
                         <% if (user.recentlyViewed.length == 0) { %>
                             <div class="no_collections">It appears you don't have any</div>
                         <% } else { %>
@@ -87,121 +111,11 @@
                                 <% } %>
                             <% }; %>
                         <% }; %>
-=======
-                        <% if (user.recentlyviewed==undefined || user.recentlyviewed.length==0) { %>
-                            <div class="no_collections">It appears you don't have any</div>
-                            <% } else { %>
-                                <% for(let i=0; i < 3; i++) { %>
-                                    <% if (user.recentlyviewed[i] !=undefined) { %>
-                                        <% let col=user.recentlyviewed[i] %>
-                                            <li>
-                                                <img src="<%=col.img%>" alt="<%=col.name%>">
-                                                <h4 class="name">
-                                                    <%=col.name%>
-                                                </h4>
-                                            </li>
-                                            <% } %>
-                                                <% }; %>
-                                                    <% }; %>
->>>>>>> main
                     </ul>
                 </section>
             </section>
 
         </div>
-
-        <section id="friends">
-            <section id="friends_list">
-                <h3>Your Friends</h3>
-                <ul class="list">
-                    <% if (user.friendlist==undefined || user.friendlist.length==0) { %>
-                        <div class="no_friends">It appears you don't have any</div>
-                        <% } else { %>
-                            <% for(let i=0; i < 3; i++) { %>
-                                <% if (user.friendlist[i] !=undefined) { %>
-                                    <% let friend=user.friendlist[i] %>
-                                        <li class="friend">
-                                            <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
-                                            <h4 class="name">
-                                                <%=friend.username%>
-                                            </h4>
-                                        </li>
-                                        <% } %>
-                                            <% }; %>
-                                                <% }; %>
-                </ul>
-                <% if (user.friendlist !=undefined && user.friendlist.length> 0) { %>
-                    <button class="button">See More</button>
-                    <% } %>
-            </section>
-            <section id="friendrequests">
-                <h3>Friend Requests</h3>
-                <ul class="list">
-<<<<<<< HEAD
-                    <% if (user.friendRequest.length == 0) { %>
-                        <div class="no_friends">It appears you don't have any</div>
-                    <% } else { %>
-                        <% for(let i = 0; i < 3; i++) { %>
-                            <% if (user.friendRequest[i] != undefined) { %>
-                                <% let friend = user.friendRequest[i] %>
-                                <li class="friend">
-                                    <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
-                                    <h4 class="name"><%=friend.username%></h4>
-                                </li>
-                            <% } %>
-                        <% }; %>
-                    <% }; %>
-                </ul>
-                <% if (user.friendRequest.length > 0) { %>
-                    <button class="button" >See More</button>
-                <% } %>
-=======
-                    <% if (user.friendrequests==undefined || user.friendrequests.length==0) { %>
-                        <div class="no_friends">It appears you don't have any</div>
-                        <% } else { %>
-                            <% for(let i=0; i < 3; i++) { %>
-                                <% if (user.friendrequests[i] !=undefined) { %>
-                                    <% let friend=user.friendrequests[i] %>
-                                        <li class="friend">
-                                            <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
-                                            <h4 class="name">
-                                                <%=friend.username%>
-                                            </h4>
-                                        </li>
-                                        <% } %>
-                                            <% }; %>
-                                                <% }; %>
-                </ul>
-                <% if (user.friendrequests !=undefined && user.friendrequests.length> 0) { %>
-                    <button class="button">See More</button>
-                    <% } %>
->>>>>>> main
-            </section>
-            <section id="blocked">
-                <h3>Blocked Users</h3>
-                <ul class="list">
-                    <% if (user.blocked==undefined || user.blocked.length==0) { %>
-                        <div class="no_friends">It appears you don't have any</div>
-                        <% } else { %>
-                            <% for(let i=0; i < 3; i++) { %>
-                                <% if (user.blocked[i] !=undefined) { %>
-                                    <% let friend=user.blocked[i] %>
-                                        <li class="friend">
-                                            <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
-                                            <h4 class="name">
-                                                <%=friend.username%>
-                                            </h4>
-                                        </li>
-                                        <% } %>
-                                            <% }; %>
-                                                <% }; %>
-                </ul>
-                <% if (user.blocked !=undefined && user.blocked.length> 0) { %>
-                    <button class="button">See More</button>
-                    <% } %>
-            </section>
-        </section>
-    </div>
 
     <section id="friends">
         <section id="friends_list">
@@ -227,15 +141,17 @@
                 <button class="button">See More</button>
                 <% } %>
         </section>
+
+
         <section id="friendrequests">
             <h3>Friend Requests</h3>
             <ul class="list">
-                <% if (user.friendrequests.length==0) { %>
+                <% if (user.friendRequest.length==0) { %>
                     <div class="no_friends">It appears you don't have any</div>
                     <% } else { %>
                         <% for(let i=0; i < 3; i++) { %>
-                            <% if (user.friendrequests[i] !=undefined) { %>
-                                <% let friend=user.friendrequests[i] %>
+                            <% if (user.friendRequest[i] !=undefined) { %>
+                                <% let friend=user.friendRequest[i] %>
                                     <li class="friend">
                                         <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
                                         <h4 class="name">
@@ -246,7 +162,7 @@
                                         <% }; %>
                                             <% }; %>
             </ul>
-            <% if (user.friendrequests.length> 0) { %>
+            <% if (user.friendRequest.length> 0) { %>
                 <button class="button">See More</button>
                 <% } %>
         </section>
@@ -258,7 +174,7 @@
                     <% } else { %>
                         <% for(let i=0; i < 3; i++) { %>
                             <% if (user.blocked[i] !=undefined) { %>
-                                <% let friend=user.blocked[i] %>
+                                <% let friend= user.blocked[i] %>
                                     <li class="friend">
                                         <img src="<%=friend.ppic%>" alt="<%=friend.username%>">
                                         <h4 class="name">

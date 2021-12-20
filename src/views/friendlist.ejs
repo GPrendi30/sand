@@ -7,7 +7,7 @@
 
         <!-- Show searchbar when on the search page -->
 
-        <div id="searchbar" style="display: none;">
+        <div id="searchbar" style="display: show;">
             <form action="">
                 <input type="text" placeholder="Search for users..." name="search">
                 <button type="submit">&#x1F50D;</button>
@@ -37,6 +37,7 @@
                     <section class="shadow" id="info">
                         <img id="avatar" src="images/user1.png" alt="<%= friend.name %>">
                         <h1 id="name"><%= friend.name %></h1>
+                        <h1 id="friend_bio"><%= friend.bio %> </h1>
                     </section>
                     <div id="buttons">
                         <button class="button" id="profile">See Profile</button>

@@ -3,7 +3,13 @@
              Eg: hot, new, popular, for you, etc -->
 
   <article class="discover_section" id="general">
-    
+    <div id="searchbar" style="display: show;">
+      <form action="">
+          <input type="text" placeholder="Search for collections..." name="search">
+          <button type="submit">&#x1F50D;</button>
+        </form>
+  </div>
+
     <% if (data == undefined || data.length == 0) { %>
 
       <div id="no_collections">No collections were found. Try again.</div>
