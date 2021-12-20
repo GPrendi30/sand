@@ -72,7 +72,7 @@ function getHome() {
     user.tracking = [collection, collection, collection, collection, collection];
     user.blocked = [];
 
-    main.innerHTML = ejs.src_views_profile({ user: user })
+    main.innerHTML = ejs.src_views_dashboard()
 
     //main.innerHTML = ejs.src_views_index({ friends: [{ name: 'not-geri' }] });
 

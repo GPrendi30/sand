@@ -109,6 +109,41 @@
                 getProfile();
             }
 
+            document.querySelector('#news_button').onclick = function () {
+                document.getElementById('history').style.display = 'block';
+            }
+
+            let toggled = false;
+            let state = 'none'
+            document.querySelector('#news_button').onclick = function () {
+                document.getElementById('emb_chat').style.display = 'none';
+
+                if (toggled) {
+                    document.getElementById('history').style.display = 'none';
+                    toggled = false;
+                } else {
+                    document.getElementById('history').style.display = 'block';
+                    toggled = true;
+                    state = 'news'
+                }
+                
+            }
+
+            document.querySelector('#chat_button').onclick = function () {
+                document.getElementById('history').style.display  = 'none';
+
+
+                if (toggled) {
+                    document.getElementById('emb_chat').style.display = 'none'
+                    toggled = false;
+                } else {
+                    document.getElementById('emb_chat').style.display = 'block';
+                    toggled = true;
+                }
+                    
+                    
+            }
+
             //getBarGraph()
         }
 
