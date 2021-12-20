@@ -1,36 +1,61 @@
-<!-- Uncomment (one at a time!) to test different main views-->
-<!-- TODO add dashboard here -->
-
 <section id="friendlist">
 
-  <section class="page" id="your_friends">
-    <h1>Your friends</h1>
-    <ul>
-      <% friends.forEach( friend=> { %>
-        <li class="friend">
-          <section class="shadow" id="info">
-            <div id="avatar"></div>
-            <h1 id="name">
-              <%= friend.name %>
-            </h1>
-            <p>Lorem ipsum dolor sit amet.</p>
-          </section>
-          <div id="buttons">
-            <button class="grow_hover" id="profile">See Profile</button>
-            <button class="grow_hover" id="message">Message</button>
-            <button class="grow_hover" id="unfriend">Unfriend</button>
-          </div>
-        </li>
+    <!-- Change #page's class between sent_requests/friends/requests/search to 
+        change color and content -->
 
-        <% }); %>
-    </ul>
-  </section>
+    <section class="friends" id="page">
 
-  <section id="bookmarks">
-    <% for(let i=0; i < 9; i++) { %>
-      <% let style='grid-area: ' + (1 + 2*i) + ' / 1 / ' + (4 + 2*i) + ' / 2' %>
-        <div style="<%= style %>" id="bm<%=i%>" class="bookmark"></div>
+        <!-- Show searchbar when on the search page -->
+
+        <div id="searchbar" style="display: none;">
+            <form action="">
+                <input type="text" placeholder="Search for users..." name="search">
+                <button type="submit">&#x1F50D;</button>
+              </form>
+        </div>
+
+        <div class="list">
+          <ul>
+              
+                <!-- To add to friendlist, insert element with this structure: 
+                
+                <li class="friend">
+                    <section class="shadow" id="info">
+                        <img id="avatar" src="images/user1.png" alt="<%= /* friend.name */ %>">
+                        <h1 id="name"><%= /* friend.name */ %></h1>
+                    </section>
+                    <div id="buttons">
+                        <button class="button" id="profile">See Profile</button>
+                        <button class="button" id="message">Message</button>
+                        <button class="button" id="unfriend">Unfriend</button>
+                    </div>
+                </li>
+                
+                -->
+            <% friends.forEach( friend => { %>
+                <li class="friend">
+                    <section class="shadow" id="info">
+                        <img id="avatar" src="images/user1.png" alt="<%= friend.name %>">
+                        <h1 id="name"><%= friend.name %></h1>
+                    </section>
+                    <div id="buttons">
+                        <button class="button" id="profile">See Profile</button>
+                        <button class="button" id="message">Message</button>
+                        <button class="button" id="unfriend">Unfriend</button>
+                    </div>
+                </li>
+
+            <% }); %>
+          </ul>
+        </div>
+        
+    </section>
+
+    <section id="bookmarks">
+        <% for(let i=0; i < 9; i++) { %>
+            <% let style = 'grid-area: ' + (1 + 2*i) + ' / 1 / ' + (4 + 2*i) + ' / 2' %>
+            <div style="<%= style %>" id="bm<%=i%>" class="bookmark"></div>
         <% }; %>
-  </section>
+    </section>
 
 </section>

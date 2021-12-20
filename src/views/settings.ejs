@@ -25,59 +25,74 @@
             <h2 class="title">Modify your profile information</h1>
 
                 <div>
-                    <form method="POST" action="/user/settings?req=email&_method=PUT"
+                    <form method="POST" action="user/settings/<%= result._id %>?req=name" enctype="multipart/form-data">
+                        <label for="name">
+                            <h3>Name</h3>
+                            <input class="input" type="text" name="name" required>
+                            <input class="button" type="submit" value="Change name">
+                        </label>
+                    </form>
+
+                    <form method="POST" action="user/settings/<%= result._id %>?req=surname"
+                        enctype="multipart/form-data">
+                        <label for="surname">
+                            <h3>Surname</h3>
+                            <input class="input" type="text" name="surname">
+                            <input class="button" type="submit" value="Change surname">
+                        </label>
+                    </form>
+
+                    <form method="POST" action="user/settings/<%= result._id %>?req=email"
                         enctype="multipart/form-data">
                         <label for="email">
                             <h3>Email address</h3>
-                            <input type="text" name="email" value=<%= result.email %> required>
+                            <input class="input" type="text" name="email" required>
                             <input class="button" type="submit" value="Change email">
                         </label>
                     </form>
 
                     <form method="POST" action="/user/settings?req=bio&_method=PUT" enctype="multipart/form-data">
+                    <form method="POST" action="/user/settings/<%= result._id %>?req=bio&_method=PUT"
+                        enctype="multipart/form-data">
                         <label for="bio">
                             <h3>Biography</h3>
-                            <input type="text" name="bio" value="<%= result.bio %>">
+                            <input class="input" type="text" name="bio" value="<%= result.bio %>">
                             <input class="button" type="submit" value="Change bio">
                         </label>
                     </form>
                 </div>
 
 
-        </section>
-
-        <!-- <form method="POST" action="/user/settings/<%= result._id %>?req=email&_method=PUT"
-            enctype="multipart/form-data">
+                <!-- <form method="POST" action="/user/settings/<%= result._id %>?req=email&_method=PUT" enctype="multipart/form-data">
             <label for="email">Change email:</label>
             <input type="email" name="email" required value=<%=result.email %>>
 
-            <h2 class="title">Modify your password</h2>
-        </form> -->
+                <h2 class="title" >Modify your password</h1> -->
 
-        <!-- <form method="POST" action="/user/settings/<%= result._id %>?req=bio&_method=PUT" enctype="multipart/form-data">
-            <label for="bio">Change bio:</label>
-            <input type="text" name="bio" value=<%=result.bio %>>
+                <section class="settings_section" id="password">
+                    <h2 class="title">Modify your password</h1>
+                        <form method="POST" action="user/settings/<%= result._id %>?req=password"
+                            enctype="multipart/form-data">
+                            <label for="old_password">
+                                <h3>Old Password</h3>
+                                <input class="input" type="text" name="old_password" required>
+                            </label>
 
-            <label for="old_password">
-                <h3>Old Password</h3>
-                <input type="text" name="old_password" required>
-            </label>
+                            <label for="new_password">
+                                <h3>New Password</h3>
+                                <input class="input" type="password" name="new_password" required>
+                            </label>
 
-            <label for="new_password">
-                <h3>New Password</h3>
-                <input type="password" name="new_password" required>
-            </label>
+                            <label for="confirm_new_password">
+                                <h3>Confirm New Password</h3>
+                                <input class="input" type="password" name="confirm_new_password" required>
+                            </label>
 
-            <label for="confirm_new_password">
-                <h3>Confirm New Password</h3>
-                <input type="password" name="confirm_new_password" required>
-            </label>
+                            <input class="button" type="submit" value="Change password">
+                        </form>
+                </section>
 
-            <input class="button" type="submit" value="Change password">
-        </form> -->
-
-        <!-- <form method="POST" action="/user/settings/<%= result._id %>?req=ppic&_method=PUT"
-            enctype="multipart/form-data">
+                <!-- <form method="POST" action="/user/settings/<%= result._id %>?req=ppic&_method=PUT" enctype="multipart/form-data">
             <label for="upload">Choose an image to upload:</label>
             <input type="file" id="file" name="profile_picture" accept="image/*">
             <button type="button" id="regenerate_image" name="regenerate_image"> Regenerate Image </button>

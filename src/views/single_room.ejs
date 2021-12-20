@@ -3,7 +3,6 @@
         <!-- central part -->
         <div id="chat_shadow">
         <section id="chat">
-            <% let prev %>
                 <% messages.forEach(msg=> { %>
                     <% let info={ prev:prev, msg:msg} %>
                     
@@ -57,20 +56,44 @@
 
 
 
-                    <!-- TODO: Implement this version instead -->
-                    <li class="room_member author %> ">
-                        <img src="/images/user1.png" alt="<% author.username %>">
-                        <h1 id="username"> <%= author.username %> </h1>
-                    </li>
-                        <% admins.forEach( admin=> { %>
-                            <% if (admin._id != author._id) { %>
-                                <li class="room_member admin ">
-                                    <img src="/images/user1.png" alt="<% user.username %>">
-                                    <h1 id="username"> <%= user.username %> </h1>
-                                </li>
-                                    <% };%>
-                                        <% }); %>
-                </ul>
+    <div id="room_container">
+        <section class="room">
+            <!-- central part -->
+            <div id="chat_shadow"></div>
+            <section id="chat">
+                <% let prev %>
+                <% messages.forEach(msg => { %>
+                    <% let info = {prev:prev, msg:msg} %>
+                    <%- include('includes/room_msg', info) %>
+                    <% if (msg.user.id != prev) { %>
+                        <% prev = msg.user.id %>
+                    <% } %>
+                <% }); %>
+            </section>
+        
+            <!-- below the chat messages -->
+            <section id="input">
+                <button class="grow_hover" id="leave_room">Leave room</button>
+                <div id="input">
+                    <label for="msg">
+                        <input id="msg" type="text" name="msg" value="" placeholder="Type here your message"/>
+                    </label>
+                    <button class="grow_hover" id="send">Send</button>
+                </div>
+            </section>
+        
+            <!-- member list aside -->
+            <section id="members">
+                <section id="normal_members">
+        
+                    <h2>Members</h2>
+                    <ul class="member_list">
+                        <% users.forEach( user => { %>
+                            <%- include('includes/room_member', {user:user, role:'user'}) %>
+                        <% }); %>
+                    </ul>
+                    
+                </section>
             </section>
             <section id="normal_members">
 

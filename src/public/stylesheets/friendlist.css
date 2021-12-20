@@ -2,21 +2,23 @@ section#friendlist {
     width: 85%;
     min-width: 400px;
     min-height: 600px;
-    margin: 50px 20px;
+    margin: 20px;
     display: grid;
     grid-template-columns: 5fr minmax(120px, 1fr);
     grid-template-rows: 1fr;
-    grid-template-areas: "pg bm"
+    grid-template-areas: "pg bm";
 }
 
-section.page {
+#page {
     border-radius: 10px 0px 0px 10px;
     grid-area: pg;
     z-index: 12;
     width: 100%;
+    max-height: 650px;
 }
 
-section.page>h1 {
+
+#page>h1 {
     padding-left: 20px;
     margin-top: 35px;
     margin-left: 20px;
@@ -24,8 +26,41 @@ section.page>h1 {
     letter-spacing: .2em;
 }
 
-section#your_friends {
-    background-color: #CDD0B9;
+/* Change color based on content */
+
+#page.friends {
+    background-color: var(--pink) !important;
+}
+
+#page.friends li.friend #info {
+    background-color: var(--lightpink);
+}
+
+#page.requests {
+    background-color: var(--lightblue) !important;
+}
+
+#page.requests li.friend #info {
+    background-color: var(--deepblue);
+    color: #f0f0f0 !important;
+}
+
+#page.sent_requests {
+    background-color: var(--deepblue) !important;
+}
+
+#page.sent_requests  li.friend #info {
+    background-color: var(--lightblue);
+    color: #f0f0f0 !important;
+}
+
+#page.search {
+    background-color: var(--deepblue) !important;
+}
+
+#page.search  li.friend #info {
+    background-color: var(--lightblue);
+    color: #f0f0f0 !important;
 }
 
 section#bookmarks {
@@ -33,6 +68,7 @@ section#bookmarks {
     display: grid;
     grid-template-columns: auto;
     grid-template-rows: repeat(19, 1fr);
+    text-shadow: rgba(0, 0, 0, 0.1) 0px 5px 10px, rgba(0, 0, 0, 0.1) 0px 3px 3px;
 }
 
 section#bookmarks>div.bookmark {
@@ -68,22 +104,31 @@ section#bookmarks :last-child {
 section#bookmarks>*::before {
     width: 90%;
     padding-left: 15px;
-    color: #181818;
+    color: #f0f0f0;
 }
 
 
 /* Bookmark Colors */
 
+section#bookmarks .current {
+    z-index: 5 !important;
+    width: 100% !important;
+}
+
 section#bookmarks :nth-child(1) {
-    background-color: #7F4F24;
+    background-color: var(--deepblue);
+}
+
+section#bookmarks :nth-child(1)::before {
+    content: "Find Users";
 }
 
 section#bookmarks :nth-child(2) {
-    background-color: #936639;
+    background-color: var(--blue);
 }
 
 section#bookmarks :nth-child(3) {
-    background-color: #A68A64;
+    background-color: var(--lightblue);
 }
 
 section#bookmarks :nth-child(3)::before {
@@ -91,13 +136,11 @@ section#bookmarks :nth-child(3)::before {
 }
 
 section#bookmarks :nth-child(4) {
-    background-color: #B6AD90;
+    background-color: var(--lightpink);
 }
 
 section#bookmarks :nth-child(5) {
-    background-color: #CDD0B9;
-    z-index: 5 !important;
-    width: 100% !important;
+    background-color: var(--pink);
 }
 
 section#bookmarks :nth-child(5)::before {
@@ -105,11 +148,11 @@ section#bookmarks :nth-child(5)::before {
 }
 
 section#bookmarks :nth-child(6) {
-    background-color: #B3B998;
+    background-color: var(--purple);
 }
 
 section#bookmarks :nth-child(7) {
-    background-color: #828A69;
+    background-color: var(--deepblue);
 }
 
 section#bookmarks :nth-child(7)::before {
@@ -117,31 +160,37 @@ section#bookmarks :nth-child(7)::before {
 }
 
 section#bookmarks :nth-child(8) {
-    background-color: #60684B;
+    background-color: var(--blue);
 }
 
 section#bookmarks :nth-child(9) {
-    background-color: #47533D;
+    background-color: var(--lightblue);
 }
 
 
 /* Friend items */
 
-section.page ul {
-    display: flex;
-    flex-direction: column;
+#page > .list {
+    height: 100%;
 }
 
-#friendlist li.friend {
+#page ul {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.friend {
     margin: 20px 10px;
     list-style-type: none;
     display: grid;
     grid-template-columns: 3fr 2fr;
 }
 
-#friendlist li.friend #info {
+.friend #info {
     display: flex;
-    background-color: #B3B998;
+    background-color: black;
     align-items: center;
     padding: 10px 20px;
     gap: 20px;
@@ -149,12 +198,11 @@ section.page ul {
     margin-left: 15px;
 }
 
-li.friend #info h1 {
+.friend #info h1 {
     font-size: 1.5em;
 }
 
-li.friend #info div {
-    background-image: url("/images/user.svg");
+.friend #info #avatar {
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: center;
@@ -162,17 +210,50 @@ li.friend #info div {
     width: 65px;
 }
 
-li.friend #buttons {
+.friend #buttons {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    margin-left: 10px;
 }
 
-li.friend #buttons button {
-    background-color: #f0f0f0;
-    font-weight: bolder;
-    min-width: 80px;
-    padding: 0px 20px;
-    height: 35px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+.friend #buttons button {
+    padding: 0px 15px !important;
+    font-size: 13px;
+}
+
+/* Search for users */
+
+#page.search .list {
+    height: 90%;
+}
+
+#page.search #searchbar {
+    display: flex !important;
+}
+
+#page.search #searchbar form {
+    margin: 10px 0px 10px 20px;
+} 
+
+#friendlist #searchbar input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+    width: 910px;
+    border-radius: 10px;
+    background-color: var(--white);
+}
+
+#friendlist #searchbar button {
+    float: right;
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: var(--white);
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
 }
