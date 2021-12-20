@@ -1,9 +1,14 @@
-<% let pages=["home", "exchange" , "discover" , "follow" , "friendlist" , "rooms" ]; %>
+<% let pages=["home", "discover" , "friendlist" , "rooms", '', '',  ]; %>
 
     <div id="nav_buttons">
         <ul>
             <% pages.forEach( p=> { %>
-                <li><a class="underline_animation" href="/<%= p %>">
+                <% if (p == '') { %>
+                    <li style="visibility: hidden">
+                <% } else { %>
+                    <li>
+                <% } %>
+                <a class="underline_animation" href="/<%= p %>">
                         <div class="nav-icon" id="<%= p %>"></div>
                         <h1>
                             <% let title=p.charAt(0).toUpperCase() + p.slice(1); %>

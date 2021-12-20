@@ -132,6 +132,15 @@ router.post('/new', isLoggedIn, async function (req, res, next) {
     });
     newRoom.addInitialAdmin(author, author);
     newRoom.addMember(author, author); //adding author to members
+
+    // open rooms, add all users as members
+
+    const users = await User.find({});
+
+    users.forEach(user => {
+        newRoom.addMember(author, user);
+    })
+
     newRoom.save()
         .then(result => {
             if (result) res.json(newRoom);

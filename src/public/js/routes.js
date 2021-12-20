@@ -5,16 +5,12 @@ function linkClick(href) {
         getHome();
     } else if (url.pathname === '/discover') {
         getDiscover()
-    } else if (url.pathname === '/follow') {
-        getFollow();
     } else if (url.pathname === '/friendlist') {
         getFriendList();
     } else if (url.pathname === '/rooms') {
         getRooms();
     } else if (url.pathname.startsWith('/rooms/')) {
-        getRoom(url);
-    } else if (url.pathname === '/exchange') {
-        getExchange();
+        getRoom(url.pathname);
     } else if (url.pathname === '/settings') {
         getSettings();
     } else { console.log('Unknown route'); }
@@ -30,8 +26,6 @@ function parsePath(path) {
             getDiscover()
         } else if (hash === '#friendlist') {
             getFriendList();
-        } else if (hash === '#follow') {
-            getFollow();
         } else {
             getHome();
         }
@@ -106,26 +100,6 @@ function getHome() {
         .catch(err => { console.error(err); });
 
         */
-}
-
-
-// yes
-function getFollow() {
-    const main = document.querySelector('main');
-    fetch('/follow', {
-        method: 'GET'
-    })
-        .then(res => {
-            if (res.status >= 400) {
-                console.log('error');
-            } else if (res.url.includes('/login')) {
-                getLogin();
-            } else {
-                window.location = '#follow?id=none';
-                let obj = { title: 'fuck', value: 'you' }
-                main.innerHTML = ejs.src_views_follow({ obj });
-            }
-        });
 }
 
 function setupFriendPage() {
@@ -282,7 +256,7 @@ function getLogin(lastLocation) {
         fetch(event.target.action, {
             method: 'POST',
             body: formdata
-        }).then(res => {
+        }).then(async res => {
             if (res.url.includes('/login')) {
                 getLogin();
             } else {
@@ -355,14 +329,14 @@ function getDiscover() {
         .catch(err => { console.error(err); });
 }
 
-
+function bufferToPng(data) {
+    const blob = new Blob([new Uint8Array(data.data)], { type: "application/octet-stream" });
+    return URL.createObjectURL(blob);
+}
 // yes
 function getRooms() {
 
-    function bufferToPng(data) {
-        const blob = new Blob([new Uint8Array(data.data)], { type: "application/octet-stream" });
-        return URL.createObjectURL(blob);
-    }
+    
 
     fetch('/rooms',
         {
@@ -403,7 +377,7 @@ function getRoom(url) {
         })
         .then(res => res.json())
         .then(roomData => {
-            window.location = '#' + url.pathname
+            window.location = '#' + url
             const main = document.querySelector('main');
             console.log(roomData);
             main.innerHTML = ejs.src_views_single_room(roomData); // work in progress
@@ -415,34 +389,10 @@ function getRoom(url) {
 
                 socket.emit('room.event.send.message', { room: roomData.room._id, 'message': message.value });
                 message.value = '';
+                
             }
         })
         .catch(err => console.log(err))
-}
-
-function getExchange() {
-    window.location = '#exchange?id=none';
-    const main = document.querySelector('main');
-
-    main.innerHTML = ejs.src_views_wip(); // work in progress
-
-
-    fetch('/exchange',
-        {
-            method: 'GET',
-            headers: { Accept: 'application/json' }
-        }
-    ).then(res => {
-        if (res.status >= 400) {
-            throw new Error(res.status);
-        }
-        return res.json(); // another promise
-    })
-        .then(data => ejs.src_views_exchange(data))
-        .then(html => {
-            // main.innerHTML = html; there is no main yet
-        })
-        .catch(err => { console.error(err); });
 }
 
 function getSettings() {
@@ -465,6 +415,7 @@ function getSettings() {
                 getLogin()
             } else {
                 const data = await res.json();
+                console.log(data)
                 main.innerHTML = ejs.src_views_settings({ result: data });
 
                 main.querySelector('#regenerate_image').onclick = () => {
@@ -510,7 +461,7 @@ function getProfile() {
         .then(data => {
             window.location = '#profile';
             const main = document.querySelector('main');
-            main.innerHTML = ejs.src_views_profile({ user: data });
+            main.innerHTML = ejs.src_views_profile({ user: data, pngUrl: bufferToPng });
         })
 
 }

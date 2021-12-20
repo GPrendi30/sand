@@ -268,6 +268,17 @@ function dosth (event) {
     console.log(event);
 }
 
+socket.on('room.event.message.sent', event => {
+    const url = window.location.hash
+    console.log(url, '#/rooms/' + event.room)
+    if (url === '#/rooms/' + event.room) {
+        console.log('message received')
+        const roomUrl = '/rooms/' + event.room;
+        getRoom(roomUrl)
+    }
+
+});
+
 socket.on('friend.request.sent.accpted', event => {
     dosth(event)
 })

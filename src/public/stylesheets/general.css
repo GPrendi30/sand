@@ -278,3 +278,99 @@ button {
     margin-bottom: 5px;
 }
 
+#dashboard {
+    align-self: flex-start;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(45deg, var(--deepblue) 0%, var(--pink) 30%, var(--lightblue));
+}
+
+#dashboard #welcome {
+    margin-top: 50px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#dashboard #welcome h1 {
+    font-size: 80px;
+    letter-spacing: 2px;
+    color: var(--white) !important;
+}
+
+#dashboard .dash_sec {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(12, 15, 31, 0.473);
+    padding: 35px 50px;
+    margin: 0px 50px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.dash_sec h2, .dash_sec p {
+    color: #ececec !important;
+}
+
+.dash_sec h2 {
+    align-self: center;
+    margin-bottom: 20px;
+    font-size: 34px;
+    letter-spacing: 1.2px;
+}
+
+.dash_sec p {
+    font-size: 18px;
+}
+
+.dash_sec#discover {
+    width: fit-content;
+    margin: 50px 0px;
+}
+
+.dash_sec#devteam {
+    margin-bottom: 100px;
+}
+
+/* Dev Team */
+
+#devteam #devteam_list {
+    list-style-type: none;
+    align-self: center;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    display: flex;
+    margin-top: 30px;
+}
+
+#devteam_list a {
+    text-decoration: none;
+}
+
+#devteam_list .dev {
+    transition: all .12s ease-out;
+}
+
+#devteam_list .dev:hover {
+    transform: scale(1.075);
+}
+
+
+
+#devteam_list .dev img {
+    width: 200px;
+    border-radius: 10px;
+}
+
+#devteam_list .dev .dev_name {
+    margin: 10px 0px;
+    letter-spacing: 1px;
+    font-size: 19px;
+    color: #ececec !important;
+}

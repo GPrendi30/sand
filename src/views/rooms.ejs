@@ -10,44 +10,19 @@
             <ul class="discover_lineup">
 
                 <% rooms.forEach( item=> { %>
-                    <li>
+                    <li data-sid="<%= item._id %>">
                         <a class="discover_item grow_hover shadow" href="/rooms/<%= item._id %>">
                             <img src="<%= pngUrl(item.icon) %>" alt="<%= item.name %>">
                             <h1 class="room_title">
                                 <%= item.name %>
                             </h1>
                         </a>
-                        <button class="button room_btn">Leave</button>
+                        <button class="button room_btn">Open</button>
                     </li>
                     <% }) %>
 
             </ul>
         </article>
-
-        <!-- other rooms -->
-        <article class="rooms_area" id="other_rooms">
-            <div class="room_lineup_info">
-                <h1>Explore rooms</h1>
-                <p>Meet others with the same interests as you, and keep up to date on recent news.</p>
-            </div>
-            <ul class="discover_lineup">
-
-                <% rooms.forEach( item=> { %>
-                    <li>
-                        <div class="discover_item grow_hover shadow">
-                            <a href="/rooms/<%= item._id %>">
-                                <img src="<%= pngUrl(item.icon) %>" alt="<%= item.name %>">
-                                <h1>
-                                    <%= item.name %>
-                                </h1>
-                            </a>
-                        </div>
-                        <button class="button room_btn">Ask to Join</button>
-                    </li>
-                    <% }) %>
-            </ul>
-        </article>
-    </div>
 
     <div id="bottom">
 
@@ -93,10 +68,6 @@
                     <label for="icon">
                         <h3>Icon</h3>
                         <input type="file" id="file" name="icon" accept="image/*">
-                    </label>
-                    <label for="users">
-                        <h3>Members</h3>
-                        <input id="searchbar" type="text" name="user" placeholder="Enter a username">
                     </label>
                     <div id="added_users">
                         <ul>

@@ -610,13 +610,13 @@ async function setInCache (collectionSlug) {
         'banner_img', data.collection.banner_image_url,
         'link', '/discover/' + data.collection.slug,
         'OpenSea_link', 'https://opensea.io/collection/' + data.collection.slug,
-        'total_volume', data.collection.stats.total_volume,
-        'num_owners', data.collection.stats.num_owners,
-        'num_assets', data.collection.stats.count,
-        'average_price', data.collection.stats.average_price,
-        'floor_price', data.collection.stats.floor_price,
+        'total_volume', data.collection.total_volume,
+        'num_owners', data.collection.num_owners,
+        'num_assets', data.collection.count,
+        'average_price', data.collection.average_price,
+        'floor_price', data.collection.floor_price,
         'created_date', data.collection.created_date,
-        'total_sales', data.collection.stats.total_sales,
+        'total_sales', data.collection.total_sales,
         function (err, reply) {
             if (err) {
                 console.log(err);

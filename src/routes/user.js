@@ -180,16 +180,14 @@ router.get('/settings/', isLoggedIn, function (req, res, next) {
 router.put('/settings/', isLoggedIn, function (req, res, next) {
 
 
-    const filter = { _id: new ObjectId(req.passport.user) };
+    const filter = { _id: new ObjectId(req.session.passport.user._id) };
 
     const modify = {}
     modify[req.query.req] = req.body[req.query.req];
-    console.log(modify)
-    models.users.findOneAndUpdate(filter, { $set: modify }, { upsert: true }) // update + insert = upsert
-        .then(result => {
-            const found = (result.upsertedCount === 0);
-            res.status(found ? 200 : 201).json(result);
-        });
+    
+    User.findOneAndUpdate(filter, { $set: modify }, { upsert: true }).then(result => {
+        res.status(result !== undefined ? 200 : 201).json(result);
+    });
 })
 
 /* GET user assets page. */

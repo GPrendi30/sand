@@ -297,7 +297,7 @@ function init(server) {
 
             room.setName(user, setDescEvent.name)
 
-            socket.to(room._id).emit('room.event.desc.set', { message: 'Room description set', finalized: true, desc: setDescEvent.desc, room: setNameEvent.room })
+            socket.to(String(room._id)).emit('room.event.desc.set', { message: 'Room description set', finalized: true, desc: setDescEvent.desc, room: setNameEvent.room })
         })
 
         socket.on('room.event.send.message', async sendMessageEvent => {
@@ -308,7 +308,7 @@ function init(server) {
             room.sendMessage(user, sendMessageEvent.message);
 
             room.save();
-            socket.to(room._id).emit('room.event.message.sent', { message: 'Message sent', finalized: true, sentMessage: sendMessageEvent.message, room: sendMessageEvent.room })
+            io.emit('room.event.message.sent', { message: 'Message sent', finalized: true, sentMessage: sendMessageEvent.message, room: sendMessageEvent.room })
         })
 
         socket.on('chat.event.send.message', async event => {
@@ -317,7 +317,7 @@ function init(server) {
             const user = authenticatedSockets[socket.id];
             chat.sendMessage(user, message)
 
-            socket.to(String(user._id)).emit('chat.event.message.sent', { message: 'Message sent', finalized: true, sentMessage: event.message })
+            io.to(String(user._id)).emit('chat.event.message.sent', { message: 'Message sent', finalized: true, sentMessage: event.message })
         })
 
         socket.on('chat.event.add.user', async event => {
