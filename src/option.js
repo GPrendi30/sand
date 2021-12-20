@@ -6,6 +6,8 @@ const getCollectionDataWithSlug = require('./api.js').getCollectionDataWithSlug;
 const getVolumeFromCache = require('./api.js').getVolumeFromCache;
 const getAllSalesFromStart = require('./api.js').getAllSalesFromStart
 const getSalesFromCache = require('./api.js').getSalesFromCache
+const plotVolumeBarData = require('./api.js').plotVolumeBarData
+const plotVolumeNumSalesData = require('./api.js').plotVolumeNumSalesData
 const currentDate = new Date();
 const currentTimestamp = Math.trunc(currentDate.getTime() / 1000);
 const lastMidnight = new Date(currentDate.setHours(0, 0, 0, 0));
@@ -35,7 +37,7 @@ async function getOptionForDailyVolume (contractSlug, timeInDays) {
     let title;
     try {
         title = (await getCollectionDataWithSlug(contractSlug)).collection.name;
-        dailyVolumeArray = await getVolumeFromCache(contractSlug, timeInDays)
+        dailyVolumeArray = await plotVolumeBarData(contractSlug, timeInDays)
 
         option = {
             title: {
@@ -89,7 +91,9 @@ async function getOptionForScatterChart (collectionSlug, timeInDays) {
     let title;
 
     try {
-        timePriceArray = await getSalesFromCache(collectionSlug, timeInDays)
+        const timestamp = Math.trunc((Date.now() / 1000) - 86400 * timeInDays)
+        // const timestamp = Math.trunc(new Date((Date.now()).getTime() - 86400 * timeInDays) / 1000)
+        timePriceArray = await getSalesFromCache(collectionSlug, timestamp)
         title = (await getCollectionDataWithSlug(collectionSlug)).collection.name
 
         const plottedTimePriceArray = [];
@@ -154,7 +158,7 @@ async function getOptionForDailySales (collectionSlug, timeInDays) {
     let option;
     let title;
     try {
-        dailySalesArray = await dailySales(collectionSlug, timeInDays)
+        dailySalesArray = await plotVolumeNumSalesData(collectionSlug, timeInDays)
         title = (await getCollectionDataWithSlug(collectionSlug)).collection.name;
 
         option = {
