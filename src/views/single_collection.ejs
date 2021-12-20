@@ -1,50 +1,102 @@
-<section class="single_collection">
+<html>
 
-    <section>
-        <img src="<%= collection.img %>" alt="the image of the collection">
-        <button id="track">
-            Track
-        </button>
-    </section>
+<head>
+    <link rel='stylesheet' href='/stylesheets/general.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/header.css' />
+    <link rel='stylesheet' href='/stylesheets/navbar.css' />
+    <link rel='stylesheet' href='/stylesheets/navbar_min.css' />
+    <link rel='stylesheet' href='/stylesheets/discover.css' />
+    <link rel='stylesheet' href='/stylesheets/follow.css' />
+    <link rel='stylesheet' href='/stylesheets/friendlist.css' />
+    <link rel='stylesheet' href='/stylesheets/footer.css' />
+    <link rel='stylesheet' href='/stylesheets/aside.css' />
+    <link rel='stylesheet' href='/stylesheets/login_signup.css' />
+    <link rel='stylesheet' href='/stylesheets/rooms.css' />
+    <link rel='stylesheet' href='/stylesheets/profile.css' />
+    <link rel='stylesheet' href='stylesheets/settings.css' />
+    <link rel='stylesheet' href='stylesheets/notif_list.css' />
+    <link rel='stylesheet' href='stylesheets/single_room.css' />
+</head>
+<div id="profile_container">
+    <div id="profile">
+
+        <section class="single_collection">
 
 
-    <section id="collection_info">
-        <h1 id="collection_title"><%= collection.title %></h1> 
-        <p id="collection_desc"><%= collection.description %></p>
-        <a href="<%= collection.OpenSea_link %>">  Link to OpenSea: </a>
-    </section>
+            <div id="top_section">
 
-    <section id="collection_stats">
-        <div>
-            <h5>Total Volume: <%= collection.total_volume %> </h5>
-        </div>
-        <div>
-            <h5>Floor Price: <%= collection.floor_price %> </h5>
-        </div>
-        <div>
-            <h5>Average Price: <%= collection.average_price %> </h5>
-        </div>
-        <div>
-            <h5>Created At: <%= collection.created_date %> </h5>
-        </div>
+                <section id="user_info_area">
 
-        <div>
-            <h5><%= collection.num_owners %> people own at least one.</h5>
-        </div>
+                    <div id="pic_and_username">
+                        <section>
+                            <img src="<%= collection.img %>" alt="the image of the collection">
+                            <button id="track">
+                                Track
+                            </button>
+                        </section>
+                    </div>
+                </section>
+            </div>
 
-        <div>
-            <h5>Total Supply: <%= collection.num_assets %></h5>
-        </div>
+            <section id="collection_info">
+                <h1 id="collection_title">
+                    <%= collection.title %>
+                </h1>
+                <p id="collection_desc">
+                    <%= collection.description %>
+                </p>
+                <a href="<%= collection.OpenSea_link %>"> Link to OpenSea: </a>
+            </section>
 
-        <div>
-            <h5>Total Sales: <%= collection.total_sales %></h5>
-        </div>
+            <section id="friends">
+                <section id="friends_list">
+            <section id="collection_stats">
+                
 
-    </section>
+               
+                <ul>
+                    <h5>Total Volume: <%= collection.total_volume %>
+                    </h5>
+                </ul>
+                <div>
+                    <h5>Floor Price: <%= collection.floor_price %>
+                    </h5>
+                </div>
+                <div>
+                    <h5>Average Price: <%= collection.average_price %>
+                    </h5>
+                </div>
+                <div>
+                    <h5>Created At: <%= collection.created_date %>
+                    </h5>
+                </div>
 
-    <section id="collection_graphs">
-        
-    </section>
+                <div>
+                    <h5>
+                        <%= collection.num_owners %> people own at least one.
+                    </h5>
+                </div>
 
-   
-</section>  
+                <div>
+                    <h5>Total Supply: <%= collection.num_assets %>
+                    </h5>
+                </div>
+
+                <div>
+                    <h5>Total Sales: <%= collection.total_sales %>
+                    </h5>
+                </div>
+            </ul>
+            </section>
+
+            <section id="collection_graphs">
+
+            </section>
+
+
+        </section>
+    </div>
+</div>
+
+</html>

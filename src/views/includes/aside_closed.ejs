@@ -1,9 +1,72 @@
 <aside>
+    <style>
+        aside {
+            display: flex;
+            flex-direction: row;
+        }
 
-    <img class="aside_button" src="/images/news.svg">
+        #history {
+            width: 400px;
+            height: 400px;
 
-    <img class="aside_button" src="/images/chat.svg">
+        }
 
+        #emb_chat {
+            width: 400px;
+            height: 400px;
+
+
+        }
+
+        #icons {
+            display: flex;
+            flex-direction: column;
+        }
+
+    </style>
+
+    <div>
+        <div id="history" style="display: none">
+            
+            <ul id="notifications">
+                <h4>Notifications History</h4> 
+                <li class="notif">
+                    Hello bruda
+                </li>
+                <li class="notif">
+                    Hello bruda
+                </li>
+                <li class="notif">
+                    Hello bruda
+                </li>
+            </ul>
+        </div>
+
+        <div id="emb_chat" style="display: none">
+            
+            <ul id="notifications">
+                <h4>Your Chat</h4> 
+                <li class="notif">
+                    Hello bruda
+                </li>
+                <li class="notif">
+                    Hello bruda
+                </li>
+                <li class="notif">
+                    Hello bruda
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="icons">
+
+
+        <img id="news_button" class="aside_button" src="/images/news.svg">
+
+        <img id="chat_button" class="aside_button" src="/images/chat.svg">
+
+    </div>
+
+    
 </aside>
-
-
