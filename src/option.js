@@ -137,6 +137,8 @@ async function getOptionForScatterChart (collectionSlug, timeInDays) {
             },
             toolbox: {
                 feature: {
+                    dataZoom: { show: true },
+                    restore: { show: true },
                     saveAsImage: { show: true }
                 }
             },
@@ -150,14 +152,29 @@ async function getOptionForScatterChart (collectionSlug, timeInDays) {
             },
             yAxis: {
                 name: 'Volume (ETH)',
-                type: 'value'
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}' // Ξ
+                }
             },
             series: [
                 {
                     name: 'Sales',
                     symbolSize: 7.5,
                     data: plottedTimePriceArray,
-                    type: 'scatter'
+                    type: 'scatter',
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: 'Max' }
+                        ]
+                    },
+                    markLine: {
+                        lineStyle: {
+                            type: 'solid',
+                            color: 'lightgreen'
+                        },
+                        data: [{ type: 'average', name: 'AVG' }, { xAxis: 100 }]
+                    }
                 }
             ]
         }
@@ -432,8 +449,106 @@ async function getVolumeChartWithAverageLine (collectionSlug, timeInDays) {
     } catch (error) { console.error(error); }
 }
 
+/**
+ * Function to generate the options for a scatter chart.
+ * @param string collectionSlug, the slug of the collection.
+ * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
+ * @returns {array} object option that is used to draw the chart.
+ */
+async function getDoubleScatter (collectionSlug, collectionSlug2, timeInDays) {
+    let timePriceArray
+    let timePriceArray2
+    let option
+    let title
+
+    try {
+        const timestamp = Math.trunc((Date.now() / 1000) - 86400 * timeInDays)
+
+        timePriceArray = await getSalesFromCache(collectionSlug, timestamp)
+        timePriceArray2 = await getSalesFromCache(collectionSlug2, timestamp)
+        const collectionName1 = (await getCollectionDataWithSlug(collectionSlug)).collection.name
+        const collectionName2 = (await getCollectionDataWithSlug(collectionSlug2)).collection.name
+        title = collectionName1 + ' VS ' + collectionName2
+
+        const plottedTimePriceArray = [];
+        timePriceArray.forEach(data => {
+            plottedTimePriceArray.push(
+                [data.t, data.p]
+            )
+        })
+
+        const plottedTimePriceArray2 = [];
+        timePriceArray2.forEach(data => {
+            plottedTimePriceArray2.push(
+                [data.t, data.p]
+            )
+        })
+
+        option = {
+            title: {
+                show: true,
+                text: title,
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                },
+                formatter: function (args) {
+                    return 'Date + ' + args[0].name + ': ' + args[0].value
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: { show: true },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            legend: {
+                show: true,
+                data: ['Sale of ' + collectionName1, 'Sale of ' + collectionName2],
+                bottom: 0
+            },
+            xAxis: {
+                type: 'time'
+            },
+            yAxis: {
+                name: 'Volume (ETH)',
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}' // Ξ
+                }
+            },
+            series: [
+                {
+                    name: 'Sale of ' + collectionName1,
+                    symbolSize: 7.5,
+                    data: plottedTimePriceArray,
+                    type: 'scatter',
+                    color: '#5470c6'
+                },
+                {
+                    name: 'Sale of ' + collectionName2,
+                    symbolSize: 7.5,
+                    data: plottedTimePriceArray2,
+                    type: 'scatter',
+                    color: '#91cc75'
+                }
+            ]
+        }
+    } catch (error) { console.error(error); }
+
+    return option
+}
+
 module.exports.getOptionForDailyVolume = getOptionForDailyVolume
 module.exports.getOptionForScatterChart = getOptionForScatterChart
 module.exports.getOptionForDailySales = getOptionForDailySales
 module.exports.getOptionForAveragePrice = getOptionForAveragePrice
 module.exports.getVolumeChartWithAverageLine = getVolumeChartWithAverageLine
+module.exports.getDoubleScatter = getDoubleScatter

@@ -6,6 +6,7 @@ const getOptionForScatterChart = require('../option.js').getOptionForScatterChar
 const getOptionForDailySales = require('../option.js').getOptionForDailySales
 const getOptionForAveragePrice = require('../option.js').getOptionForAveragePrice
 const getVolumeChartWithAverageLine = require('../option.js').getVolumeChartWithAverageLine
+const getDoubleScatter = require('../option.js').getDoubleScatter
 
 /* GET graph page. */
 router.get('/', isLoggedIn, function (req, res, next) {
@@ -26,6 +27,7 @@ router.get('/types', function (req, res, next) {
 router.get('/data', async function (req, res, next) {
     const chartType = req.query.chart
     const contractSlug = req.query.slug
+    const contractSlug2 = req.query.slug2
     const time = req.query.time
 
     if (req.accepts('json')) {
@@ -45,6 +47,10 @@ router.get('/data', async function (req, res, next) {
             res.status(200).send(option);
         } else if (chartType === 'volumeWithAverageLine') {
             const option = await getVolumeChartWithAverageLine(contractSlug, time);
+            console.log(option);
+            res.status(200).send(option);
+        } else if (chartType === 'doubleScatter') {
+            const option = await getDoubleScatter(contractSlug, contractSlug2, time);
             console.log(option);
             res.status(200).send(option);
         } else {
