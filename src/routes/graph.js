@@ -4,6 +4,8 @@ const { isLoggedIn } = require('../login');
 const getOptionForDailyVolume = require('../option.js').getOptionForDailyVolume
 const getOptionForScatterChart = require('../option.js').getOptionForScatterChart
 const getOptionForDailySales = require('../option.js').getOptionForDailySales
+const getOptionForAveragePrice = require('../option.js').getOptionForAveragePrice
+const getVolumeChartWithAverageLine = require('../option.js').getVolumeChartWithAverageLine
 
 /* GET graph page. */
 router.get('/', isLoggedIn, function (req, res, next) {
@@ -36,6 +38,14 @@ router.get('/data', async function (req, res, next) {
             res.status(200).send(option);
         } else if (chartType === 'scatter') {
             const option = await getOptionForScatterChart(contractSlug, time)
+            res.status(200).send(option);
+        } else if (chartType === 'averageLine') {
+            const option = await getOptionForAveragePrice(contractSlug, time);
+            console.log(option);
+            res.status(200).send(option);
+        } else if (chartType === 'volumeWithAverageLine') {
+            const option = await getVolumeChartWithAverageLine(contractSlug, time);
+            console.log(option);
             res.status(200).send(option);
         } else {
             res.status(404).end()

@@ -1031,10 +1031,8 @@ async function plotVolumeBarData (collectionSlug, days) {
     for (let i = 0; i < salesArray.length - 1; i++) {
         const currentDay = new Date(salesArray[i].t).getDate()
         console.log('currentDay: ', currentDay)
-        // saleSum += salesArray[i].p
 
         while (i < salesArray.length && currentDay === new Date(salesArray[i].t).getDate()) {
-            console.log('sales arrau', salesArray[i].p)
             saleSum += parseFloat(salesArray[i].p)
             i++
         }
@@ -1055,8 +1053,6 @@ async function plotVolumeNumSalesData (collectionSlug, days) {
     let saleSum = 0
     for (let i = 0; i < salesArray.length - 1; i++) {
         const currentDay = new Date(salesArray[i].t).getDate()
-        console.log('currentDay: ', currentDay)
-        // saleSum += salesArray[i].p
 
         while (i < salesArray.length && currentDay === new Date(salesArray[i].t).getDate()) {
             console.log('sales arrau', salesArray[i].p)
@@ -1066,6 +1062,33 @@ async function plotVolumeNumSalesData (collectionSlug, days) {
         i--
         dailyVolume.push(saleSum)
         saleSum = 0
+    }
+
+    console.log(dailyVolume)
+    return dailyVolume
+}
+
+async function plotAveragePriceData (collectionSlug, days) {
+    const oldestMidnight = Math.trunc(new Date().setHours(0, 0, 0, 0) / 1000) - 86400 * days
+    const salesArray = await getSalesFromCache(collectionSlug, oldestMidnight)
+    console.log('salesArray: ', salesArray)
+    const dailyVolume = []
+    let sum = 0
+    let saleSum = 0
+    for (let i = 0; i < salesArray.length - 1; i++) {
+        const currentDay = new Date(salesArray[i].t).getDate()
+
+        while (i < salesArray.length && currentDay === new Date(salesArray[i].t).getDate()) {
+            saleSum += parseFloat(salesArray[i].p)
+            sum++
+            i++
+        }
+        i--
+
+        dailyVolume.push(saleSum / sum)
+
+        saleSum = 0
+        sum = 0
     }
 
     console.log(dailyVolume)
@@ -1088,18 +1111,4 @@ module.exports.getAllSalesFromStart = getAllSalesFromStart
 module.exports.getSalesFromCache = getSalesFromCache
 module.exports.plotVolumeBarData = plotVolumeBarData
 module.exports.plotVolumeNumSalesData = plotVolumeNumSalesData
-
-// if (Date1.getDate() === Date2.getDate() && Date1.getMonth() === Date2.getMonth()) {
-//     //They are on the same day
-// } else {
-//     // Not on the same day
-// }
-
-// console.log('timestamp: ', Math.trunc(new Date(Date.now()).getTime() / 1000))
-// console.log('date: ', new Date((Math.trunc(new Date(Date.now()).getTime() / 1000)) * 1000))
-// console.log(async () => { await getSalesFromCache('doodles-official', Math.trunc(new Date(Date.now()).getTime() / 1000)) })
-
-// const timeInDays = 3;
-// const timestamp = Math.trunc((Date.now() / 1000) - 86400 * timeInDays)
-// console.log('Date.now(): ', Math.trunc(Date.now() / 1000 - 86400 * timeInDays))
-// getSalesFromCache('doodles-official', timestamp)
+module.exports.plotAveragePriceData = plotAveragePriceData
