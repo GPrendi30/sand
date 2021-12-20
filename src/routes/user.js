@@ -121,9 +121,7 @@ router.get('/me', isLoggedIn, function (req, res, next) {
 /* GET user page. */
 router.get('/all', function (req, res, next) {
     User.find().then(result => {
-        result.forEach(element => {
-            removeSensitiveData(element)
-        });
+        result = result.map(element => removeSensitiveData(element));
         const user = result;
         if (user === null) {
             res.status(404).end();
@@ -215,11 +213,11 @@ router.get('/assets/:_id', isLoggedIn, function (req, res, next) {
 })
 
 /* GET user friends page. */
-router.get('/friends/:_id', isLoggedIn, function (req, res, next) {
+router.get('/friends/', isLoggedIn, function (req, res, next) {
     if (req.accepts('application/json')) {
         let filter
         try {
-            filter = { _id: new ObjectId(req.params._id) }
+            filter = { _id: new ObjectId(req.session.passport.user._id) }
         } catch (e) { res.status(404) }
         User.findOne(filter).then(result => {
             const user = result
@@ -233,6 +231,45 @@ router.get('/friends/:_id', isLoggedIn, function (req, res, next) {
         res.status(406).end()
     }
 })
+
+/* GET user pending friend request. */
+router.get('/friendrequest', isLoggedIn, function (req, res, next) {
+    let filter
+    try {
+        filter = { _id: new ObjectId(req.session.passport.user._id) }
+    } catch (e) { res.status(404) }
+    User.findOne(filter).then(async result => {
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            const friendRequests = await User.find({ _id: { $in: user.friendRequest } })
+            res.json(friendRequests)
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+
+/* GET user pending friend request. */
+router.get('/friendrequestsent', isLoggedIn, function (req, res, next) {
+    let filter
+    try {
+        filter = { _id: new ObjectId(req.session.passport.user._id) }
+    } catch (e) { res.status(404) }
+    User.findOne(filter).then(result => {
+        const user = result
+        if (user === null) {
+            res.status(404).end();
+        } else if (req.accepts('application/json')) {
+            res.json(user.friendRequestSent)
+        } else {
+            res.status(406).end()
+        }
+    })
+})
+
+
 
 /* GET user recently viewed assets page. */
 router.get('/recentlyviewed/:_id', isLoggedInSpecialized, function (req, res, next) {
@@ -295,23 +332,7 @@ router.get('/edit/:_id', isLoggedInSpecialized, function (req, res, next) {
     })
 })
 // to do add tests
-/* GET user pending friend request. */
-router.get('/friendrequests/:_id', isLoggedInSpecialized, function (req, res, next) {
-    let filter
-    try {
-        filter = { _id: new ObjectId(req.params._id) }
-    } catch (e) { res.status(404) }
-    User.findOne(filter).then(result => {
-        const user = result
-        if (user === null) {
-            res.status(404).end();
-        } else if (req.accepts('application/json')) {
-            res.json(user.friendrequests)
-        } else {
-            res.status(406).end()
-        }
-    })
-})
+
 // to do add tests
 /* GET user blocked friend. */
 router.get('/blocked/:_id', isLoggedInSpecialized, function (req, res, next) {

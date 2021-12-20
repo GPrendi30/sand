@@ -33,16 +33,16 @@
                 
                 -->
             <% friends.forEach( friend => { %>
-                <li class="friend">
+                <li class="friend" data-sid="<%= friend._id %>">
                     <section class="shadow" id="info">
                         <img id="avatar" src="images/user1.png" alt="<%= friend.name %>">
                         <h1 id="name"><%= friend.name %></h1>
                         <h1 id="friend_bio"><%= friend.bio %> </h1>
                     </section>
                     <div id="buttons">
-                        <button class="button" id="profile">See Profile</button>
-                        <button class="button" id="message">Message</button>
-                        <button class="button" id="unfriend">Unfriend</button>
+                        <button class="button" id="profile" data-sid="<%= friend._id %>" >See Profile</button>
+                        <button class="button" id="message" data-sid="<%= friend._id %>" >Message</button>
+                        <button class="button" id="friend_button" data-sid="<%= friend._id %>" >Add Friend</button>
                     </div>
                 </li>
 

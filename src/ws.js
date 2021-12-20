@@ -104,7 +104,7 @@ function init(server) {
         // console.log('user connected id:', authenticatedSockets[socket.id]);
 
         // RECEIVE AND HANDLE PENDING FRIEND REQUESTS
-        socket.on('friend.request.sent', async friendRequest => {
+        socket.on('friend.request.send', async friendRequest => {
             /**
              * sender: me
              * receiver: the friend
@@ -117,9 +117,10 @@ function init(server) {
                 if (friend === null) throw new Error('Friend not found');
 
                 user.sendFriendRequest(friend);
-                socket.to(String(user._id)).emit('friend.request.sent.accepted', { message: 'Request sent', sent: true, user: friend.username })
+                user.save();
+                socket.to(String(user._id)).emit('friend.request.sent', { message: 'Request sent', sent: true, user: friend.username })
             } catch (e) {
-                socket.to(String(user._id)).emit('friend.request.sent.rejected', { message: 'User not found', sent: false, user: null });
+                socket.to(String(user._id)).emit('friend.request.sent', { message: 'User not found', sent: false, user: null });
             }
         });
 

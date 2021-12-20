@@ -66,6 +66,8 @@ userSchema.methods.sendFriendRequest = function (friend) {
     if (this.friendRequestSent.includes(friend._id)) return;
 
     this.friendRequestSent.push(friend._id);
+    friend.friendRequests.push(this._id);
+    friend.save();
 }
 
 userSchema.methods.revokeFriendRequest = function (friend) {

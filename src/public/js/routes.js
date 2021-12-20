@@ -122,8 +122,68 @@ function getFollow() {
                 getLogin();
             } else {
                 window.location = '#follow?id=none';
-                let obj = { title: 'fuck', value: 'you'  }
+                let obj = { title: 'fuck', value: 'you' }
                 main.innerHTML = ejs.src_views_follow({ obj });
+            }
+        });
+}
+
+function setupFriendPage() {
+    const usersButton = document.getElementById('bm0');
+    const friendsButton = document.getElementById('bm4');
+    const friendRequestsButton = document.getElementById('bm2');
+    const friendRequestsSentButton = document.getElementById('bm6');
+
+    usersButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        getUserList();
+    });
+
+    friendsButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        getFriendList();
+    });
+
+    friendRequestsButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        getFriendRequests();
+    });
+
+    friendRequestsSentButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        getSentFriendRequests();
+    })
+}
+
+function getUserList() {
+    const main = document.querySelector('main');
+
+    
+    fetch('/user/all', {
+        method: 'GET'
+    })
+        .then(async res => {
+            if (res.status >= 400) {
+                console.log('error');
+            } else if (res.url.includes('/login')) {
+                getLogin();
+            } else {
+                window.location = '#users';
+               
+                main.innerHTML = ejs.src_views_friendlist({
+                    friends: await res.json()
+                });
+
+                setupFriendPage();
+                const list = document.querySelectorAll('.friend');
+                list.forEach(item => {
+                    const friendButton = document.querySelector(`li[data-sid="${item.dataset.sid}"] #friend_button`);
+                    friendButton.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        socket.emit('friend.request.send', { receiver: item.dataset.sid })
+                        friendButton.innerHTML = 'Request Sent';
+                    });
+                })
             }
         });
 }
@@ -131,44 +191,81 @@ function getFollow() {
 function getFriendList() {
     const main = document.querySelector('main');
 
-    window.location = '#friendlist?id=none';
-    main.innerHTML = ejs.src_views_friendlist({
-        friends:
-            [
-                { name: 'geri' },
-                { name: 'geri' },
-                { name: 'geri' },
-                { name: 'geri' },
-                { name: 'geri' },
-                { name: 'geri' },
-                { name: 'geri' }
-            ]
-    });
+    fetch('/user/friends',
+        {
+            method: 'GET',
+            headers: { Accept: 'application/json' }
+        }
+    ).then(res => {
+        if (res.status >= 400) {
+            throw new Error(res.status);
+        } else if (res.url.includes('/login')) {
+            getLogin();
+            return;
+        }
 
-    fetch('/user/friends/61b51e6166ee527f461c77b7', {
-        method: 'GET'
+        return res.json(); // another promise
     })
-        .then(res => {
-            if (res.status >= 400) {
-                console.log('error');
-            } else if (res.url.includes('/login')) {
-                getLogin();
-            } else {
-                window.location = '#friendlist?id=none';
-                main.innerHTML = ejs.src_views_friendlist({
-                    friends:
-                        [
-                            { name: 'geri' },
-                            { name: 'geri' },
-                            { name: 'geri' },
-                            { name: 'geri' },
-                            { name: 'geri' },
-                            { name: 'geri' },
-                            { name: 'geri' }
-                        ]
-                });
-            }
-        });
+        .then(data => ejs.src_views_friendlist({ friends: data }))
+        .then(html => {
+            window.location = '#friendlist';
+            main.innerHTML = html;
+
+            setupFriendPage();
+        })
+        .catch(err => { console.error(err); });
+}
+
+
+function getFriendRequests() {
+
+    const main = document.querySelector('main');
+
+    fetch('/user/friendrequest',
+        {
+            method: 'GET',
+            headers: { Accept: 'application/json' }
+        }
+    ).then(res => {
+        if (res.status >= 400) {
+            throw new Error(res.status);
+        }
+        return res.json(); // another promise
+    })
+        .then(data => ejs.src_views_friendlist({ friends: data }))
+        .then(html => {
+            window.location = '#friendrequests';
+            main.innerHTML = html;
+
+            setupFriendPage();
+        })
+        .catch(err => { console.error(err); });
+}
+
+
+function getSentFriendRequests() {
+
+    const main = document.querySelector('main');
+
+    fetch('/user/friendrequestsent',
+        {
+            method: 'GET',
+            headers: { Accept: 'application/json' }
+        }
+    ).then(res => {
+        if (res.status >= 400) {
+            throw new Error(res.status);
+        }
+        return res.json(); // another promise
+    })
+        .then(data => ejs.src_views_friendlist({ friends: data }))
+        .then(html => {
+            window.location = '#sentfriendrequests';
+            main.innerHTML = html;
+
+            setupFriendPage();
+        })
+        .catch(err => { console.error(err); });
 }
 
 function getLogin(lastLocation) {
@@ -291,6 +388,8 @@ function getRooms() {
                     linkClick(event.currentTarget.href);
                 })
             })
+
+
         }
     })
         .catch(err => { console.error(err); });

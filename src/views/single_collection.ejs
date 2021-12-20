@@ -18,85 +18,72 @@
     <link rel='stylesheet' href='stylesheets/notif_list.css' />
     <link rel='stylesheet' href='stylesheets/single_room.css' />
 </head>
-<div id="profile_container">
-    <div id="profile">
+<section class="single_collection">
 
-        <section class="single_collection">
-
-
-            <div id="top_section">
-
-                <section id="user_info_area">
-
-                    <div id="pic_and_username">
-                        <section>
-                            <img src="<%= collection.img %>" alt="the image of the collection">
-                            <button id="track">
-                                Track
-                            </button>
-                        </section>
-                    </div>
-                </section>
-            </div>
-
-            <section id="collection_info">
-                <h1 id="collection_title">
-                    <%= collection.title %>
-                </h1>
-                <p id="collection_desc">
-                    <%= collection.description %>
-                </p>
-                <a href="<%= collection.OpenSea_link %>"> Link to OpenSea: </a>
-            </section>
-
-            <section id="friends">
-                <section id="friends_list">
-            <section id="collection_stats">
-                
-
-               
-                <ul>
-                    <h5>Total Volume: <%= collection.total_volume %>
-                    </h5>
-                </ul>
-                <div>
-                    <h5>Floor Price: <%= collection.floor_price %>
-                    </h5>
-                </div>
-                <div>
-                    <h5>Average Price: <%= collection.average_price %>
-                    </h5>
-                </div>
-                <div>
-                    <h5>Created At: <%= collection.created_date %>
-                    </h5>
-                </div>
-
-                <div>
-                    <h5>
-                        <%= collection.num_owners %> people own at least one.
-                    </h5>
-                </div>
-
-                <div>
-                    <h5>Total Supply: <%= collection.num_assets %>
-                    </h5>
-                </div>
-
-                <div>
-                    <h5>Total Sales: <%= collection.total_sales %>
-                    </h5>
-                </div>
-            </ul>
-            </section>
-
-            <section id="collection_graphs">
-
-            </section>
+    <section>
+        <img src="<%= collection.img %>" alt="the image of the collection">
+        <button id="track">
+            Track
+        </button>
+    </section>
 
 
-        </section>
-    </div>
+    <section id="collection_info">
+        <h1 id="collection_title">
+            <%= collection.title %>
+        </h1>
+        <p id="collection_desc">
+            <%= collection.description %>
+        </p>
+        <a href="<%= collection.OpenSea_link %>"> Link to OpenSea: </a>
+    </section>
+
+    <section id="collection_stats">
+
+
+
+        <ul>
+            <h5>Total Volume: <%= collection.total_volume %>
+            </h5>
+        </ul>
+        <div>
+            <h5>Floor Price: <%= collection.floor_price %>
+            </h5>
+        </div>
+        <div>
+            <h5>Average Price: <%= collection.average_price %>
+            </h5>
+        </div>
+        <div>
+            <h5>Created At: <%= collection.created_date %>
+            </h5>
+        </div>
+
+        <div>
+            <h5>
+                <%= collection.num_owners %> people own at least one.
+            </h5>
+        </div>
+
+        <div>
+            <h5>Total Supply: <%= collection.num_assets %>
+            </h5>
+        </div>
+
+        <div>
+            <h5>Total Sales: <%= collection.total_sales %>
+            </h5>
+        </div>
+        </ul>
+    </section>
+
+    <section id="collection_graphs">
+
+    </section>
+
+
+</section>
+</div>
 </div>
 
 </html>
