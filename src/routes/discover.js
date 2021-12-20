@@ -3,12 +3,13 @@ const router = express.Router()
 const getCollectionDataWithSlug = require('../api.js').getCollectionDataWithSlug;
 const getCollections = require('../api.js').getCollections;
 const checkInCache = require('../api.js').checkInCache;
+const getCollectionsWithOwnerAddress = require('../api.js').getCollectionsWithOwnerAddress
 // const returnGetSlugObjectFromCache = require('../api.js').returnGetSlugObjectFromCache;
 
 // /* GET discover page. */
 router.get('/', async function (req, res, next) {
     if (req.accepts('json')) {
-        const collection = await getCollections();
+        const collection = await getCollectionsWithOwnerAddress();
         res.send(collection);
     } else {
         res.status(406).end();
@@ -20,7 +21,7 @@ router.get('/:slug', async function (req, res, next) {
     const slug = req.params.slug
     if (req.accepts('json')) {
         const collectionData = await checkInCache(slug)
-        console.log(collectionData)
+        console.log('collectionData in get discover/slug: ', collectionData)
 
         // const inCache = await checkInCache(slug)
         // if (inCache === false) {

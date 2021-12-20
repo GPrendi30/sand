@@ -21,6 +21,23 @@ async function getCollectionDataWithSlug(slug) {
     try {
         response = await axios.request(options);
 
+        // console.log(response.data)
+        // const data = response.data
+        // console.log('title', data.collection.name)
+        // console.log('description', data.collection.description)
+        // console.log('slug', data.collection.slug)
+        // console.log('img', data.collection.image_url)
+        // console.log('banner_img', data.collection.banner_image_url)
+        // console.log('link', '/discover/' + data.collection.slug)
+        // console.log('OpenSea_link', 'https://opensea.io/collection/' + data.collection.slug)
+        // console.log('total_volume', data.collection.stats.total_volume)
+        // console.log('num_owners', data.collection.stats.num_owners)
+        // console.log('num_assets', data.collection.stats.count)
+        // console.log('average_price', data.collection.stats.average_price)
+        // console.log('floor_price', data.collection.stats.floor_price)
+        // console.log('created_date', data.collection.created_date)
+        // console.log('total_sales', data.collection.stats.total_sales)
+
         return response.data;
     } catch (error) { console.error(error); }
 }
@@ -599,6 +616,85 @@ async function getCollections () {
     return allCollectionsData
 }
 
+/**
+ * Get a list with 300 random collections.
+ * @returns {object} object with all the data.
+ */
+async function getCollectionsWithOwnerAddress () {
+    // Returns a random integer from 1 to 100:
+    // const offset = Math.floor(Math.random() * 49700);
+    // console.log('Offset to retrieve random collections: ', offset);
+    const options = {
+        method: 'GET',
+        url: 'https://api.opensea.io/api/v1/collections',
+        params: { asset_owner: '0x28C7400877F6d012B79a6b85297204A73D388335', offset: 0, limit: '300' },
+        headers: { 'X-API-KEY': apiKey }
+    };
+
+    let response;
+    try {
+        response = await axios.request(options);
+    } catch (error) { console.error(error); }
+
+    const allCollectionsData = []
+    console.log(response)
+    response.data.forEach(collection => {
+        let image = ''
+
+        if (collection.image_url === null) {
+            image = '/images/image_not_available.png'
+        } else {
+            image = collection.image_url
+        }
+        const collectionsData = {
+            title: collection.name,
+            description: collection.description,
+            slug: collection.slug,
+            img: image,
+            banner_img: collection.banner_image_url,
+            link: '/discover/' + collection.slug,
+            OpenSea_link: 'https://opensea.io/collection/' + collection.slug,
+            total_volume: collection.stats.total_volume,
+            num_owners: collection.stats.num_owners,
+            num_assets: collection.stats.count,
+            average_price: collection.stats.average_price,
+            floor_price: collection.stats.floor_price,
+            created_date: collection.created_date,
+            total_sales: collection.stats.total_sales
+        }
+        console.log('collectionsData: ', collectionsData)
+
+        redis.hmset('get_' + collection.slug,
+            'title', collectionsData.title,
+            'description', collectionsData.description,
+            'slug', collectionsData.slug,
+            'img', collectionsData.img,
+            'banner_img', collectionsData.banner_img,
+            'link', collectionsData.link,
+            'OpenSea_link', collectionsData.OpenSea_link,
+            'total_volume', collectionsData.total_volume,
+            'num_owners', collectionsData.num_owners,
+            'num_assets', collectionsData.num_assets,
+            'average_price', collectionsData.average_price,
+            'floor_price', collectionsData.floor_price,
+            'created_date', collectionsData.created_date,
+            'total_sales', collectionsData.total_sales,
+            function (err, reply) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log('Collection ' + collection.slug + ' was added to cache');
+                }
+            }
+        );
+
+        allCollectionsData.push(collectionsData)
+    })
+
+    // console.log(allCollectionsData)
+    return allCollectionsData
+}
+
 async function setInCache (collectionSlug) {
     const data = await getCollectionDataWithSlug(collectionSlug)
 
@@ -676,7 +772,7 @@ async function setInCache (collectionSlug) {
 async function checkInCache (collectionSlug) {
     const inCache = await redis.hget('get_' + collectionSlug, 'title')
     if (inCache === null) {
-        setInCache(slug)
+        setInCache(collectionSlug)
     }
 
     const getSlug = 'get_' + collectionSlug
@@ -709,7 +805,7 @@ async function checkInCache (collectionSlug) {
         average_price: averagePrice,
         floor_price: floorPrice,
         created_date: createdDate,
-        totalSales: totalSales
+        total_sales: totalSales
     }
 
     return data
@@ -1204,3 +1300,7 @@ module.exports.getSalesFromCache = getSalesFromCache
 module.exports.plotVolumeBarData = plotVolumeBarData
 module.exports.plotVolumeNumSalesData = plotVolumeNumSalesData
 module.exports.plotAveragePriceData = plotAveragePriceData
+module.exports.getCollectionsWithOwnerAddress = getCollectionsWithOwnerAddress
+
+
+getCollectionDataWithSlug('doodles-official')
