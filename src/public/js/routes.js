@@ -122,7 +122,8 @@ function getFollow() {
                 getLogin();
             } else {
                 window.location = '#follow?id=none';
-                main.innerHTML = ejs.src_views_follow();
+                let obj = { title: 'fuck', value: 'you'  }
+                main.innerHTML = ejs.src_views_follow({ obj });
             }
         });
 }
@@ -348,7 +349,7 @@ function getExchange() {
 function getSettings() {
     window.location = '#settings'
     const main = document.querySelector('#content');
-    fetch('/user/settings/',
+    fetch('/user/settings',
         {
             method: 'GET',
             headers: { Accept: 'application/json' }

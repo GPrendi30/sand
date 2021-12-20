@@ -1,40 +1,49 @@
 <div id="room_container">
-    <section class="room" >
+    <section class="room">
         <!-- central part -->
         <div id="chat_shadow">
-        <section id="chat">
-                <% messages.forEach(msg=> { %>
-                    <% let info={ prev:prev, msg:msg} %>
-                    
-                        <% if (msg.user === author) { %>
-                            <% if (msg.user === prev) { %> 
-                                <section class="message stream mine">
-                            <% } else { %>
-                                <section class="message mine">
-                                <% prev = msg.user %>
-                            
-                            <% } %>
+            <section id="chat">
+            <% let prev %>
+            <% messages.forEach(msg=> { %>
+            <% let info={ prev:prev, msg:msg} %>
 
-                        <% } else { %>
-                            <% if (msg.user === prev) { %> 
-                                <section class="message stream">
-                            <% } else { %>
-                                <section class="message">
-                                <% prev = msg.user %>
-                               
-                            <% } %>
-                        <% } %>
-                        <h1 id="username"> <%= msg.username %> </h1>
-                        <p id="msg"> <%= msg.body %></p>
-                        <p id = "time_stamp"> <%= new Date(msg.timestamp).toLocaleTimeString() %></p>
-                            <% if (msg.user !=prev) { %>
-                                <% prev=msg.user %>
-                                    <% } %>
-                                </section>
-                                        <% }); %>
-                                                      
-        </section>
-        </div>  
+                <% if (msg.user===author) { %>
+                    <% if (msg.user===prev) { %>
+                        <section class="message stream mine">
+                    <% } else { %>
+                        <section class="message mine">
+                            <% prev=msg.user %>
+
+                                <% } %>
+
+                                    <% } else { %>
+                                        <% if (msg.user===prev) { %>
+                                            <section class="message stream">
+                                                <% } else { %>
+                                                    <section class="message">
+                                                        <% prev=msg.user %>
+
+                                                            <% } %>
+                                                                <% } %>
+                                                                    <h1 id="username">
+                                                                        <%= msg.username %>
+                                                                    </h1>
+                                                                    <p id="msg">
+                                                                        <%= msg.body %>
+                                                                    </p>
+                                                                    <p id="time_stamp">
+                                                                        <%= new
+                                                                            Date(msg.timestamp).toLocaleTimeString()
+                                                                            %>
+                                                                    </p>
+                                                                    <% if (msg.user !=prev) { %>
+                                                                        <% prev=msg.user %>
+                                                                            <% } %>
+                                                    </section>
+                                                    <% }); %>
+
+                                            </section>
+        </div>
 
         <!-- below the chat messages -->
         <section id="input">
@@ -49,52 +58,8 @@
 
         <!-- member list aside -->
         <section id="members">
-            <section id="admins">
-
-                <h2>Admins</h2>
-                <ul class="member_list">
 
 
-
-    <div id="room_container">
-        <section class="room">
-            <!-- central part -->
-            <div id="chat_shadow"></div>
-            <section id="chat">
-                <% let prev %>
-                <% messages.forEach(msg => { %>
-                    <% let info = {prev:prev, msg:msg} %>
-                    <%- include('includes/room_msg', info) %>
-                    <% if (msg.user.id != prev) { %>
-                        <% prev = msg.user.id %>
-                    <% } %>
-                <% }); %>
-            </section>
-        
-            <!-- below the chat messages -->
-            <section id="input">
-                <button class="grow_hover" id="leave_room">Leave room</button>
-                <div id="input">
-                    <label for="msg">
-                        <input id="msg" type="text" name="msg" value="" placeholder="Type here your message"/>
-                    </label>
-                    <button class="grow_hover" id="send">Send</button>
-                </div>
-            </section>
-        
-            <!-- member list aside -->
-            <section id="members">
-                <section id="normal_members">
-        
-                    <h2>Members</h2>
-                    <ul class="member_list">
-                        <% users.forEach( user => { %>
-                            <%- include('includes/room_member', {user:user, role:'user'}) %>
-                        <% }); %>
-                    </ul>
-                    
-                </section>
-            </section>
             <section id="normal_members">
 
                 <h2>Members</h2>
@@ -102,15 +67,18 @@
 
                     <!-- TODO: Implement this version instead -->
                     <% users.forEach( user=> { %>
-                        <% if (user._id != author._id) { %>
+                        <% if (user._id !=author._id) { %>
                             <li class="room_member user">
                                 <img src="/images/user1.png" alt="<% user.username %>">
-                                <h1 id="username"> <%= user.username %> </h1>
+                                <h1 id="username">
+                                    <%= user.username %>
+                                </h1>
                             </li>
-                                <% }; %>
-                                    <% }); %>
+                            <% }; %>
+                                <% }); %>
                 </ul>
             </section>
+
+
         </section>
-    </section>
 </div>

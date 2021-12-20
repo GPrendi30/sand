@@ -9,12 +9,12 @@
             </div>
             <ul class="discover_lineup">
 
-                <% my_rooms.forEach( item=> { %>
+                <% rooms.forEach( item=> { %>
                     <li>
-                        <a class="discover_item grow_hover shadow" href="/item/info">
-                            <img src="<%= item.img %>" alt="<%= item.title %>">
+                        <a class="discover_item grow_hover shadow" href="/rooms/<%= item._id %>">
+                            <img src="<%= pngUrl(item.icon) %>" alt="<%= item.name %>">
                             <h1 class="room_title">
-                                <%= item.title %>
+                                <%= item.name %>
                             </h1>
                         </a>
                         <button class="button room_btn">Leave</button>
@@ -32,13 +32,13 @@
             </div>
             <ul class="discover_lineup">
 
-                <% other_rooms.forEach( item=> { %>
+                <% rooms.forEach( item=> { %>
                     <li>
                         <div class="discover_item grow_hover shadow">
-                            <a href="/item/info">
-                                <img src="<%= item.img %>" alt="<%= item.title %>">
+                            <a href="/rooms/<%= item._id %>">
+                                <img src="<%= pngUrl(item.icon) %>" alt="<%= item.name %>">
                                 <h1>
-                                    <%= item.title %>
+                                    <%= item.name %>
                                 </h1>
                             </a>
                         </div>
@@ -117,10 +117,5 @@
 
     </div>
 
-    <<<<<<< HEAD=======<!-- too see the invites to join privates rooms -->
-        <section class="invites">
-            <button id="accept_invite">accept invite</button>
-            <section>
-                >>>>>>> main
 
-            </section>
+</section>
