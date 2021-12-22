@@ -97,8 +97,6 @@ async function getOptionForDailyVolume (collectionSlug, timeInDays) {
  * @returns {array} object option that is used to draw the chart.
  */
 async function getOptionForScatterChart (collectionSlug, timeInDays) {
-    // const startTimestamp = (Date.now() / 1000) - 86400 * timeInDays;
-    // const endTimestamp = (Date.now() / 1000);
 
     let timePriceArray;
     let option;
@@ -267,7 +265,7 @@ async function getOptionForDailySales (collectionSlug, timeInDays) {
 }
 
 /**
- * Function to generate the options for a daily sales bar chart.
+ * Function to generate the options for a bar chart that plots the average price of a collection in the specified days.
  * @param string collectionSlug, the slug of the collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object option that is used to draw the chart.
@@ -350,7 +348,7 @@ async function getOptionForAveragePrice (collectionSlug, timeInDays) {
 }
 
 /**
- * Function to generate the options for a scatter chart.
+ * Function to generate the options for a bar chart that plots the average price of a collection in the specified days and also a line that represents the average price of the assets in the last days.
  * @param string collectionSlug, the slug of the collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object option that is used to draw the chart.
@@ -450,8 +448,9 @@ async function getVolumeChartWithAverageLine (collectionSlug, timeInDays) {
 }
 
 /**
- * Function to generate the options for a scatter chart.
- * @param string collectionSlug, the slug of the collection.
+ * Function to generate the options for a scatter bar that plots two collections together.
+ * @param string collectionSlug, the slug of the first collection.
+ * @param string collectionSlug2, the slug of the second collection.
  * @param int timeInDays, the number of the days you want to get the volume of (e.g. 7 means the last 7 days).
  * @returns {array} object option that is used to draw the chart.
  */
@@ -546,6 +545,7 @@ async function getDoubleScatter (collectionSlug, collectionSlug2, timeInDays) {
     return option
 }
 
+// required exports
 module.exports.getOptionForDailyVolume = getOptionForDailyVolume
 module.exports.getOptionForScatterChart = getOptionForScatterChart
 module.exports.getOptionForDailySales = getOptionForDailySales
