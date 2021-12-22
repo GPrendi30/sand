@@ -36,22 +36,18 @@ router.get('/data', async function (req, res, next) {
             res.status(200).send(option);
         } else if (chartType === 'dailySales') {
             const option = await getOptionForDailySales(contractSlug, time);
-            console.log(option);
             res.status(200).send(option);
         } else if (chartType === 'scatter') {
             const option = await getOptionForScatterChart(contractSlug, time)
             res.status(200).send(option);
         } else if (chartType === 'averageLine') {
             const option = await getOptionForAveragePrice(contractSlug, time);
-            console.log(option);
             res.status(200).send(option);
         } else if (chartType === 'volumeWithAverageLine') {
             const option = await getVolumeChartWithAverageLine(contractSlug, time);
-            console.log(option);
             res.status(200).send(option);
         } else if (chartType === 'doubleScatter') {
             const option = await getDoubleScatter(contractSlug, contractSlug2, time);
-            console.log(option);
             res.status(200).send(option);
         } else {
             res.status(404).end()
